@@ -1,9 +1,9 @@
 /***************************************************************************
  *  Description:
- *  
- *  Arguments:
- *
- *  Returns:
+ *      Command-line tool for quick, basic statistics.  Basic Unix tools
+ *      don't facilitate stats very well and going to R for every little
+ *      thing can really cramp your workflow, especially when using non-R
+ *      tools for most of the work.
  *
  *  History: 
  *  Date        Name        Modification
@@ -20,23 +20,46 @@ int     main(int argc, char *argv[])
 
 {
     /* options descriptor */
+    // http://makemeanalyst.com/basic-statistics-for-data-analysis/
     static struct option longopts[] = {
+	{ "help",       required_argument,  NULL,           'h' },
 	{ "median",     required_argument,  NULL,           'm' },
 	{ "average",    required_argument,  NULL,           'a' },
+	{ "variance",   required_argument,  NULL,           'v' },
+	{ "stddev",     required_argument,  NULL,           's' },
+	{ "mode",       required_argument,  NULL,           'o' },
+	{ "range",      required_argument,  NULL,           'r' },
+	{ "iq-range",   required_argument,  NULL,           'i' },
+	{ "box-plot",   required_argument,  NULL,           'b' },
+	{ "z-scores",   required_argument,  NULL,           'z' },
 	{ 0,            0,                  0,              0 }
     };
     int     ch;
+    
+    if ( argc < 2 )
+	usage(argv);
     
     while ((ch = getopt_long(argc, argv, "m:a:", longopts, NULL)) != -1)
     {
 	switch(ch)
 	{
+	    case    'h':
+		usage(argv);
 	    case    'm':
 		median();
 		break;
 	    case    'a':
 		average();
 		break;
+	    case    'v':
+	    case    's':
+	    case    'o':
+	    case    'r':
+	    case    'i':
+	    case    'b':
+	    case    'z':
+		fprintf(stderr, "Not yet implemented.\n");
+		return EX_UNAVAILABLE;
 	    default:
 		usage(argv);
 	}
@@ -48,8 +71,18 @@ int     main(int argc, char *argv[])
 void    usage(char *argv[])
 
 {
-    fprintf(stderr, "Usage: %s [-m|--median column] [-a|--average column]\n",
-	    argv[0]);
+    fprintf(stderr, "Usage: %s function column [function column ...]\n", argv[0]);
+    fprintf(stderr, "\nAt least one of the following functions is required:\n\n");
+    fprintf(stderr,"  --median, -m column\n");
+    fprintf(stderr,"  --average, -a column\n");
+    fprintf(stderr,"  --variance, -v column\n");
+    fprintf(stderr,"  --stddev, -s column\n");
+    fprintf(stderr,"  --mode, -o column\n");
+    fprintf(stderr,"  --range, -r column\n");
+    fprintf(stderr,"  --iq-range, -i column\n");
+    fprintf(stderr,"  --box-plot, -b column\n");
+    fprintf(stderr,"  --z-scores, -z column\n");
+    fputc('\n', stderr);
     exit(EX_USAGE);
 }
 
