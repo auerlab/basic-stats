@@ -1,0 +1,3 @@
+basic-stats.o: basic-stats.c basic-stats.h basic-stats-protos.h
+	${CC} -c ${CFLAGS} basic-stats.c
+

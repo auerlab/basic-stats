@@ -1,3 +1,4 @@
 basic-stats
 *.dSYM
 .*.bak
+*.o
