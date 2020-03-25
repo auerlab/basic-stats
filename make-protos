@@ -1,0 +1,7 @@
+#!/bin/sh -e
+
+: ${LOCALBASE:=../local}
+
+for file in *.c; do
+    cproto -I${LOCALBASE}/include $file > ${file%.c}-protos.h
+done
