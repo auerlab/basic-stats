@@ -14,6 +14,7 @@
 #include <sysexits.h>
 #include <getopt.h>
 #include <stdlib.h>
+#include <math.h>
 #include "basic-stats.h"
 
 int     main(int argc, char *argv[])
@@ -27,7 +28,8 @@ int     main(int argc, char *argv[])
 	{ "average",            required_argument,  NULL,           'a' },
 	{ "population-variance",required_argument,  NULL,           'V' },
 	{ "sample-variance",    required_argument,  NULL,           'v' },
-	{ "stddev",             required_argument,  NULL,           's' },
+	{ "population-stddev",  required_argument,  NULL,           'S' },
+	{ "sample-stddev",      required_argument,  NULL,           's' },
 	{ "mode",               required_argument,  NULL,           'o' },
 	{ "range",              required_argument,  NULL,           'r' },
 	{ "iq-range",           required_argument,  NULL,           'i' },
@@ -40,23 +42,30 @@ int     main(int argc, char *argv[])
     if ( argc < 2 )
 	usage(argv);
     
-    while ((ch = getopt_long(argc, argv, "m:a:V:", longopts, NULL)) != -1)
+    while ((ch = getopt_long(argc, argv, "m:a:V:v:S:s:", longopts, NULL)) != -1)
     {
 	switch(ch)
 	{
 	    case    'h':
 		usage(argv);
 	    case    'm':
-		median();
+		printf("%f\n", median());
 		break;
 	    case    'a':
-		average();
+		printf("%f\n", average());
 		break;
 	    case    'V':
-		population_variance();
+		printf("%f\n", variance(POPULATION_VARIANCE));
 		break;
 	    case    'v':
+		printf("%f\n", variance(SAMPLE_VARIANCE));
+		break;
+	    case    'S':
+		printf("%f\n", sqrt(variance(POPULATION_VARIANCE)));
+		break;
 	    case    's':
+		printf("%f\n", sqrt(variance(SAMPLE_VARIANCE)));
+		break;
 	    case    'o':
 	    case    'r':
 	    case    'i':
@@ -81,7 +90,8 @@ void    usage(char *argv[])
     fprintf(stderr,"  --average, -a column\n");
     fprintf(stderr,"  --population-variance, -V column\n");
     fprintf(stderr,"  --sample-variance, -v column\n");
-    fprintf(stderr,"  --stddev, -s column\n");
+    fprintf(stderr,"  --population-stddev, -S column\n");
+    fprintf(stderr,"  --sample-stddev, -s column\n");
     fprintf(stderr,"  --mode, -o column\n");
     fprintf(stderr,"  --range, -r column\n");
     fprintf(stderr,"  --iq-range, -i column\n");
@@ -115,7 +125,6 @@ double  median(void)
 	median = (list[list_size / 2 - 1] + list[list_size / 2]) / 2.0;
     else
 	median = list[list_size / 2];
-    printf("%f\n", median);
     return median;
 }
 
@@ -132,14 +141,15 @@ int     double_cmp(const double *d1, const double *d2)
 }
 
 
-void    population_variance(void)
+double  variance(variance_t variance_type)
 
 {
     size_t  list_size,
 	    c;
     double  num,
 	    total,
-	    mean;
+	    mean,
+	    divisor;
     FILE    *fp;
     
     fp = tmpfile();
@@ -156,11 +166,11 @@ void    population_variance(void)
 	fscanf(fp, "%lf", &num);
 	total += (num - mean) * (num - mean);
     }
-    printf("%f\n", total / list_size);
+    return total / (list_size - variance_type);
 }
 
 
-void    average(void)
+double  average(void)
 
 {
     size_t  list_size;
@@ -169,5 +179,5 @@ void    average(void)
     
     for (list_size = 0, total = 0.0; scanf("%lf", &num) == 1; ++list_size)
 	total += num;
-    printf("%f\n", total / list_size);
+    return total / list_size;
 }
