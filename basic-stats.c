@@ -148,8 +148,7 @@ double  variance(variance_t variance_type)
 	    c;
     double  num,
 	    total,
-	    mean,
-	    divisor;
+	    mean;
     FILE    *fp;
     
     fp = tmpfile();
