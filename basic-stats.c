@@ -17,6 +17,7 @@
 #include <string.h>
 #include <math.h>
 #include <xtend/dsv.h>
+#include <xtend/mem.h>
 #include "basic-stats.h"
 
 // http://makemeanalyst.com/basic-statistics-for-data-analysis/
@@ -24,14 +25,14 @@
 int     main(int argc, char *argv[])
 
 {
-    char    *delims = "\t";
+    char    *delims = " \t";
     int     c;
-    function_list_t function_list;
+    function_list_t flist;
     
     if ( argc < 4 )
 	usage(argv);
     
-    function_list_init(&function_list);
+    function_list_init(&flist);
     for (c = 1; c < argc; ++c)
     {
 	if ( strcmp(argv[c], "--delims") == 0 )
@@ -44,32 +45,32 @@ int     main(int argc, char *argv[])
 	else if ( strcmp(argv[c],"--help") == 0 )
 	    usage(argv);
 	else if ( strcmp(argv[c],"median") == 0 )
-	    add_function(&function_list, MEDIAN, &c, argv);
+	    add_function(&flist, MEDIAN, &c, argv);
 	else if ( strcmp(argv[c],"mean") == 0 )
-	    add_function(&function_list, MEAN, &c, argv);
+	    add_function(&flist, MEAN, &c, argv);
 	else if ( strcmp(argv[c],"population-variance") == 0 )
-	    add_function(&function_list, POPULATION_VARIANCE, &c, argv);
+	    add_function(&flist, POPULATION_VARIANCE, &c, argv);
 	else if ( strcmp(argv[c],"sample-variance") == 0 )
-	    add_function(&function_list, SAMPLE_VARIANCE, &c, argv);
+	    add_function(&flist, SAMPLE_VARIANCE, &c, argv);
 	else if ( strcmp(argv[c],"population-stddev") == 0 )
-	    add_function(&function_list, POPULATION_STDDEV, &c, argv);
+	    add_function(&flist, POPULATION_STDDEV, &c, argv);
 	else if ( strcmp(argv[c],"sample-stddev") == 0 )
-	    add_function(&function_list, SAMPLE_STDDEV, &c, argv);
+	    add_function(&flist, SAMPLE_STDDEV, &c, argv);
 	else if ( strcmp(argv[c],"mode") == 0 )
-	    add_function(&function_list, MODE, &c, argv);
+	    add_function(&flist, MODE, &c, argv);
 	else if ( strcmp(argv[c],"range") == 0 )
-	    add_function(&function_list, RANGE, &c, argv);
+	    add_function(&flist, RANGE, &c, argv);
 	else if ( strcmp(argv[c],"iq-range") == 0 )
-	    add_function(&function_list, IQ_RANGE, &c, argv);
+	    add_function(&flist, IQ_RANGE, &c, argv);
 	else if ( strcmp(argv[c],"box-plot") == 0 )
-	    add_function(&function_list, BOX_PLOT, &c, argv);
+	    add_function(&flist, BOX_PLOT, &c, argv);
 	else if ( strcmp(argv[c],"z-scores") == 0 )
-	    add_function(&function_list, Z_SCORES, &c, argv);
+	    add_function(&flist, Z_SCORES, &c, argv);
 	else
 	    usage(argv);
     }
     
-    return process_data(&function_list, delims);
+    return process_data(&flist, delims);
 }
 
 
@@ -95,11 +96,11 @@ void    usage(char *argv[])
 }
 
 
-int     add_function(function_list_t *function_list, function_t new_function,
+int     add_function(function_list_t *flist, function_t new_function,
 		     int *c, char *argv[])
 
 {
-    int             count = function_list->count;
+    int             count = flist->count;
     unsigned long   n;
     char            *end;
     
@@ -115,37 +116,50 @@ int     add_function(function_list_t *function_list, function_t new_function,
 	usage(argv);
     if ( strcmp(argv[*c + 1], "--row") == 0 )
     {
-	function_list->rows[count] = n;
-	function_list->cols[count] = 0;
-	fprintf(stderr, "%s %lu\n", argv[*c + 1], n);
+	flist->rows[count] = n;
+	flist->cols[count] = 0;
     }
     else if ( strcmp(argv[*c + 1], "--col") == 0 )
     {
-	function_list->cols[count] = n;
-	function_list->rows[count] = 0;
+	flist->cols[count] = n;
+	flist->rows[count] = 0;
     }
     else
 	usage(argv);
-    function_list->functions[count] = new_function;
-    ++function_list->count;
+    flist->functions[count] = new_function;
+    ++flist->count;
     *c += 2;
     return 0;
 }
 
 
-int     process_data(function_list_t *function_list, const char *delims)
+int     process_data(function_list_t *flist, const char *delims)
 
 {
     unsigned    row,
-		col;
+		col,
+		row_col_value = 0;
     char        buff[MAX_DIGITS + 1],
-		*end;
+		*end,
+		*row_col_name = "";
     size_t      len,
-		f;
+		c;
     double      x;
     int         ch;
+
+    for (c = 0; c < flist->count; ++c)
+    {
+	if ( flist->functions[c] == MEDIAN )
+	{
+	    // FIXME: Check malloc
+	    flist->nums[c] = xt_malloc(1024, sizeof(*flist->nums[c]));
+	    flist->array_size[c] = 1024;
+	}
+	else if ( (flist->functions[c] == POPULATION_VARIANCE) ||
+		  (flist->functions[c] == SAMPLE_VARIANCE) )
+	    flist->temp_file[c] = tmpfile();
+    }
     
-    fprintf(stderr, "%u functions.\n", function_list->count);
     row = 1, col = 1;
     while ( (ch = dsv_read_field(stdin, buff, MAX_DIGITS, delims, &len)) != EOF )
     {
@@ -156,40 +170,34 @@ int     process_data(function_list_t *function_list, const char *delims)
 		    buff, row, col);
 	    exit(EX_DATAERR);
 	}
-	for (f = 0; f < function_list->count; ++f)
+	
+	printf("%16.2f", x);
+	for (c = 0; c < flist->count; ++c)
 	{
 	    /*
-	     *  Unspecified rows and cols are set to 0 in function_list and
+	     *  Unspecified rows and cols are set to 0 in flist and
 	     *  row and col begin at 1, so checking for equality is all we
 	     *  need to do.
 	     */
 	    
-	    if ( row == function_list->rows[f] )
+	    if ( row == flist->rows[c] )
 	    {
-		switch(function_list->functions[f])
-		{
-		    case MEAN:
-			function_list->sum[f] += x;
-			++function_list->n[f];
-			printf("x = %f, sum = %f, n = %u\n",
-				x, function_list->sum[f], function_list->n[f]);
-			break;
-		    
-		    default:
-			break;
-		}
+		process_val(flist, c, x);
 	    }
-	    else if ( col == function_list->cols[f] )
+	    
+	    if ( col == flist->cols[c] )
 	    {
-	    }
-	    else
-	    {
-		fprintf(stderr, "Software error: neither row nor col set.\n");
-		exit(EX_SOFTWARE);
+		process_val(flist, c, x);
 	    }
 	}
+	
+	// End of input line?
 	if ( ch == '\n' )
+	{
 	    ++row;
+	    col = 1;
+	    putchar('\n');
+	}
 	else
 	    ++col;
     }
@@ -198,12 +206,28 @@ int     process_data(function_list_t *function_list, const char *delims)
      *  Finalize and print results
      */
     
-    for (f = 0; f < function_list->count; ++f)
+    for (c = 0; c < flist->count; ++c)
     {
-	switch(function_list->functions[f])
+	if ( flist->rows[c] != 0 )
+	{
+	    row_col_name = "Row";
+	    row_col_value = flist->rows[c];
+	}
+	else
+	{
+	    row_col_name = "Col";
+	    row_col_value = flist->cols[c];
+	}
+	switch(flist->functions[c])
 	{
 	    case    MEAN:
-		printf("Mean: %f\n", function_list->sum[f] / function_list->n[f]);
+		printf("%s %u mean: %f\n", row_col_name, row_col_value,
+			flist->sum[c] / flist->n[c]);
+		break;
+	    
+	    case    MEDIAN:
+		printf("%s %u median: %f\n", row_col_name, row_col_value,
+			median(flist->nums[c], flist->nums_count[c]));
 		break;
 	    
 	    default:
@@ -214,39 +238,57 @@ int     process_data(function_list_t *function_list, const char *delims)
 }
 
 
-void    function_list_init(function_list_t *function_list)
+void    process_val(function_list_t *flist, size_t c, double x)
 
 {
-    size_t  c;
-    
-    function_list->count = 0;
-    for (c = 0; c < MAX_FUNCTIONS; ++c)
+    switch(flist->functions[c])
     {
-	function_list->rows[c] = 0;
-	function_list->cols[c] = 0;
-	function_list->n[c] = 0;
-	function_list->sum[c] = 0.0;
+	case MEAN:
+	    flist->sum[c] += x;
+	    ++flist->n[c];
+	    break;
+	
+	case MEDIAN:
+	    // FIXME: Check malloc
+	    if ( flist->nums_count[c] == flist->array_size[c] )
+		flist->nums[c] = xt_realloc(flist->nums[c],
+			       flist->array_size[c] *= 2,
+			       sizeof(*flist->nums[c]));
+	    flist->nums[c][flist->nums_count[c]] = x;
+	    ++flist->nums_count[c];
+	    break;
+	
+	default:
+	    break;
     }
 }
 
 
-double  median(void)
+void    function_list_init(function_list_t *flist)
 
 {
-    double  *list,
-	    median;
-    size_t  array_size = INITIAL_LIST_SIZE,
-	    list_size;
+    size_t  c;
     
-    list = MALLOC(array_size, double);
-    for (list_size = 0; scanf("%lf", list + list_size) == 1; ++list_size)
+    flist->count = 0;
+    for (c = 0; c < MAX_FUNCTIONS; ++c)
     {
-	if ( list_size == array_size - 1 )
-	{
-	    array_size += array_size;
-	    list = REALLOC(list, array_size, double);
-	}
+	flist->rows[c] = 0;
+	flist->cols[c] = 0;
+	flist->n[c] = 0;
+	flist->sum[c] = 0.0;
+	flist->nums[c] = NULL;
+	flist->array_size[c] = 0;
+	flist->nums_count[c] = 0;
+	flist->temp_file[c] = NULL;
     }
+}
+
+
+double  median(double list[], size_t list_size)
+
+{
+    double  median;
+
     qsort(list, list_size, sizeof(double),
 	  (int (*)(const void *, const void *))double_cmp);
     if ( list_size % 2 == 0 )
@@ -269,7 +311,7 @@ int     double_cmp(const double *d1, const double *d2)
 }
 
 
-double  variance(variance_t variance_type)
+double  variance(variance_t variance_adjust)
 
 {
     size_t  list_size,
@@ -293,18 +335,5 @@ double  variance(variance_t variance_type)
 	fscanf(fp, "%lf", &num);
 	total += (num - mean) * (num - mean);
     }
-    return total / (list_size - variance_type);
-}
-
-
-double  average(void)
-
-{
-    size_t  list_size;
-    double  num,
-	    total;
-    
-    for (list_size = 0, total = 0.0; scanf("%lf", &num) == 1; ++list_size)
-	total += num;
-    return total / list_size;
+    return total / (list_size - variance_adjust);
 }
