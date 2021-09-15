@@ -14,91 +14,219 @@
 #include <sysexits.h>
 #include <getopt.h>
 #include <stdlib.h>
+#include <string.h>
 #include <math.h>
+#include <xtend/dsv.h>
 #include "basic-stats.h"
+
+// http://makemeanalyst.com/basic-statistics-for-data-analysis/
 
 int     main(int argc, char *argv[])
 
 {
-    /* options descriptor */
-    // http://makemeanalyst.com/basic-statistics-for-data-analysis/
-    static struct option longopts[] = {
-	{ "help",               required_argument,  NULL,           'h' },
-	{ "median",             required_argument,  NULL,           'm' },
-	{ "average",            required_argument,  NULL,           'a' },
-	{ "population-variance",required_argument,  NULL,           'V' },
-	{ "sample-variance",    required_argument,  NULL,           'v' },
-	{ "population-stddev",  required_argument,  NULL,           'S' },
-	{ "sample-stddev",      required_argument,  NULL,           's' },
-	{ "mode",               required_argument,  NULL,           'o' },
-	{ "range",              required_argument,  NULL,           'r' },
-	{ "iq-range",           required_argument,  NULL,           'i' },
-	{ "box-plot",           required_argument,  NULL,           'b' },
-	{ "z-scores",           required_argument,  NULL,           'z' },
-	{ 0,                    0,                  0,               0  }
-    };
-    int     ch;
+    char    *delims = "\t";
+    int     c;
+    function_list_t function_list;
     
-    if ( argc < 2 )
+    if ( argc < 4 )
 	usage(argv);
     
-    while ((ch = getopt_long(argc, argv, "m:a:V:v:S:s:", longopts, NULL)) != -1)
+    function_list_init(&function_list);
+    for (c = 1; c < argc; ++c)
     {
-	switch(ch)
+	if ( strcmp(argv[c], "--delims") == 0 )
 	{
-	    case    'h':
-		usage(argv);
-	    case    'm':
-		printf("%f\n", median());
-		break;
-	    case    'a':
-		printf("%f\n", average());
-		break;
-	    case    'V':
-		printf("%f\n", variance(POPULATION_VARIANCE));
-		break;
-	    case    'v':
-		printf("%f\n", variance(SAMPLE_VARIANCE));
-		break;
-	    case    'S':
-		printf("%f\n", sqrt(variance(POPULATION_VARIANCE)));
-		break;
-	    case    's':
-		printf("%f\n", sqrt(variance(SAMPLE_VARIANCE)));
-		break;
-	    case    'o':
-	    case    'r':
-	    case    'i':
-	    case    'b':
-	    case    'z':
-		fprintf(stderr, "Not yet implemented.\n");
-		return EX_UNAVAILABLE;
-	    default:
+	    if ( ++c < argc )
+		delims = argv[c];
+	    else
 		usage(argv);
 	}
+	else if ( strcmp(argv[c],"--help") == 0 )
+	    usage(argv);
+	else if ( strcmp(argv[c],"median") == 0 )
+	    add_function(&function_list, MEDIAN, &c, argv);
+	else if ( strcmp(argv[c],"mean") == 0 )
+	    add_function(&function_list, MEAN, &c, argv);
+	else if ( strcmp(argv[c],"population-variance") == 0 )
+	    add_function(&function_list, POPULATION_VARIANCE, &c, argv);
+	else if ( strcmp(argv[c],"sample-variance") == 0 )
+	    add_function(&function_list, SAMPLE_VARIANCE, &c, argv);
+	else if ( strcmp(argv[c],"population-stddev") == 0 )
+	    add_function(&function_list, POPULATION_STDDEV, &c, argv);
+	else if ( strcmp(argv[c],"sample-stddev") == 0 )
+	    add_function(&function_list, SAMPLE_STDDEV, &c, argv);
+	else if ( strcmp(argv[c],"mode") == 0 )
+	    add_function(&function_list, MODE, &c, argv);
+	else if ( strcmp(argv[c],"range") == 0 )
+	    add_function(&function_list, RANGE, &c, argv);
+	else if ( strcmp(argv[c],"iq-range") == 0 )
+	    add_function(&function_list, IQ_RANGE, &c, argv);
+	else if ( strcmp(argv[c],"box-plot") == 0 )
+	    add_function(&function_list, BOX_PLOT, &c, argv);
+	else if ( strcmp(argv[c],"z-scores") == 0 )
+	    add_function(&function_list, Z_SCORES, &c, argv);
+	else
+	    usage(argv);
     }
-    return EX_OK;
+    
+    return process_data(&function_list, delims);
 }
 
 
 void    usage(char *argv[])
 
 {
-    fprintf(stderr, "Usage: %s function column [function column ...]\n", argv[0]);
+    fprintf(stderr, "Usage: %s [--delim string] function1 --row row1 | --col col1 \\\n"
+	    "        [function2 --row row2 | --col col2 ...]\n", argv[0]);
     fprintf(stderr, "\nAt least one of the following functions is required:\n\n");
-    fprintf(stderr,"  --median, -m column\n");
-    fprintf(stderr,"  --average, -a column\n");
-    fprintf(stderr,"  --population-variance, -V column\n");
-    fprintf(stderr,"  --sample-variance, -v column\n");
-    fprintf(stderr,"  --population-stddev, -S column\n");
-    fprintf(stderr,"  --sample-stddev, -s column\n");
-    fprintf(stderr,"  --mode, -o column\n");
-    fprintf(stderr,"  --range, -r column\n");
-    fprintf(stderr,"  --iq-range, -i column\n");
-    fprintf(stderr,"  --box-plot, -b column\n");
-    fprintf(stderr,"  --z-scores, -z column\n");
-    fputc('\n', stderr);
+    fprintf(stderr,"  median\n");
+    fprintf(stderr,"  average\n");
+    fprintf(stderr,"  population-variance\n");
+    fprintf(stderr,"  sample-variance\n");
+    fprintf(stderr,"  population-stddev\n");
+    fprintf(stderr,"  sample-stddev\n");
+    fprintf(stderr,"  mode\n");
+    fprintf(stderr,"  range\n");
+    fprintf(stderr,"  iq-range\n");
+    fprintf(stderr,"  box-plot\n");
+    fprintf(stderr,"  z-scores\n");
+    fprintf(stderr,"\nDefault delimiter is TAB.  The delimiter string may be multiple characters.\n");
     exit(EX_USAGE);
+}
+
+
+int     add_function(function_list_t *function_list, function_t new_function,
+		     int *c, char *argv[])
+
+{
+    int             count = function_list->count;
+    unsigned long   n;
+    char            *end;
+    
+    if ( *c == MAX_FUNCTIONS )
+    {
+	fprintf(stderr, "Error: Maximum functions for one run is %u.\n",
+		MAX_FUNCTIONS);
+	exit(EX_USAGE);
+    }
+    
+    n = strtoul(argv[*c + 2], &end, 10);
+    if ( *end != '\0' )
+	usage(argv);
+    if ( strcmp(argv[*c + 1], "--row") == 0 )
+    {
+	function_list->rows[count] = n;
+	function_list->cols[count] = 0;
+	fprintf(stderr, "%s %lu\n", argv[*c + 1], n);
+    }
+    else if ( strcmp(argv[*c + 1], "--col") == 0 )
+    {
+	function_list->cols[count] = n;
+	function_list->rows[count] = 0;
+    }
+    else
+	usage(argv);
+    function_list->functions[count] = new_function;
+    ++function_list->count;
+    *c += 2;
+    return 0;
+}
+
+
+int     process_data(function_list_t *function_list, const char *delims)
+
+{
+    unsigned    row,
+		col;
+    char        buff[MAX_DIGITS + 1],
+		*end;
+    size_t      len,
+		f;
+    double      x;
+    int         ch;
+    
+    fprintf(stderr, "%u functions.\n", function_list->count);
+    row = 1, col = 1;
+    while ( (ch = dsv_read_field(stdin, buff, MAX_DIGITS, delims, &len)) != EOF )
+    {
+	x = strtod(buff, &end);
+	if ( *end != '\0' )
+	{
+	    fprintf(stderr, "Invalid number: %s: row %u, col %u\n",
+		    buff, row, col);
+	    exit(EX_DATAERR);
+	}
+	for (f = 0; f < function_list->count; ++f)
+	{
+	    /*
+	     *  Unspecified rows and cols are set to 0 in function_list and
+	     *  row and col begin at 1, so checking for equality is all we
+	     *  need to do.
+	     */
+	    
+	    if ( row == function_list->rows[f] )
+	    {
+		switch(function_list->functions[f])
+		{
+		    case MEAN:
+			function_list->sum[f] += x;
+			++function_list->n[f];
+			printf("x = %f, sum = %f, n = %u\n",
+				x, function_list->sum[f], function_list->n[f]);
+			break;
+		    
+		    default:
+			break;
+		}
+	    }
+	    else if ( col == function_list->cols[f] )
+	    {
+	    }
+	    else
+	    {
+		fprintf(stderr, "Software error: neither row nor col set.\n");
+		exit(EX_SOFTWARE);
+	    }
+	}
+	if ( ch == '\n' )
+	    ++row;
+	else
+	    ++col;
+    }
+    
+    /*
+     *  Finalize and print results
+     */
+    
+    for (f = 0; f < function_list->count; ++f)
+    {
+	switch(function_list->functions[f])
+	{
+	    case    MEAN:
+		printf("Mean: %f\n", function_list->sum[f] / function_list->n[f]);
+		break;
+	    
+	    default:
+		break;
+	}
+    }
+    return EX_OK;
+}
+
+
+void    function_list_init(function_list_t *function_list)
+
+{
+    size_t  c;
+    
+    function_list->count = 0;
+    for (c = 0; c < MAX_FUNCTIONS; ++c)
+    {
+	function_list->rows[c] = 0;
+	function_list->cols[c] = 0;
+	function_list->n[c] = 0;
+	function_list->sum[c] = 0.0;
+    }
 }
 
 
