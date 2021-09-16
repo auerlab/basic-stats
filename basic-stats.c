@@ -99,7 +99,7 @@ void    usage(char *argv[])
 }
 
 
-int     add_function(function_list_t *flist, function_t new_function,
+int     add_function(function_list_t *flist, function_code_t new_code,
 		     int *c, char *argv[])
 
 {
@@ -114,11 +114,11 @@ int     add_function(function_list_t *flist, function_t new_function,
 	exit(EX_USAGE);
     }
     
-    flist->functions[count] = new_function;
-    switch (new_function)
+    flist->functions[count].code = new_code;
+    switch (new_code)
     {
 	case    QUANTILE:
-	    flist->quantile[count] = strtoul(argv[++*c], &end, 10);
+	    flist->functions[count].partitions = strtoul(argv[++*c], &end, 10);
 	    if ( *end != '\0' )
 	    {
 		fprintf(stderr, "Invalid quantile partition count: %s\n", argv[*c]);
@@ -127,8 +127,8 @@ int     add_function(function_list_t *flist, function_t new_function,
 	    break;
 	
 	case    MEDIAN:
-	    flist->functions[count] = QUANTILE;
-	    flist->quantile[count] = 2;
+	    flist->functions[count].code = QUANTILE;
+	    flist->functions[count].partitions = 2;
 	    break;
 	
 	default:
@@ -143,13 +143,13 @@ int     add_function(function_list_t *flist, function_t new_function,
     }
     if ( strcmp(argv[*c + 1], "--row") == 0 )
     {
-	flist->rows[count] = row_col;
-	flist->cols[count] = 0;
+	flist->functions[count].row = row_col;
+	flist->functions[count].col = 0;
     }
     else if ( strcmp(argv[*c + 1], "--col") == 0 )
     {
-	flist->cols[count] = row_col;
-	flist->rows[count] = 0;
+	flist->functions[count].col = row_col;
+	flist->functions[count].row = 0;
     }
     else
 	usage(argv);
@@ -175,29 +175,22 @@ int     process_data(function_list_t *flist, const char *delims)
 
     for (c = 0; c < flist->count; ++c)
     {
-	if ( flist->functions[c] == QUANTILE )
+	if ( flist->functions[c].code == QUANTILE )
 	{
 	    // FIXME: Check malloc
-	    flist->nums[c] = xt_malloc(1024, sizeof(*flist->nums[c]));
-	    flist->array_size[c] = 1024;
+	    flist->functions[c].nums = xt_malloc(1024,
+					sizeof(*flist->functions[c].nums));
+	    flist->functions[c].array_size = 1024;
 	}
-	else if ( (flist->functions[c] == POPULATION_VARIANCE) ||
-		  (flist->functions[c] == SAMPLE_VARIANCE) )
-	    flist->temp_file[c] = tmpfile();
+	else if ( (flist->functions[c].code == POPULATION_VARIANCE) ||
+		  (flist->functions[c].code == SAMPLE_VARIANCE) )
+	    flist->functions[c].temp_file = tmpfile();
     }
     
     row = 1, col = 1;
     while ( (ch = dsv_read_field(stdin, buff, MAX_DIGITS, delims, &len)) != EOF )
     {
-	x = strtod(buff, &end);
-	if ( *end != '\0' )
-	{
-	    fprintf(stderr, "Invalid number: %s: row %u, col %u\n",
-		    buff, row, col);
-	    exit(EX_DATAERR);
-	}
-	
-	printf("%8.2f", x);
+	printf("%8s", buff);
 	for (c = 0; c < flist->count; ++c)
 	{
 	    /*
@@ -206,15 +199,32 @@ int     process_data(function_list_t *flist, const char *delims)
 	     *  need to do.
 	     */
 	    
-	    if ( row == flist->rows[c] )
+	    if ( (row == flist->functions[c].row) ||
+		 (col == flist->functions[c].col) )
 	    {
+		x = strtod(buff, &end);
+		if ( *end != '\0' )
+		{
+		    fprintf(stderr, "Invalid number: %s: row %u, col %u\n",
+			    buff, row, col);
+		    exit(EX_DATAERR);
+		}
 		process_val(flist, c, x);
 	    }
 	    
+	    /*
 	    if ( col == flist->cols[c] )
 	    {
+		x = strtod(buff, &end);
+		if ( *end != '\0' )
+		{
+		    fprintf(stderr, "Invalid number: %s: row %u, col %u\n",
+			    buff, row, col);
+		    exit(EX_DATAERR);
+		}
 		process_val(flist, c, x);
 	    }
+	    */
 	}
 	
 	// End of input line?
@@ -234,21 +244,21 @@ int     process_data(function_list_t *flist, const char *delims)
     
     for (c = 0; c < flist->count; ++c)
     {
-	if ( flist->rows[c] != 0 )
+	if ( flist->functions[c].row != 0 )
 	{
 	    row_col_name = "Row";
-	    row_col_value = flist->rows[c];
+	    row_col_value = flist->functions[c].row;
 	}
 	else
 	{
 	    row_col_name = "Col";
-	    row_col_value = flist->cols[c];
+	    row_col_value = flist->functions[c].col;
 	}
-	switch(flist->functions[c])
+	switch(flist->functions[c].code)
 	{
 	    case    MEAN:
 		printf("%s %u mean           %f\n", row_col_name, row_col_value,
-			flist->sum[c] / flist->n[c]);
+			flist->functions[c].sum / flist->functions[c].num_count);
 		break;
 	    
 	    case    QUANTILE:
@@ -266,21 +276,21 @@ int     process_data(function_list_t *flist, const char *delims)
 void    process_val(function_list_t *flist, size_t c, double x)
 
 {
-    switch(flist->functions[c])
+    switch(flist->functions[c].code)
     {
 	case MEAN:
-	    flist->sum[c] += x;
-	    ++flist->n[c];
+	    flist->functions[c].sum += x;
+	    ++flist->functions[c].num_count;
 	    break;
 	
 	case QUANTILE:
 	    // FIXME: Check malloc
-	    if ( flist->nums_count[c] == flist->array_size[c] )
-		flist->nums[c] = xt_realloc(flist->nums[c],
-			       flist->array_size[c] *= 2,
-			       sizeof(*flist->nums[c]));
-	    flist->nums[c][flist->nums_count[c]] = x;
-	    ++flist->nums_count[c];
+	    if ( flist->functions[c].num_count == flist->functions[c].array_size )
+		flist->functions[c].nums = xt_realloc(flist->functions[c].nums,
+			       flist->functions[c].array_size *= 2,
+			       sizeof(*flist->functions[c].nums));
+	    flist->functions[c].nums[flist->functions[c].num_count] = x;
+	    ++flist->functions[c].num_count;
 	    break;
 	
 	default:
@@ -297,15 +307,14 @@ void    function_list_init(function_list_t *flist)
     flist->count = 0;
     for (c = 0; c < MAX_FUNCTIONS; ++c)
     {
-	flist->rows[c] = 0;
-	flist->cols[c] = 0;
-	flist->n[c] = 0;
-	flist->sum[c] = 0.0;
-	flist->nums[c] = NULL;
-	flist->array_size[c] = 0;
-	flist->nums_count[c] = 0;
-	flist->temp_file[c] = NULL;
-	flist->quantile[c] = 0;
+	flist->functions[c].row = 0;
+	flist->functions[c].col = 0;
+	flist->functions[c].num_count = 0;
+	flist->functions[c].sum = 0.0;
+	flist->functions[c].nums = NULL;
+	flist->functions[c].array_size = 0;
+	flist->functions[c].temp_file = NULL;
+	flist->functions[c].partitions = 0;
     }
 }
 
@@ -314,12 +323,12 @@ void    quantiles(function_list_t *flist, size_t c,
 		  const char *row_col_name, unsigned row_col_value)
 
 {
-    double  *list = flist->nums[c],
+    double  *list = flist->functions[c].nums,
 	    quantile,
 	    p,
 	    a;
-    size_t  list_size = flist->nums_count[c],
-	    partitions = flist->quantile[c],
+    size_t  list_size = flist->functions[c].num_count,
+	    partitions = flist->functions[c].partitions,
 	    k;
     
     qsort(list, list_size, sizeof(double),

@@ -13,7 +13,7 @@ typedef double  variance_t;
 #define POPULATION_VARIANCE_ADJUST  0.0
 #define SAMPLE_VARIANCE_ADJUST      1.0
 
-#define MAX_DIGITS          64
+#define MAX_DIGITS          4096    // Big enough for string data
 
 #define MAX_FUNCTIONS       64  // Number of functions computed in 1 run
 #define FUNCTION_LIST_INIT  { 0 }
@@ -31,21 +31,25 @@ typedef enum
     IQ_RANGE,
     BOX_PLOT,
     Z_SCORES
-}   function_t;
-    
+}   function_code_t;
+
 typedef struct
 {
-    unsigned    count;
+    function_code_t code;       // MEAN, MEDIAN, etc.
+    unsigned        row;        // 1-based row in input
+    unsigned        col;        // 1-based col in input
+    double          sum;        // Mean
+    double          *nums;      // Array for sorting for quantiles
+    size_t          num_count;
+    size_t          array_size;
+    FILE            *temp_file; // Second pass for variance relevant data only
+    unsigned        partitions; // Quantile partitions
+}   function_t;
+
+typedef struct
+{
+    unsigned        count;
     function_t  functions[MAX_FUNCTIONS];
-    unsigned    rows[MAX_FUNCTIONS];
-    unsigned    cols[MAX_FUNCTIONS];
-    unsigned    n[MAX_FUNCTIONS];
-    double      sum[MAX_FUNCTIONS];
-    double      *nums[MAX_FUNCTIONS];
-    size_t      array_size[MAX_FUNCTIONS];
-    size_t      nums_count[MAX_FUNCTIONS];
-    FILE        *temp_file[MAX_FUNCTIONS];
-    unsigned    quantile[MAX_FUNCTIONS];
 }   function_list_t;
 
 #include "basic-stats-protos.h"
