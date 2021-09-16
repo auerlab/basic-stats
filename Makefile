@@ -44,7 +44,6 @@
 # Installed targets
 
 BIN     = basic-stats
-# MAN     = ad2vcf.1
 
 ############################################################################
 # List object files that comprise BIN.
@@ -160,15 +159,7 @@ realclean: clean
 install: all
 	${MKDIR} -p ${DESTDIR}${PREFIX}/bin ${DESTDIR}${MANDIR}/man1
 	${INSTALL} ${BIN} ${DESTDIR}${PREFIX}/bin
-
-#        ${INSTALL} -m 0444 ${MAN} ${DESTDIR}${MANDIR}/man1
-
-############################################################################
-# Remove all installed files
-
-uninstall:
-	${RM} ${PREFIX}/bin/${BIN}
-	${RM} ${MANDIR}/man1/${MAN}
+	${INSTALL} -m 0444 Man/*.1 ${DESTDIR}${MANDIR}/man1
 
 help:
 	@printf "Usage: make [VARIABLE=value ...] all\n\n"
