@@ -50,12 +50,12 @@ int     main(int argc, char *argv[])
 	    add_function(&flist, MEDIAN, &c, argv);
 	else if ( strcmp(argv[c],"mean") == 0 )
 	    add_function(&flist, MEAN, &c, argv);
-	else if ( strcmp(argv[c],"population-variance") == 0 )
-	    add_function(&flist, POPULATION_VARIANCE, &c, argv);
-	else if ( strcmp(argv[c],"sample-variance") == 0 )
-	    add_function(&flist, SAMPLE_VARIANCE, &c, argv);
-	else if ( strcmp(argv[c],"population-stddev") == 0 )
-	    add_function(&flist, POPULATION_STDDEV, &c, argv);
+	else if ( strcmp(argv[c],"pop-var") == 0 )
+	    add_function(&flist, POP_VAR, &c, argv);
+	else if ( strcmp(argv[c],"sample-var") == 0 )
+	    add_function(&flist, SAMPLE_VAR, &c, argv);
+	else if ( strcmp(argv[c],"pop-stddev") == 0 )
+	    add_function(&flist, POP_STDDEV, &c, argv);
 	else if ( strcmp(argv[c],"sample-stddev") == 0 )
 	    add_function(&flist, SAMPLE_STDDEV, &c, argv);
 	else if ( strcmp(argv[c],"mode") == 0 )
@@ -85,9 +85,9 @@ void    usage(char *argv[])
     fprintf(stderr,"  mean\n");
     fprintf(stderr,"  quantile N (N = number of divisions)\n");
     fprintf(stderr,"  median (same as quantile 2)\n");
-    fprintf(stderr,"  population-variance\n");
-    fprintf(stderr,"  sample-variance\n");
-    fprintf(stderr,"  population-stddev\n");
+    fprintf(stderr,"  pop-var\n");
+    fprintf(stderr,"  sample-var\n");
+    fprintf(stderr,"  pop-stddev\n");
     fprintf(stderr,"  sample-stddev\n");
     fprintf(stderr,"  mode\n");
     fprintf(stderr,"  range\n");
@@ -170,7 +170,7 @@ int     process_data(function_list_t *flist, const char *delims)
 		*row_col_name = "";
     size_t      len,
 		c;
-    double      x;
+    double      x, ss, var;
     int         ch;
 
     for (c = 0; c < flist->count; ++c)
@@ -182,9 +182,6 @@ int     process_data(function_list_t *flist, const char *delims)
 					sizeof(*flist->functions[c].nums));
 	    flist->functions[c].array_size = 1024;
 	}
-	else if ( (flist->functions[c].code == POPULATION_VARIANCE) ||
-		  (flist->functions[c].code == SAMPLE_VARIANCE) )
-	    flist->functions[c].temp_file = tmpfile();
     }
     
     row = 1, col = 1;
@@ -211,20 +208,6 @@ int     process_data(function_list_t *flist, const char *delims)
 		}
 		process_val(flist, c, x);
 	    }
-	    
-	    /*
-	    if ( col == flist->cols[c] )
-	    {
-		x = strtod(buff, &end);
-		if ( *end != '\0' )
-		{
-		    fprintf(stderr, "Invalid number: %s: row %u, col %u\n",
-			    buff, row, col);
-		    exit(EX_DATAERR);
-		}
-		process_val(flist, c, x);
-	    }
-	    */
 	}
 	
 	// End of input line?
@@ -265,6 +248,29 @@ int     process_data(function_list_t *flist, const char *delims)
 		quantiles(flist, c, row_col_name, row_col_value);
 		break;
 	    
+	    /*
+	     *  Use theorom sum[(x - u)^2] = sum[x^2] - (sum[x])^2 / n
+	     */
+	    case    POP_VAR:
+	    case    POP_STDDEV:
+		ss = sum_squares(&flist->functions[c]);
+		var = ss / flist->functions[c].num_count;
+		printf("%s %u pop-var        %f\n", row_col_name,
+			row_col_value, var);
+		printf("%s %u pop-stddev     %f\n", row_col_name,
+			row_col_value, sqrt(var));
+		break;
+		
+	    case    SAMPLE_VAR:
+	    case    SAMPLE_STDDEV:
+		ss = sum_squares(&flist->functions[c]);
+		var = ss / (flist->functions[c].num_count - 1);
+		printf("%s %u sample-var     %f\n", row_col_name,
+			row_col_value, var);
+		printf("%s %u sample-stddev  %f\n", row_col_name,
+			row_col_value, sqrt(var));
+		break;
+	    
 	    default:
 		break;
 	}
@@ -276,11 +282,11 @@ int     process_data(function_list_t *flist, const char *delims)
 void    process_val(function_list_t *flist, size_t c, double x)
 
 {
+    ++flist->functions[c].num_count;
     switch(flist->functions[c].code)
     {
 	case MEAN:
 	    flist->functions[c].sum += x;
-	    ++flist->functions[c].num_count;
 	    break;
 	
 	case QUANTILE:
@@ -290,7 +296,14 @@ void    process_val(function_list_t *flist, size_t c, double x)
 			       flist->functions[c].array_size *= 2,
 			       sizeof(*flist->functions[c].nums));
 	    flist->functions[c].nums[flist->functions[c].num_count] = x;
-	    ++flist->functions[c].num_count;
+	    break;
+
+	case POP_VAR:
+	case SAMPLE_VAR:
+	case POP_STDDEV:
+	case SAMPLE_STDDEV:
+	    flist->functions[c].sum_x += x;
+	    flist->functions[c].sum_x_2 += x * x;
 	    break;
 	
 	default:
@@ -313,8 +326,9 @@ void    function_list_init(function_list_t *flist)
 	flist->functions[c].sum = 0.0;
 	flist->functions[c].nums = NULL;
 	flist->functions[c].array_size = 0;
-	flist->functions[c].temp_file = NULL;
 	flist->functions[c].partitions = 0;
+	flist->functions[c].sum_x = 0.0;
+	flist->functions[c].sum_x_2 = 0.0;
     }
 }
 
@@ -366,29 +380,9 @@ int     double_cmp(const double *d1, const double *d2)
 }
 
 
-double  variance(variance_t variance_adjust)
+double  sum_squares(function_t *function)
 
 {
-    size_t  list_size,
-	    c;
-    double  num,
-	    total,
-	    mean;
-    FILE    *fp;
-    
-    fp = tmpfile();
-    for (list_size = 0, total = 0.0; scanf("%lf", &num) == 1; ++list_size)
-    {
-	total += num;
-	fprintf(fp, "%f\n", num);
-    }
-    mean = total / list_size;
-    
-    rewind(fp);
-    for (c = 0, total = 0.0; c < list_size; ++c)
-    {
-	fscanf(fp, "%lf", &num);
-	total += (num - mean) * (num - mean);
-    }
-    return total / (list_size - variance_adjust);
+    return  function->sum_x_2 -
+	    function->sum_x * function->sum_x / function->num_count;
 }
