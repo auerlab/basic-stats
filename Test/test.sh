@@ -12,4 +12,6 @@ set -x
     median --row 1 \
     mean --col 3 \
     median --col 2 \
+    sample-stddev --col 1 \
+    sample-stddev --col 3 \
     < sample.txt

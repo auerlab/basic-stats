@@ -255,6 +255,8 @@ int     process_data(function_list_t *flist, const char *delims)
 	    case    POP_STDDEV:
 		ss = sum_squares(&flist->functions[c]);
 		var = ss / flist->functions[c].num_count;
+		printf("%s %u sum-squares    %f\n", row_col_name,
+			row_col_value, ss);
 		printf("%s %u pop-var        %f\n", row_col_name,
 			row_col_value, var);
 		printf("%s %u pop-stddev     %f\n", row_col_name,
@@ -265,6 +267,8 @@ int     process_data(function_list_t *flist, const char *delims)
 	    case    SAMPLE_STDDEV:
 		ss = sum_squares(&flist->functions[c]);
 		var = ss / (flist->functions[c].num_count - 1);
+		printf("%s %u sum-squares    %f\n", row_col_name,
+			row_col_value, ss);
 		printf("%s %u sample-var     %f\n", row_col_name,
 			row_col_value, var);
 		printf("%s %u sample-stddev  %f\n", row_col_name,
@@ -282,7 +286,6 @@ int     process_data(function_list_t *flist, const char *delims)
 void    process_val(function_list_t *flist, size_t c, double x)
 
 {
-    ++flist->functions[c].num_count;
     switch(flist->functions[c].code)
     {
 	case MEAN:
@@ -309,6 +312,7 @@ void    process_val(function_list_t *flist, size_t c, double x)
 	default:
 	    break;
     }
+    ++flist->functions[c].num_count;
 }
 
 
