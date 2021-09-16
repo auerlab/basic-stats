@@ -59,7 +59,7 @@ hence a good vehicle to learn how to create packages.
 ### Installing basic-stats on FreeBSD:
 
 FreeBSD is a highly underrated platform for scientific computing, with over
-1,800 scientific libraries and applications in the FreeBSD ports collection
+1,900 scientific libraries and applications in the FreeBSD ports collection
 (of more than 30,000 total), modern clang compiler, fully-integrated ZFS
 filesystem, and renowned security, performance, and reliability.
 FreeBSD has a somewhat well-earned reputation for being difficult to set up
