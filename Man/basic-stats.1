@@ -1,0 +1,106 @@
+.TH basic-stats 1
+.SH NAME    \" Section header
+.PP
+
+basic-stats - Command-line statistics made trivial
+
+\" Convention:
+\" Underline anything that is typed verbatim - commands, etc.
+.SH SYNOPSIS
+.PP
+.nf 
+.na
+basic-stats [--delim string] function1 [param1] --row|--col N \\
+    [function2 ...]
+.ad
+.fi
+
+.SH OPTIONS
+.TP
+\fB\-\-delim \fIstring\fR
+Use string as a set of delimiters instead of the default " \\t"
+
+.TP
+\fB\-\-row \fIN\fR
+Compute statistics for row N (1-based) of the input
+
+.TP
+\fB\-\-col \fIN\fR
+Compute statistics for column N (1-based) of the input
+
+.TP
+\fBmean\fI --row|--col N\fR
+Compute the mean (average) for row/column N
+
+.TP
+\fBquantile partitions\fI --row|--col N\fR
+Compute the low, high, and quantiles for row/column N
+
+.TP
+\fBmedian\fI --row|--col N\fR
+Compute the low, high, and median for row/column N.  Identical to
+quantile 2 --row|--col N.
+
+.SH "PURPOSE"
+
+.B Basic-stats
+is a program for quickly computing statistics on tabular data from the
+command-line.  It elimintes the nuisance of importing data into a spreadsheet
+or writing custom scripts in order to gather basic statistics.
+
+.SH "DESCRIPTION"
+
+.B Basic-stats
+computes common statistics such as mean, median, etc. on rows and/or columns
+of tabular data.  It can compute multiple functions on multiple rows and/or
+columns in a single pass through the input stream.
+
+The default delimiter is either a single TAB or multiple space characters. 
+Alternate delimiters, such as a comma, can be specified using, e.g.
+--delim ','.
+
+Quantiles are computed using a generalized interpolation formula (method 4
+from the Wikipedia page on quartiles).
+
+.B Basic-stats is written entirely in C for maximal performance.  Memory use
+is trivial for many functions, but some computations such as quantiles
+which involve sorting the data require the use of arrays.
+
+.SH EXAMPLES
+.nf
+.na
+> cat sample.txt    
+1    5  21
+2   12  22
+3   13  23
+4   14  24
+5   15  25
+6   16  26
+7   17  27
+8   18  28
+9   19  29
+10  20  30
+> basic-stats mean --col 1 median --row 2 quantile 4 --col 3 < sample.txt
+Col 1 mean           5.500000
+Row 2 low            2.000000
+Row 2 quantile(0.50) 12.000000
+Row 2 high           22.000000
+Col 3 low            21.000000
+Col 3 quantile(0.25) 22.750000
+Col 3 quantile(0.50) 25.500000
+Col 3 quantile(0.75) 28.250000
+Col 3 high           30.000000
+.ad
+.fi
+
+.SH "SEE ALSO"
+awk(1), R(1)
+
+.SH BUGS
+Please report bugs to the author and send patches in unified diff format.
+(man diff for more information)
+
+.SH AUTHOR
+.nf
+.na
+

@@ -19,7 +19,8 @@ typedef double  variance_t;
 #define FUNCTION_LIST_INIT  { 0 }
 typedef enum
 {
-    MEDIAN = 0,
+    QUANTILE = 0,
+    MEDIAN,
     MEAN,
     MODE,
     POPULATION_VARIANCE,
@@ -44,6 +45,7 @@ typedef struct
     size_t      array_size[MAX_FUNCTIONS];
     size_t      nums_count[MAX_FUNCTIONS];
     FILE        *temp_file[MAX_FUNCTIONS];
+    unsigned    quantile[MAX_FUNCTIONS];
 }   function_list_t;
 
 #include "basic-stats-protos.h"

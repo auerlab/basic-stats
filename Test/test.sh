@@ -1,8 +1,11 @@
 #!/bin/sh -e
 
+cd ..
 ./cave-man-install.sh
-ldd ./basic-stats
-./basic-stats \
+ldd basic-stats
+cd Test
+set -x
+../basic-stats \
     mean --col 1 \
     median --col 1 \
     mean --row 1 \

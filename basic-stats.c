@@ -44,6 +44,8 @@ int     main(int argc, char *argv[])
 	}
 	else if ( strcmp(argv[c],"--help") == 0 )
 	    usage(argv);
+	else if ( strcmp(argv[c],"quantile") == 0 )
+	    add_function(&flist, QUANTILE, &c, argv);
 	else if ( strcmp(argv[c],"median") == 0 )
 	    add_function(&flist, MEDIAN, &c, argv);
 	else if ( strcmp(argv[c],"mean") == 0 )
@@ -77,11 +79,12 @@ int     main(int argc, char *argv[])
 void    usage(char *argv[])
 
 {
-    fprintf(stderr, "Usage: %s [--delim string] function1 --row row1 | --col col1 \\\n"
-	    "        [function2 --row row2 | --col col2 ...]\n", argv[0]);
+    fprintf(stderr, "Usage: %s [--delim string] function1 [param1] --row row1 | --col col1 \\\n"
+	    "        [function2 [param2] --row row2 | --col col2 ...]\n", argv[0]);
     fprintf(stderr, "\nAt least one of the following functions is required:\n\n");
-    fprintf(stderr,"  median\n");
-    fprintf(stderr,"  average\n");
+    fprintf(stderr,"  mean\n");
+    fprintf(stderr,"  quantile N (N = number of divisions)\n");
+    fprintf(stderr,"  median (same as quantile 2)\n");
     fprintf(stderr,"  population-variance\n");
     fprintf(stderr,"  sample-variance\n");
     fprintf(stderr,"  population-stddev\n");
@@ -101,7 +104,7 @@ int     add_function(function_list_t *flist, function_t new_function,
 
 {
     int             count = flist->count;
-    unsigned long   n;
+    unsigned long   row_col;
     char            *end;
     
     if ( *c == MAX_FUNCTIONS )
@@ -111,22 +114,45 @@ int     add_function(function_list_t *flist, function_t new_function,
 	exit(EX_USAGE);
     }
     
-    n = strtoul(argv[*c + 2], &end, 10);
+    flist->functions[count] = new_function;
+    switch (new_function)
+    {
+	case    QUANTILE:
+	    flist->quantile[count] = strtoul(argv[++*c], &end, 10);
+	    if ( *end != '\0' )
+	    {
+		fprintf(stderr, "Invalid quantile partition count: %s\n", argv[*c]);
+		usage(argv);
+	    }
+	    break;
+	
+	case    MEDIAN:
+	    flist->functions[count] = QUANTILE;
+	    flist->quantile[count] = 2;
+	    break;
+	
+	default:
+	    break;
+    }
+    
+    row_col = strtoul(argv[*c + 2], &end, 10);
     if ( *end != '\0' )
+    {
+	fprintf(stderr, "Invalid row/col: %s\n", argv[*c + 2]);
 	usage(argv);
+    }
     if ( strcmp(argv[*c + 1], "--row") == 0 )
     {
-	flist->rows[count] = n;
+	flist->rows[count] = row_col;
 	flist->cols[count] = 0;
     }
     else if ( strcmp(argv[*c + 1], "--col") == 0 )
     {
-	flist->cols[count] = n;
+	flist->cols[count] = row_col;
 	flist->rows[count] = 0;
     }
     else
 	usage(argv);
-    flist->functions[count] = new_function;
     ++flist->count;
     *c += 2;
     return 0;
@@ -149,7 +175,7 @@ int     process_data(function_list_t *flist, const char *delims)
 
     for (c = 0; c < flist->count; ++c)
     {
-	if ( flist->functions[c] == MEDIAN )
+	if ( flist->functions[c] == QUANTILE )
 	{
 	    // FIXME: Check malloc
 	    flist->nums[c] = xt_malloc(1024, sizeof(*flist->nums[c]));
@@ -171,7 +197,7 @@ int     process_data(function_list_t *flist, const char *delims)
 	    exit(EX_DATAERR);
 	}
 	
-	printf("%16.2f", x);
+	printf("%8.2f", x);
 	for (c = 0; c < flist->count; ++c)
 	{
 	    /*
@@ -221,13 +247,12 @@ int     process_data(function_list_t *flist, const char *delims)
 	switch(flist->functions[c])
 	{
 	    case    MEAN:
-		printf("%s %u mean: %f\n", row_col_name, row_col_value,
+		printf("%s %u mean           %f\n", row_col_name, row_col_value,
 			flist->sum[c] / flist->n[c]);
 		break;
 	    
-	    case    MEDIAN:
-		printf("%s %u median: %f\n", row_col_name, row_col_value,
-			median(flist->nums[c], flist->nums_count[c]));
+	    case    QUANTILE:
+		quantiles(flist, c, row_col_name, row_col_value);
 		break;
 	    
 	    default:
@@ -248,7 +273,7 @@ void    process_val(function_list_t *flist, size_t c, double x)
 	    ++flist->n[c];
 	    break;
 	
-	case MEDIAN:
+	case QUANTILE:
 	    // FIXME: Check malloc
 	    if ( flist->nums_count[c] == flist->array_size[c] )
 		flist->nums[c] = xt_realloc(flist->nums[c],
@@ -280,22 +305,43 @@ void    function_list_init(function_list_t *flist)
 	flist->array_size[c] = 0;
 	flist->nums_count[c] = 0;
 	flist->temp_file[c] = NULL;
+	flist->quantile[c] = 0;
     }
 }
 
 
-double  median(double list[], size_t list_size)
+void    quantiles(function_list_t *flist, size_t c,
+		  const char *row_col_name, unsigned row_col_value)
 
 {
-    double  median;
-
+    double  *list = flist->nums[c],
+	    quantile,
+	    p,
+	    a;
+    size_t  list_size = flist->nums_count[c],
+	    partitions = flist->quantile[c],
+	    k;
+    
     qsort(list, list_size, sizeof(double),
 	  (int (*)(const void *, const void *))double_cmp);
-    if ( list_size % 2 == 0 )
-	median = (list[list_size / 2 - 1] + list[list_size / 2]) / 2.0;
-    else
-	median = list[list_size / 2];
-    return median;
+    
+    printf("%s %u low            %f\n", row_col_name, row_col_value, list[0]);
+    for (c = 1; c < partitions; ++c)
+    {
+	/*
+	 *  Using Wikipedia quartile method 4, which can be generalized
+	 *  to any quantile
+	 */
+	p = 1.0 / partitions * c;
+	k = p * (list_size + 1);
+	a = p * (list_size + 1) - k;
+	//printf("p = %f  k = %zu  a = %f  ", p, k, a);
+	// Method is 1-based, so adjust for C arrays
+	quantile = list[k - 1] + a * (list[k] - list[k - 1]);
+	printf("%s %u quantile(%0.2f) %f\n", row_col_name, row_col_value,
+		p, quantile);
+    }
+    printf("%s %u high           %f\n", row_col_name, row_col_value, list[list_size - 1]);
 }
 
 
