@@ -1,3 +1,17 @@
-basic-stats.o: basic-stats.c basic-stats.h basic-stats-protos.h
+basic-stats.o: basic-stats.c ../local/include/xtend/dsv.h \
+  ../local/include/xtend/mem.h basic-stats.h basic-stats-protos.h \
+  statsf-list.h statsf.h statsf-protos.h statsf-list-protos.h
 	${CC} -c ${CFLAGS} basic-stats.c
+
+statsf-list.o: statsf-list.c ../local/include/xtend/mem.h \
+  ../local/include/xtend/dsv.h statsf-list.h statsf.h statsf-protos.h \
+  statsf-list-protos.h
+	${CC} -c ${CFLAGS} statsf-list.c
+
+statsf.o: statsf.c ../local/include/xtend/mem.h statsf.h statsf-protos.h
+	${CC} -c ${CFLAGS} statsf.c
+
+temp-statsf-mutators.o: temp-statsf-mutators.c \
+  ../local/include/xtend/string.h statsf.h statsf-protos.h
+	${CC} -c ${CFLAGS} temp-statsf-mutators.c
 

@@ -14,4 +14,5 @@ set -x
     median --col 2 \
     sample-stddev --col 1 \
     sample-stddev --col 3 \
+    pop-stddev --col 3 \
     < sample.txt
