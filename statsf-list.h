@@ -5,6 +5,9 @@
 #define SFL_MAX_FUNCTIONS       64      // Max functions computed in 1 pass
 #define SFL_MAX_FIELD_LEN       4096    // Any field, not just numeric
 
+#define SFL_FLAG_NONE           0x00
+#define SFL_FLAG_VERBOSE        0x01
+
 typedef struct
 {
     unsigned    count;

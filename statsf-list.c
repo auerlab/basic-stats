@@ -72,7 +72,8 @@ int     statsf_list_add_func(statsf_list_t *flist, statsf_code_t new_code,
 }
 
 
-int     statsf_list_process_stream(statsf_list_t *flist, FILE *stream, const char *delims)
+int     statsf_list_process_stream(statsf_list_t *flist, FILE *stream,
+				   const char *delims, int flags)
 
 {
     unsigned    row,
@@ -102,7 +103,8 @@ int     statsf_list_process_stream(statsf_list_t *flist, FILE *stream, const cha
     while ( (ch = dsv_read_field(stream, buff, SFL_MAX_FIELD_LEN, delims,
 		    &len)) != EOF )
     {
-	printf("%8s", buff);
+	if ( flags & SFL_FLAG_VERBOSE )
+	    printf("%8s", buff);
 	for (c = 0; c < flist->count; ++c)
 	{
 	    /*
@@ -130,7 +132,8 @@ int     statsf_list_process_stream(statsf_list_t *flist, FILE *stream, const cha
 	{
 	    ++row;
 	    col = 1;
-	    putchar('\n');
+	    if ( flags & SFL_FLAG_VERBOSE)
+		putchar('\n');
 	}
 	else
 	    ++col;

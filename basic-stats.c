@@ -27,7 +27,8 @@ int     main(int argc, char *argv[])
 
 {
     char    *delims = " \t";
-    int     c;
+    int     c,
+	    flags = SFL_FLAG_NONE;
     statsf_list_t flist;
     
     if ( argc < 4 )
@@ -45,6 +46,8 @@ int     main(int argc, char *argv[])
 	}
 	else if ( strcmp(argv[c],"--help") == 0 )
 	    usage(argv);
+	else if ( strcmp(argv[c],"--verbose") == 0 )
+	    flags |= SFL_FLAG_VERBOSE;
 	else if ( strcmp(argv[c],"quantile") == 0 )
 	    statsf_list_add_func(&flist, STATSF_QUANTILE, &c, argv);
 	else if ( strcmp(argv[c],"median") == 0 )
@@ -75,7 +78,7 @@ int     main(int argc, char *argv[])
 	    usage(argv);
     }
     
-    return statsf_list_process_stream(&flist, stdin, delims);
+    return statsf_list_process_stream(&flist, stdin, delims, flags);
 }
 
 
