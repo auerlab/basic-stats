@@ -10,12 +10,17 @@ basic-stats - Command-line statistics made trivial
 .PP
 .nf 
 .na
-basic-stats [--delim string] function1 [param1] --row|--col N \\
-    [function2 ...]
+basic-stats [--verbose] [--delim string] \\
+	    function1 [param1] --row|--col N \\
+	    [function2 ...]
 .ad
 .fi
 
 .SH OPTIONS
+.TP
+\fB\-\-verbose
+Echo input data during processing
+
 .TP
 \fB\-\-delim \fIstring\fR
 Use string as a set of delimiters instead of the default " \\t"
@@ -61,6 +66,9 @@ Alternate delimiters, such as a comma, can be specified using, e.g.
 
 Quantiles are computed using a generalized interpolation formula (method 4
 from the Wikipedia page on quartiles).
+
+The output format is designed to be both human-readable and easily parsed
+by command-line tools and scripts.
 
 .B Basic-stats is written entirely in C for maximal performance.  Memory use
 is trivial for many functions, but some computations such as quantiles

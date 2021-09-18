@@ -85,8 +85,9 @@ int     main(int argc, char *argv[])
 void    usage(char *argv[])
 
 {
-    fprintf(stderr, "Usage: %s [--delim string] function1 [param1] --row row1 | --col col1 \\\n"
-	    "        [function2 [param2] --row row2 | --col col2 ...]\n", argv[0]);
+    fprintf(stderr, "Usage: %s [--verbose] [--delim string] \\\n"
+	    "       function1 [param1] --row|--col N1 \\\n"
+	    "       [function2 [param2] --row|--col N2 ...]\n", argv[0]);
     fprintf(stderr, "\nAt least one of the following functions is required:\n\n");
     fprintf(stderr,"  mean\n");
     fprintf(stderr,"  quantile N (N = number of divisions)\n");
