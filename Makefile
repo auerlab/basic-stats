@@ -162,13 +162,23 @@ realclean: clean
 ############################################################################
 # Install all target files (binaries, libraries, docs, etc.)
 
-install: all
+common-install: all
 	${MKDIR} -p ${DESTDIR}${PREFIX}/bin \
+		    ${DESTDIR}${PREFIX}/include \
+		    ${DESTDIR}${PREFIX}/lib \
 		    ${DESTDIR}${MANDIR}/man1 \
 		    ${DESTDIR}${MANDIR}/man3
 	${INSTALL} ${BIN} ${DESTDIR}${PREFIX}/bin
+	${INSTALL} *.h ${DESTDIR}${PREFIX}/include
+	${INSTALL} *.a ${DESTDIR}${PREFIX}/lib
 	${INSTALL} -m 0444 Man/*.1 ${DESTDIR}${MANDIR}/man1
 	${INSTALL} -m 0444 Man/*.3 ${DESTDIR}${MANDIR}/man3
+
+install: common-install
+	${INSTALL} -m 0444 Man/Macros/*.3 ${DESTDIR}${MANDIR}/man3
+
+# No Macros/*.3, which conflict with functions on case-insensitive FSs
+apple-install: common-install
 
 help:
 	@printf "Usage: make [VARIABLE=value ...] all\n\n"
