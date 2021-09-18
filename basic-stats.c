@@ -49,6 +49,8 @@ int     main(int argc, char *argv[])
 	    statsf_list_add_func(&flist, STATSF_QUANTILE, &c, argv);
 	else if ( strcmp(argv[c],"median") == 0 )
 	    statsf_list_add_func(&flist, STATSF_MEDIAN, &c, argv);
+	else if ( strcmp(argv[c],"quartile") == 0 )
+	    statsf_list_add_func(&flist, STATSF_QUARTILE, &c, argv);
 	else if ( strcmp(argv[c],"mean") == 0 )
 	    statsf_list_add_func(&flist, STATSF_MEAN, &c, argv);
 	else if ( strcmp(argv[c],"pop-var") == 0 )
@@ -86,6 +88,7 @@ void    usage(char *argv[])
     fprintf(stderr,"  mean\n");
     fprintf(stderr,"  quantile N (N = number of divisions)\n");
     fprintf(stderr,"  median (same as quantile 2)\n");
+    fprintf(stderr,"  quartile (same as quantile 4)\n");
     fprintf(stderr,"  pop-var\n");
     fprintf(stderr,"  sample-var\n");
     fprintf(stderr,"  pop-stddev\n");

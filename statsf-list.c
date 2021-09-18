@@ -39,6 +39,11 @@ int     statsf_list_add_func(statsf_list_t *flist, statsf_code_t new_code,
 	    STATSF_SET_PARTITIONS(&flist->functions[count], 2);
 	    break;
 	
+	case    STATSF_QUARTILE:
+	    STATSF_SET_CODE(&flist->functions[count], STATSF_QUANTILE);
+	    STATSF_SET_PARTITIONS(&flist->functions[count], 4);
+	    break;
+	
 	default:
 	    break;
     }

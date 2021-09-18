@@ -6,6 +6,7 @@ typedef enum
 {
     STATSF_QUANTILE = 0,
     STATSF_MEDIAN,
+    STATSF_QUARTILE,
     STATSF_MEAN,
     STATSF_MODE,
     STATSF_POP_VAR,

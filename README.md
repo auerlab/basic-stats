@@ -23,6 +23,32 @@ Basic-stats is written entirely in C for maximal performance.  Memory use
 is trivial for many functions, but some computations such as quantiles
 which involve sorting the data require the use of arrays.
 
+## Example
+
+```
+> cat sample.txt    
+1    5  21
+2   12  22
+3   13  23
+4   14  24
+5   15  25
+6   16  26
+7   17  27
+8   18  28
+9   19  29
+10  20  30
+> basic-stats mean --col 1 median --row 2 quantile 4 --col 3 < sample.txt
+Col 1 mean           5.500000
+Row 2 low            2.000000
+Row 2 quantile(0.50) 12.000000
+Row 2 high           22.000000
+Col 3 low            21.000000
+Col 3 quantile(0.25) 22.750000
+Col 3 quantile(0.50) 25.500000
+Col 3 quantile(0.75) 28.250000
+Col 3 high           30.000000
+```
+
 ## Design and Implementation
 
 The code is organized following basic object-oriented design principals, but
