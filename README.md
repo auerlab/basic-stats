@@ -9,7 +9,8 @@ or writing custom scripts in order to gather basic statistics.
 
 Basic-stats
 computes common statistics such as mean, median, etc. on rows and/or columns
-of tabular data.  It can compute multiple functions on multiple rows and/or
+of tabular data such as a TSV or CSV file.
+It can compute multiple functions on multiple rows and/or
 columns in a single pass through the input stream.
 
 The default delimiter is either a single TAB or multiple space characters. 
@@ -18,6 +19,9 @@ Alternate delimiters, such as a comma, can be specified using, e.g.
 
 Quantiles are computed using a generalized interpolation formula (method 4
 from the Wikipedia page on quartiles).
+
+The output format is designed to be both human-readable and easily parsed
+by command-line tools and scripts.
 
 Basic-stats is written entirely in C for maximal performance.  Memory use
 is trivial for many functions, but some computations such as quantiles
