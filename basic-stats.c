@@ -64,6 +64,8 @@ int     main(int argc, char *argv[])
 	    statsf_list_add_func(&flist, STATSF_POP_STDDEV, &c, argv);
 	else if ( strcmp(argv[c],"sample-stddev") == 0 )
 	    statsf_list_add_func(&flist, STATSF_SAMPLE_STDDEV, &c, argv);
+	else if ( strcmp(argv[c],"sample-stderr") == 0 )
+	    statsf_list_add_func(&flist, STATSF_SAMPLE_STDERR, &c, argv);
 	else if ( strcmp(argv[c],"mode") == 0 )
 	    statsf_list_add_func(&flist, STATSF_MODE, &c, argv);
 	else if ( strcmp(argv[c],"range") == 0 )
@@ -97,6 +99,7 @@ void    usage(char *argv[])
     fprintf(stderr,"  sample-var\n");
     fprintf(stderr,"  pop-stddev\n");
     fprintf(stderr,"  sample-stddev\n");
+    fprintf(stderr,"  sample-stderr\n");
     fprintf(stderr,"  mode\n");
     fprintf(stderr,"  range\n");
     fprintf(stderr,"  iq-range\n");

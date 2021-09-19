@@ -2,8 +2,8 @@
 
 ## Description
 
-Basic-stats
-is a program for quickly computing statistics on tabular data from the
+Basic-stats is a program and a C library
+for quickly computing statistics on tabular data from the
 command-line.  It elimintes the nuisance of importing data into a spreadsheet
 or writing custom scripts in order to gather basic statistics.
 
@@ -63,6 +63,9 @@ Structures are treated as classes, with accessor and mutator functions
 (or macros) provided, so dependent applications and libraries need not access
 structure members directly.  Since the C language cannot enforce this, it's
 up to application programmers to exercise self-discipline.
+
+For detailed coding standards, see
+https://github.com/outpaddling/Coding-Standards/.
 
 ## Building and installing
 

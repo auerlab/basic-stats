@@ -84,7 +84,7 @@ int     statsf_list_process_stream(statsf_list_t *flist, FILE *stream,
 		*row_col_name = "";
     size_t      len,
 		c;
-    double      x, ss, var;
+    double      x, ss, var, mean, se;
     int         ch;
 
     for (c = 0; c < flist->count; ++c)
@@ -155,12 +155,13 @@ int     statsf_list_process_stream(statsf_list_t *flist, FILE *stream,
 	    row_col_name = "Col";
 	    row_col_value = STATSF_COL(&flist->functions[c]);
 	}
+	mean = STATSF_SUM(&flist->functions[c]) /
+		STATSF_NUM_COUNT(&flist->functions[c]);
 	switch(STATSF_CODE(&flist->functions[c]))
 	{
 	    case    STATSF_MEAN:
-		printf("%s %u mean           %f\n", row_col_name, row_col_value,
-			STATSF_SUM(&flist->functions[c]) /
-			STATSF_NUM_COUNT(&flist->functions[c]));
+		printf("%s %u mean           %f\n", row_col_name,
+			row_col_value, mean);
 		break;
 	    
 	    case    STATSF_QUANTILE:
@@ -185,14 +186,22 @@ int     statsf_list_process_stream(statsf_list_t *flist, FILE *stream,
 		
 	    case    STATSF_SAMPLE_VAR:
 	    case    STATSF_SAMPLE_STDDEV:
+	    case    STATSF_SAMPLE_STDERR:
 		ss = sum_squares(&flist->functions[c]);
 		var = ss / (STATSF_NUM_COUNT(&flist->functions[c]) - 1);
+		se = sqrt(var) / sqrt(STATSF_NUM_COUNT(&flist->functions[c]));
 		printf("%s %u sum-squares    %f\n", row_col_name,
 			row_col_value, ss);
 		printf("%s %u sample-var     %f\n", row_col_name,
 			row_col_value, var);
 		printf("%s %u sample-stddev  %f\n", row_col_name,
 			row_col_value, sqrt(var));
+		printf("%s %u sample-stderr  %f\n", row_col_name,
+			row_col_value, se);
+		printf("%s %u sample-mean    %f\n", row_col_name,
+			row_col_value, mean);
+		printf("%s %u 95%%-CI-2SE     %f->%f\n", row_col_name,
+			row_col_value, mean - 2.0*se, mean + 2.0*se);
 		break;
 	    
 	    default:

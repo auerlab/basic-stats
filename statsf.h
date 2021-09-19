@@ -10,9 +10,10 @@ typedef enum
     STATSF_MEAN,
     STATSF_MODE,
     STATSF_POP_VAR,
-    STATSF_SAMPLE_VAR,
     STATSF_POP_STDDEV,
+    STATSF_SAMPLE_VAR,
     STATSF_SAMPLE_STDDEV,
+    STATSF_SAMPLE_STDERR,
     STATSF_RANGE,
     STATSF_IQ_RANGE,
     STATSF_BOX_PLOT,
@@ -93,3 +94,4 @@ typedef struct
 #define STATSF_SET_SUM_X_2(ptr,val)             ((ptr)->sum_x_2 = (val))
 
 #include "statsf-protos.h"
+#include "statsf-mutators-protos.h"

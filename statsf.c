@@ -5,10 +5,11 @@
 void    statsf_process_val(statsf_t *function, double x)
 
 {
+    // Always compute mean since it's cheap and necessary for SE, etc.
+    function->sum += x;
     switch(function->code)
     {
 	case STATSF_MEAN:
-	    function->sum += x;
 	    break;
 	
 	case STATSF_QUANTILE:
@@ -24,6 +25,7 @@ void    statsf_process_val(statsf_t *function, double x)
 	case STATSF_SAMPLE_VAR:
 	case STATSF_POP_STDDEV:
 	case STATSF_SAMPLE_STDDEV:
+	case STATSF_SAMPLE_STDERR:
 	    function->sum_x += x;
 	    function->sum_x_2 += x * x;
 	    break;

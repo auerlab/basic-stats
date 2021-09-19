@@ -53,3 +53,4 @@ typedef struct
 #define STATSF_LIST_SET_FUNCTIONS_AE(ptr,c,val) ((ptr)->functions[c] = (val))
 
 #include "statsf-list-protos.h"
+#include "statsf-list-mutators-protos.h"
