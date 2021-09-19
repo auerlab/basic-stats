@@ -2,9 +2,9 @@
 
 ## Description
 
-Basic-stats is a program and a C library
-for quickly computing statistics on tabular data from the
-command-line.  It elimintes the nuisance of importing data into a spreadsheet
+Basic-stats is a command-line program and a C library
+for quickly computing statistics on tabular data.
+It eliminates the nuisance of importing data into a spreadsheet
 or writing custom scripts in order to gather basic statistics.
 
 Basic-stats
@@ -160,7 +160,7 @@ To facilitate incorporation into package managers, the Makefile respects
 standard make/environment variables such as CC, CFLAGS, PREFIX, etc.  
 
 Add-on libraries required for the build, such as libxtend, should be found
-under ${LOCABASE}, which defaults to ../local.
+under ${LOCALBASE}, which defaults to ../local.
 The library, headers, and man pages are installed under
 ${DESTDIR}${PREFIX}.  DESTDIR is empty by default and is primarily used by
 package managers to stage installations.  PREFIX defaults to ${LOCALBASE}.
