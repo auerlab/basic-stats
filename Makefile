@@ -89,6 +89,7 @@ CPP         ?= cpp
 
 AR          ?= ar
 RANLIB      ?= ranlib
+STRIP       ?= strip
 
 INCLUDES    += -I${LOCALBASE}/include
 CFLAGS      += ${INCLUDES}
@@ -179,6 +180,9 @@ install: common-install
 
 # No Macros/*.3, which conflict with functions on case-insensitive FSs
 apple-install: common-install
+
+install-strip: install
+	${STRIP} ${DESTDIR}${PREFIX}/bin/basic-stats
 
 help:
 	@printf "Usage: make [VARIABLE=value ...] all\n\n"
