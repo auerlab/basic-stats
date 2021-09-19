@@ -3,6 +3,11 @@ basic-stats.o: basic-stats.c ../local/include/xtend/dsv.h \
   statsf-list.h statsf.h statsf-protos.h statsf-list-protos.h
 	${CC} -c ${CFLAGS} basic-stats.c
 
+statsf-list-mutators.o: statsf-list-mutators.c \
+  ../local/include/xtend/string.h statsf-list.h statsf.h statsf-protos.h \
+  statsf-list-protos.h
+	${CC} -c ${CFLAGS} statsf-list-mutators.c
+
 statsf-list.o: statsf-list.c ../local/include/xtend/mem.h \
   ../local/include/xtend/dsv.h statsf-list.h statsf.h statsf-protos.h \
   statsf-list-protos.h

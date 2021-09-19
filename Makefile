@@ -50,7 +50,7 @@ LIB     = basic-stats.a
 # List object files that comprise BIN.
 
 OBJS    = basic-stats.o
-LIBOBJS = statsf-list.o statsf.o statsf-mutators.o
+LIBOBJS = statsf-list.o statsf.o statsf-mutators.o statsf-list-mutators.o
 
 ############################################################################
 # Compile, link, and install options
