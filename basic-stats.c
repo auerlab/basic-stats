@@ -76,6 +76,10 @@ int     main(int argc, char *argv[])
 	    statsf_list_add_func(&flist, STATSF_BOX_PLOT, &c, argv);
 	else if ( strcmp(argv[c],"z-scores") == 0 )
 	    statsf_list_add_func(&flist, STATSF_Z_SCORES, &c, argv);
+	else if ( strcmp(argv[c],"chi-sq-fit") == 0 )
+	    statsf_list_add_func(&flist, STATSF_CHI_FIT, &c, argv);
+	else if ( strcmp(argv[c],"chi-sq-ind") == 0 )
+	    statsf_list_add_func(&flist, STATSF_CHI_IND, &c, argv);
 	else
 	    usage(argv);
     }

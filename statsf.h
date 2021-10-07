@@ -17,7 +17,9 @@ typedef enum
     STATSF_RANGE,
     STATSF_IQ_RANGE,
     STATSF_BOX_PLOT,
-    STATSF_Z_SCORES
+    STATSF_Z_SCORES,
+    STATSF_CHI_FIT,
+    STATSF_CHI_IND
 }   statsf_code_t;
 
 typedef struct
@@ -25,6 +27,8 @@ typedef struct
     statsf_code_t   code;       // MEAN, MEDIAN, etc.
     unsigned        row;        // 1-based row in input
     unsigned        col;        // 1-based col in input
+    unsigned        *rows;      // List of rows for multirow (e.g. chi-sq)
+    unsigned        *cols;      // List of cols for multicol (e.g. chi-sq)
     double          sum;        // Mean
     double          *nums;      // Array for sorting for quantiles
     size_t          num_count;
@@ -34,6 +38,8 @@ typedef struct
     // For variance use theorom sum[(x - u)^2] = sum[x^2] - (sum[x])^2 / n
     double          sum_x;
     double          sum_x_2;
+    double          *row_sums;  // List of row sums for multirow (e.g. chi-sq)
+    double          *col_sums;  // List of col sums for multirow (e.g. chi-sq)
 }   statsf_t;
 
 
