@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <xtend/mem.h>
+#include <xtend/math.h> // double_cmp()
 #include "statsf.h"
 
 void    statsf_process_val(statsf_t *function, double x)
@@ -88,19 +89,7 @@ void    statsf_quantiles(statsf_t *function,
 }
 
 
-int     double_cmp(const double *d1, const double *d2)
-
-{
-    if ( *d1 > *d2 )
-	return 1;
-    else if ( *d1 < *d2 )
-	return -1;
-    else
-	return 0;
-}
-
-
-double  sum_squares(statsf_t *function)
+double  statsf_sum_squares(statsf_t *function)
 
 {
     return  function->sum_x_2 -

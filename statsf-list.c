@@ -174,7 +174,7 @@ int     statsf_list_process_stream(statsf_list_t *flist, FILE *stream,
 	     */
 	    case    STATSF_POP_VAR:
 	    case    STATSF_POP_STDDEV:
-		ss = sum_squares(&flist->functions[c]);
+		ss = statsf_sum_squares(&flist->functions[c]);
 		var = ss / STATSF_NUM_COUNT(&flist->functions[c]);
 		printf("%s %u sum-squares    %f\n", row_col_name,
 			row_col_value, ss);
@@ -187,7 +187,7 @@ int     statsf_list_process_stream(statsf_list_t *flist, FILE *stream,
 	    case    STATSF_SAMPLE_VAR:
 	    case    STATSF_SAMPLE_STDDEV:
 	    case    STATSF_SAMPLE_STDERR:
-		ss = sum_squares(&flist->functions[c]);
+		ss = statsf_sum_squares(&flist->functions[c]);
 		var = ss / (STATSF_NUM_COUNT(&flist->functions[c]) - 1);
 		se = sqrt(var) / sqrt(STATSF_NUM_COUNT(&flist->functions[c]));
 		printf("%s %u sum-squares    %f\n", row_col_name,
