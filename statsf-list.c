@@ -197,9 +197,12 @@ int     statsf_list_process_stream(statsf_list_t *flist, FILE *stream,
 		{
 		    // FIXME: Use accessor for tmp_file
 		    rewind(flist->functions[c].tmp_file);
-		    printf("%s %u z-scores\n", row_col_name, row_col_value);
+		    printf("%s %u z-scores:\n%16s %16s %16s\n", row_col_name, row_col_value,
+			    "Val", "z-score", "CDF = P(x < Val)");
 		    while ( fscanf(flist->functions[c].tmp_file, "%lf", &x) == 1 )
-			printf("%f %f\n", x, z_score(x, mean, stddev));
+			printf("%16f %16f %16f\n", x,
+				z_score(x, mean, stddev),
+				z_percentile(x, mean, stddev));
 		}
 		break;
 		
@@ -228,9 +231,12 @@ int     statsf_list_process_stream(statsf_list_t *flist, FILE *stream,
 		{
 		    // FIXME: Use accessor for tmp_file
 		    rewind(flist->functions[c].tmp_file);
-		    printf("%s %u z-scores\n", row_col_name, row_col_value);
+		    printf("%s %u z-scores:\n%16s %16s %16s\n", row_col_name, row_col_value,
+			    "Val", "z-score", "CDF = P(x < Val)");
 		    while ( fscanf(flist->functions[c].tmp_file, "%lf", &x) == 1 )
-			printf("%f %f\n", x, z_score(x, mean, stddev));
+			printf("%16f %16f %16f\n", x,
+				z_score(x, mean, stddev),
+				z_percentile(x, mean, stddev));
 		}
 		break;
 	    

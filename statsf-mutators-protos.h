@@ -23,5 +23,3 @@ int statsf_set_row_sums_cpy(statsf_t *statsf_ptr, double *new_row_sums, size_t a
 int statsf_set_col_sums(statsf_t *statsf_ptr, double *new_col_sums);
 int statsf_set_col_sums_ae(statsf_t *statsf_ptr, size_t c, double new_col_sums_element);
 int statsf_set_col_sums_cpy(statsf_t *statsf_ptr, double *new_col_sums, size_t array_size);
-int statsf_set_given_mean(statsf_t *statsf_ptr, double new_given_mean);
-int statsf_set_given_stddev(statsf_t *statsf_ptr, double new_given_stddev);

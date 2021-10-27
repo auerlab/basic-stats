@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <math.h>
 #include <xtend/mem.h>
 #include <xtend/math.h> // double_cmp()
 #include "statsf.h"
@@ -169,4 +170,35 @@ double  z_equivalent(double score, double mean, double stddev,
 
 {
     return z_score(score, mean, stddev) * new_stddev + new_mean;
+}
+
+
+/***************************************************************************
+ *  Library:
+ *      #include <>
+ *      -l
+ *
+ *  Description:
+ *  
+ *  Arguments:
+ *
+ *  Returns:
+ *
+ *  Examples:
+ *
+ *  Files:
+ *
+ *  Environment
+ *
+ *  See also:
+ *
+ *  History: 
+ *  Date        Name        Modification
+ *  2021-10-27  Jason Bacon Begin
+ ***************************************************************************/
+
+double  z_percentile(double x, double mean, double stddev)
+
+{
+    return 0.5 * (1 + erf((x - mean) / (stddev * M_SQRT2)));
 }
