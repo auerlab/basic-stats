@@ -49,37 +49,39 @@ int     main(int argc, char *argv[])
 	else if ( strcmp(argv[c],"--verbose") == 0 )
 	    flags |= SFL_FLAG_VERBOSE;
 	else if ( strcmp(argv[c],"quantile") == 0 )
-	    statsf_list_add_func(&flist, STATSF_QUANTILE, &c, argv);
+	    statsf_list_add_func(&flist, STATSF_QUANTILE, &c, argc, argv);
 	else if ( strcmp(argv[c],"median") == 0 )
-	    statsf_list_add_func(&flist, STATSF_MEDIAN, &c, argv);
+	    statsf_list_add_func(&flist, STATSF_MEDIAN, &c, argc, argv);
 	else if ( strcmp(argv[c],"quartile") == 0 )
-	    statsf_list_add_func(&flist, STATSF_QUARTILE, &c, argv);
+	    statsf_list_add_func(&flist, STATSF_QUARTILE, &c, argc, argv);
 	else if ( strcmp(argv[c],"mean") == 0 )
-	    statsf_list_add_func(&flist, STATSF_MEAN, &c, argv);
+	    statsf_list_add_func(&flist, STATSF_MEAN, &c, argc, argv);
 	else if ( strcmp(argv[c],"pop-var") == 0 )
-	    statsf_list_add_func(&flist, STATSF_POP_VAR, &c, argv);
+	    statsf_list_add_func(&flist, STATSF_POP_VAR, &c, argc, argv);
 	else if ( strcmp(argv[c],"sample-var") == 0 )
-	    statsf_list_add_func(&flist, STATSF_SAMPLE_VAR, &c, argv);
+	    statsf_list_add_func(&flist, STATSF_SAMPLE_VAR, &c, argc, argv);
 	else if ( strcmp(argv[c],"pop-stddev") == 0 )
-	    statsf_list_add_func(&flist, STATSF_POP_STDDEV, &c, argv);
+	    statsf_list_add_func(&flist, STATSF_POP_STDDEV, &c, argc, argv);
+	else if ( strcmp(argv[c],"pop-z-scores") == 0 )
+	    statsf_list_add_func(&flist, STATSF_POP_Z_SCORES, &c, argc, argv);
 	else if ( strcmp(argv[c],"sample-stddev") == 0 )
-	    statsf_list_add_func(&flist, STATSF_SAMPLE_STDDEV, &c, argv);
+	    statsf_list_add_func(&flist, STATSF_SAMPLE_STDDEV, &c, argc, argv);
 	else if ( strcmp(argv[c],"sample-stderr") == 0 )
-	    statsf_list_add_func(&flist, STATSF_SAMPLE_STDERR, &c, argv);
+	    statsf_list_add_func(&flist, STATSF_SAMPLE_STDERR, &c, argc, argv);
+	else if ( strcmp(argv[c],"sample-z-scores") == 0 )
+	    statsf_list_add_func(&flist, STATSF_SAMPLE_Z_SCORES, &c, argc, argv);
 	else if ( strcmp(argv[c],"mode") == 0 )
-	    statsf_list_add_func(&flist, STATSF_MODE, &c, argv);
+	    statsf_list_add_func(&flist, STATSF_MODE, &c, argc, argv);
 	else if ( strcmp(argv[c],"range") == 0 )
-	    statsf_list_add_func(&flist, STATSF_RANGE, &c, argv);
+	    statsf_list_add_func(&flist, STATSF_RANGE, &c, argc, argv);
 	else if ( strcmp(argv[c],"iq-range") == 0 )
-	    statsf_list_add_func(&flist, STATSF_IQ_RANGE, &c, argv);
+	    statsf_list_add_func(&flist, STATSF_IQ_RANGE, &c, argc, argv);
 	else if ( strcmp(argv[c],"box-plot") == 0 )
-	    statsf_list_add_func(&flist, STATSF_BOX_PLOT, &c, argv);
-	else if ( strcmp(argv[c],"z-scores") == 0 )
-	    statsf_list_add_func(&flist, STATSF_Z_SCORES, &c, argv);
+	    statsf_list_add_func(&flist, STATSF_BOX_PLOT, &c, argc, argv);
 	else if ( strcmp(argv[c],"chi-sq-fit") == 0 )
-	    statsf_list_add_func(&flist, STATSF_CHI_FIT, &c, argv);
+	    statsf_list_add_func(&flist, STATSF_CHI_FIT, &c, argc, argv);
 	else if ( strcmp(argv[c],"chi-sq-ind") == 0 )
-	    statsf_list_add_func(&flist, STATSF_CHI_IND, &c, argv);
+	    statsf_list_add_func(&flist, STATSF_CHI_IND, &c, argc, argv);
 	else
 	    usage(argv);
     }
@@ -100,15 +102,16 @@ void    usage(char *argv[])
     fprintf(stderr,"  median (same as quantile 2)\n");
     fprintf(stderr,"  quartile (same as quantile 4)\n");
     fprintf(stderr,"  pop-var\n");
-    fprintf(stderr,"  sample-var\n");
     fprintf(stderr,"  pop-stddev\n");
+    fprintf(stderr,"  pop-z-scores\n");
+    fprintf(stderr,"  sample-var\n");
     fprintf(stderr,"  sample-stddev\n");
+    fprintf(stderr,"  sample-z-scores\n");
     fprintf(stderr,"  sample-stderr\n");
     fprintf(stderr,"  mode\n");
     fprintf(stderr,"  range\n");
     fprintf(stderr,"  iq-range\n");
     fprintf(stderr,"  box-plot\n");
-    fprintf(stderr,"  z-scores\n");
     fprintf(stderr,"\nDefault delimiter is TAB.  The delimiter string may be multiple characters.\n");
     exit(EX_USAGE);
 }

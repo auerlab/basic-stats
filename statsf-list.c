@@ -6,9 +6,11 @@
 #include <xtend/mem.h>
 #include <xtend/dsv.h>
 #include "statsf-list.h"
+// FIXME: Define usage() somewhere else
+#include "basic-stats-protos.h"
 
 int     statsf_list_add_func(statsf_list_t *flist, statsf_code_t new_code,
-		     int *c, char *argv[])
+		     int *c, int argc, char *argv[])
 
 {
     int             count = flist->count;
@@ -35,19 +37,23 @@ int     statsf_list_add_func(statsf_list_t *flist, statsf_code_t new_code,
 	    break;
 	
 	case    STATSF_MEDIAN:
+	    // Overwrite median code since it's a special case of quantile
 	    STATSF_SET_CODE(&flist->functions[count], STATSF_QUANTILE);
 	    STATSF_SET_PARTITIONS(&flist->functions[count], 2);
 	    break;
 	
 	case    STATSF_QUARTILE:
+	    // Overwrite quartile code since it's a special case of quantile
 	    STATSF_SET_CODE(&flist->functions[count], STATSF_QUANTILE);
 	    STATSF_SET_PARTITIONS(&flist->functions[count], 4);
 	    break;
-	
+
 	default:
 	    break;
     }
     
+    if ( argc < *c + 2 )
+	usage(argv);
     row_col = strtoul(argv[*c + 2], &end, 10);
     if ( *end != '\0' )
     {
@@ -65,7 +71,7 @@ int     statsf_list_add_func(statsf_list_t *flist, statsf_code_t new_code,
 	STATSF_SET_COL(&flist->functions[count], row_col);
     }
     else
-	exit(EX_USAGE);
+	usage(argv);
     ++flist->count;
     *c += 2;
     return 0;
@@ -84,7 +90,7 @@ int     statsf_list_process_stream(statsf_list_t *flist, FILE *stream,
 		*row_col_name = "";
     size_t      len,
 		c;
-    double      x, ss, var, mean, se;
+    double      x, ss, var, stddev, mean, se;
     int         ch;
 
     for (c = 0; c < flist->count; ++c)
@@ -174,34 +180,58 @@ int     statsf_list_process_stream(statsf_list_t *flist, FILE *stream,
 	     */
 	    case    STATSF_POP_VAR:
 	    case    STATSF_POP_STDDEV:
+	    case    STATSF_POP_Z_SCORES:
 		ss = statsf_sum_squares(&flist->functions[c]);
 		var = ss / STATSF_NUM_COUNT(&flist->functions[c]);
+		stddev = sqrt(var);
 		printf("%s %u sum-squares    %f\n", row_col_name,
 			row_col_value, ss);
 		printf("%s %u pop-var        %f\n", row_col_name,
 			row_col_value, var);
 		printf("%s %u pop-stddev     %f\n", row_col_name,
-			row_col_value, sqrt(var));
+			row_col_value, stddev);
+		printf("%s %u pop-mean       %f\n", row_col_name,
+			row_col_value, mean);
+
+		if ( STATSF_CODE(&flist->functions[c]) == STATSF_POP_Z_SCORES )
+		{
+		    // FIXME: Use accessor for tmp_file
+		    rewind(flist->functions[c].tmp_file);
+		    printf("%s %u z-scores\n", row_col_name, row_col_value);
+		    while ( fscanf(flist->functions[c].tmp_file, "%lf", &x) == 1 )
+			printf("%f %f\n", x, z_score(x, mean, stddev));
+		}
 		break;
 		
 	    case    STATSF_SAMPLE_VAR:
 	    case    STATSF_SAMPLE_STDDEV:
 	    case    STATSF_SAMPLE_STDERR:
+	    case    STATSF_SAMPLE_Z_SCORES:
 		ss = statsf_sum_squares(&flist->functions[c]);
 		var = ss / (STATSF_NUM_COUNT(&flist->functions[c]) - 1);
+		stddev = sqrt(var);
 		se = sqrt(var) / sqrt(STATSF_NUM_COUNT(&flist->functions[c]));
 		printf("%s %u sum-squares    %f\n", row_col_name,
 			row_col_value, ss);
 		printf("%s %u sample-var     %f\n", row_col_name,
 			row_col_value, var);
 		printf("%s %u sample-stddev  %f\n", row_col_name,
-			row_col_value, sqrt(var));
+			row_col_value, stddev);
 		printf("%s %u sample-stderr  %f\n", row_col_name,
 			row_col_value, se);
 		printf("%s %u sample-mean    %f\n", row_col_name,
 			row_col_value, mean);
 		printf("%s %u 95%%-CI-2SE     %f->%f\n", row_col_name,
 			row_col_value, mean - 2.0*se, mean + 2.0*se);
+
+		if ( STATSF_CODE(&flist->functions[c]) == STATSF_SAMPLE_Z_SCORES )
+		{
+		    // FIXME: Use accessor for tmp_file
+		    rewind(flist->functions[c].tmp_file);
+		    printf("%s %u z-scores\n", row_col_name, row_col_value);
+		    while ( fscanf(flist->functions[c].tmp_file, "%lf", &x) == 1 )
+			printf("%f %f\n", x, z_score(x, mean, stddev));
+		}
 		break;
 	    
 	    default:
