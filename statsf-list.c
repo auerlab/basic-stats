@@ -229,6 +229,11 @@ int     statsf_list_process_stream(statsf_list_t *flist, FILE *stream,
 
 		if ( STATSF_CODE(&flist->functions[c]) == STATSF_SAMPLE_Z_SCORES )
 		{
+		    if ( STATSF_NUM_COUNT(&flist->functions[c]) < 30 )
+		    {
+			printf("Warning: Sample size is < 30.\n");
+			printf("You may want to use a t-distribution instad.\n");
+		    }
 		    // FIXME: Use accessor for tmp_file
 		    rewind(flist->functions[c].tmp_file);
 		    printf("%s %u z-scores:\n%16s %16s %16s\n", row_col_name, row_col_value,
