@@ -197,7 +197,7 @@ double  z_equivalent(double score, double mean, double stddev,
  *  2021-10-27  Jason Bacon Begin
  ***************************************************************************/
 
-double  z_percentile(double x, double mean, double stddev)
+double  z_cdf(double x, double mean, double stddev)
 
 {
     return 0.5 * (1 + erf((x - mean) / (stddev * M_SQRT2)));

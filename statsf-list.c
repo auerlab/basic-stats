@@ -202,7 +202,7 @@ int     statsf_list_process_stream(statsf_list_t *flist, FILE *stream,
 		    while ( fscanf(flist->functions[c].tmp_file, "%lf", &x) == 1 )
 			printf("%16f %16f %16f\n", x,
 				z_score(x, mean, stddev),
-				z_percentile(x, mean, stddev));
+				z_cdf(x, mean, stddev));
 		}
 		break;
 		
@@ -241,7 +241,7 @@ int     statsf_list_process_stream(statsf_list_t *flist, FILE *stream,
 		    while ( fscanf(flist->functions[c].tmp_file, "%lf", &x) == 1 )
 			printf("%16f %16f %16f\n", x,
 				z_score(x, mean, stddev),
-				z_percentile(x, mean, stddev));
+				z_cdf(x, mean, stddev));
 		}
 		break;
 	    

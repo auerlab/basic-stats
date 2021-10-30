@@ -21,6 +21,9 @@
 #include "basic-stats.h"
 #include "statsf-list.h"
 
+int     print_z_table(void);
+int     print_z_cdf(int argc, char *argv[]);
+
 // http://makemeanalyst.com/basic-statistics-for-data-analysis/
 
 int     main(int argc, char *argv[])
@@ -30,8 +33,12 @@ int     main(int argc, char *argv[])
     int     c,
 	    flags = SFL_FLAG_NONE;
     statsf_list_t flist;
-    
-    if ( argc < 4 )
+
+    if ( (argc == 2) && (strcmp(argv[1], "z-table") == 0) )
+	return print_z_table();
+    else if ( (argc > 1) && (strcmp(argv[1], "z-cdf") == 0) )
+	return print_z_cdf(argc, argv);
+    else if ( argc < 4 )
 	usage(argv);
     
     statsf_list_init(&flist);
@@ -93,6 +100,9 @@ int     main(int argc, char *argv[])
 void    usage(char *argv[])
 
 {
+    fprintf(stderr, "Usage: %s z-table\n\n", argv[0]);
+    fprintf(stderr, "Usage: %s z-cdf z-score [mean stddev]\n\n", argv[0]);
+    
     fprintf(stderr, "Usage: %s [--verbose] [--delim string] \\\n"
 	    "       function1 [param1] --row|--col N1 \\\n"
 	    "       [function2 [param2] --row|--col N2 ...]\n", argv[0]);
@@ -114,4 +124,53 @@ void    usage(char *argv[])
     fprintf(stderr,"  box-plot\n");
     fprintf(stderr,"\nDefault delimiter is TAB.  The delimiter string may be multiple characters.\n");
     exit(EX_USAGE);
+}
+
+
+int     print_z_table(void)
+
+{
+    double  row, col;
+
+    printf("     ");
+    for (col = 0.00; col < 0.099; col += 0.01)
+	printf("%6.2f ", col);
+    putchar('\n');
+    for (row = -3.0; row < 3.1; row += 0.1)
+    {
+	printf("%4.1f ", row);
+	for (col = 0.00; col < 0.099; col += 0.01)
+	    printf("%.4f ", z_cdf(row + (row < 0 ? -col : col), 0.0, 1.0));
+	putchar('\n');
+    }
+    return EX_OK;
+}
+
+
+int     print_z_cdf(int argc, char *argv[])
+
+{
+    double  z_score, mean, stddev;
+    char    *end;
+    
+    if ( argc == 3 )
+    {
+	z_score = strtod(argv[2], &end);
+	if ( *end != '\0' )
+	{
+	    fprintf(stderr, "Invalid z-score: %s\n", argv[1]);
+	    usage(argv);
+	}
+	printf("P(x < %f) = %f\n", z_score, z_cdf(z_score, 0.0, 1.0));
+    }
+    else if ( argc == 5 )
+    {
+	z_score = strtod(argv[2], &end);
+	mean = strtod(argv[3], &end);
+	stddev = strtod(argv[4], &end);
+	printf("P(x < %f) = %f\n", z_score, z_cdf(z_score, mean, stddev));
+    }
+    else
+	usage(argv);
+    return EX_OK;
 }
