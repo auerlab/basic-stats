@@ -132,10 +132,10 @@ double  statsf_sum_squares(statsf_t *function)
  *  2021-10-27  Jason Bacon Begin
  ***************************************************************************/
 
-double  z_score(double score, double mean, double stddev)
+double  z_score(double x, double mean, double stddev)
 
 {
-    return (score - mean) / stddev;
+    return (x - mean) / stddev;
 }
 
 

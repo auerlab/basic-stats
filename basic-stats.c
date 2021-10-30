@@ -22,6 +22,7 @@
 #include "statsf-list.h"
 
 int     print_z_table(void);
+int     print_z_score(int argc, char *argv[]);
 int     print_z_cdf(int argc, char *argv[]);
 
 // http://makemeanalyst.com/basic-statistics-for-data-analysis/
@@ -38,6 +39,8 @@ int     main(int argc, char *argv[])
 	return print_z_table();
     else if ( (argc > 1) && (strcmp(argv[1], "z-cdf") == 0) )
 	return print_z_cdf(argc, argv);
+    else if ( (argc == 5) && (strcmp(argv[1], "z-score") == 0) )
+	return print_z_score(argc, argv);
     else if ( argc < 4 )
 	usage(argv);
     
@@ -100,29 +103,36 @@ int     main(int argc, char *argv[])
 void    usage(char *argv[])
 
 {
-    fprintf(stderr, "Usage: %s z-table\n\n", argv[0]);
-    fprintf(stderr, "Usage: %s z-cdf z-score [mean stddev]\n\n", argv[0]);
+    fprintf(stderr, "\nSimple functions:\n");
+    fprintf(stderr, "   %s z-table\n", argv[0]);
+    fprintf(stderr, "   %s z-score x mean stddev\n", argv[0]);
+    fprintf(stderr, "   %s z-cdf z-score [mean stddev] (defaults: 0 1)\n\n", argv[0]);
     
-    fprintf(stderr, "Usage: %s [--verbose] [--delim string] \\\n"
-	    "       function1 [param1] --row|--col N1 \\\n"
-	    "       [function2 [param2] --row|--col N2 ...]\n", argv[0]);
-    fprintf(stderr, "\nAt least one of the following functions is required:\n\n");
-    fprintf(stderr,"  mean\n");
-    fprintf(stderr,"  quantile N (N = number of divisions)\n");
-    fprintf(stderr,"  median (same as quantile 2)\n");
-    fprintf(stderr,"  quartile (same as quantile 4)\n");
-    fprintf(stderr,"  pop-var\n");
-    fprintf(stderr,"  pop-stddev\n");
-    fprintf(stderr,"  pop-z-scores\n");
-    fprintf(stderr,"  sample-var\n");
-    fprintf(stderr,"  sample-stddev\n");
-    fprintf(stderr,"  sample-z-scores\n");
-    fprintf(stderr,"  sample-stderr\n");
-    fprintf(stderr,"  mode\n");
-    fprintf(stderr,"  range\n");
-    fprintf(stderr,"  iq-range\n");
-    fprintf(stderr,"  box-plot\n");
-    fprintf(stderr,"\nDefault delimiter is TAB.  The delimiter string may be multiple characters.\n");
+    fprintf(stderr, "Tabular data:\n");
+    fprintf(stderr, "   %s [--verbose] [--delim 'string'] \\\n"
+		    "       function1 [param1] --row|--col N1 \\\n"
+		    "       [function2 [param2] --row|--col N2 ...] \\\n"
+		    "       < input-file\n", argv[0]);
+    fprintf(stderr, "\nFor tabular data at least one of the following functions is required:\n\n");
+    fprintf(stderr, "  mean\n");
+    fprintf(stderr, "  quantile N (N = number of divisions)\n");
+    fprintf(stderr, "  median (same as quantile 2)\n");
+    fprintf(stderr, "  quartile (same as quantile 4)\n");
+    fprintf(stderr, "  pop-var\n");
+    fprintf(stderr, "  pop-stddev\n");
+    fprintf(stderr, "  pop-z-scores\n");
+    fprintf(stderr, "  sample-var\n");
+    fprintf(stderr, "  sample-stddev\n");
+    fprintf(stderr, "  sample-z-scores\n");
+    fprintf(stderr, "  sample-stderr\n");
+    fprintf(stderr, "  mode\n");
+    fprintf(stderr, "  range\n");
+    fprintf(stderr, "  iq-range\n");
+    fprintf(stderr, "  box-plot\n");
+    fprintf(stderr, "\nDefault delimiter is TAB.  The delimiter string may be multiple characters.\n");
+    fprintf(stderr, "Multiple consecutive spaces are treated as a single delimiter.\n");
+    fprintf(stderr, "\nExample: basic-stats sample-stddev --col 9 pop-var --col 10 < sample.tsv\n");
+    fprintf(stderr, "Example: echo '3 6 1 8 2' | basic-stats mean --row 1\n\n");
     exit(EX_USAGE);
 }
 
@@ -132,17 +142,33 @@ int     print_z_table(void)
 {
     double  row, col;
 
-    printf("     ");
+    printf("      ");
     for (col = 0.00; col < 0.099; col += 0.01)
 	printf("%6.2f ", col);
     putchar('\n');
     for (row = -3.0; row < 3.1; row += 0.1)
     {
-	printf("%4.1f ", row);
+	printf("%4.1f  ", row);
 	for (col = 0.00; col < 0.099; col += 0.01)
 	    printf("%.4f ", z_cdf(row + (row < 0 ? -col : col), 0.0, 1.0));
 	putchar('\n');
     }
+    return EX_OK;
+}
+
+
+int     print_z_score(int argc, char *argv[])
+
+{
+    double  x, mean, stddev, score;
+    char    *end;
+    
+    x = strtod(argv[2], &end);
+    mean = strtod(argv[3], &end);
+    stddev = strtod(argv[4], &end);
+    score = z_score(x, mean, stddev);
+    printf("z-score = %f\n", score);
+    printf("P(z < %f) = %f\n", score, z_cdf(score, 0.0, 1.0));
     return EX_OK;
 }
 
@@ -161,14 +187,14 @@ int     print_z_cdf(int argc, char *argv[])
 	    fprintf(stderr, "Invalid z-score: %s\n", argv[1]);
 	    usage(argv);
 	}
-	printf("P(x < %f) = %f\n", z_score, z_cdf(z_score, 0.0, 1.0));
+	printf("P(z < %f) = %f\n", z_score, z_cdf(z_score, 0.0, 1.0));
     }
     else if ( argc == 5 )
     {
 	z_score = strtod(argv[2], &end);
 	mean = strtod(argv[3], &end);
 	stddev = strtod(argv[4], &end);
-	printf("P(x < %f) = %f\n", z_score, z_cdf(z_score, mean, stddev));
+	printf("P(z < %f) = %f\n", z_score, z_cdf(z_score, mean, stddev));
     }
     else
 	usage(argv);
