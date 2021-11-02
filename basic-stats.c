@@ -21,10 +21,6 @@
 #include "basic-stats.h"
 #include "statsf-list.h"
 
-int     print_z_table(void);
-int     print_z_score(int argc, char *argv[]);
-int     print_z_cdf(int argc, char *argv[]);
-
 // http://makemeanalyst.com/basic-statistics-for-data-analysis/
 
 int     main(int argc, char *argv[])
@@ -41,6 +37,12 @@ int     main(int argc, char *argv[])
 	return print_z_cdf(argc, argv);
     else if ( (argc == 5) && (strcmp(argv[1], "z-score") == 0) )
 	return print_z_score(argc, argv);
+    else if ( (argc == 5) && (strcmp(argv[1], "t-table") == 0) )
+	return print_t_table();
+    else if ( (argc == 6) && (strcmp(argv[1], "t-score") == 0) )
+	return print_t_score(argc, argv);
+    else if ( (argc == 5) && (strcmp(argv[1], "t-cdf") == 0) )
+	return print_t_cdf(argc, argv);
     else if ( argc < 4 )
 	usage(argv);
     
@@ -80,6 +82,8 @@ int     main(int argc, char *argv[])
 	    statsf_list_add_func(&flist, STATSF_SAMPLE_STDERR, &c, argc, argv);
 	else if ( strcmp(argv[c],"sample-z-scores") == 0 )
 	    statsf_list_add_func(&flist, STATSF_SAMPLE_Z_SCORES, &c, argc, argv);
+	else if ( strcmp(argv[c],"sample-t-score") == 0 )
+	    statsf_list_add_func(&flist, STATSF_T_SCORE, &c, argc, argv);
 	else if ( strcmp(argv[c],"mode") == 0 )
 	    statsf_list_add_func(&flist, STATSF_MODE, &c, argc, argv);
 	else if ( strcmp(argv[c],"range") == 0 )
@@ -107,6 +111,7 @@ void    usage(char *argv[])
     fprintf(stderr, "   %s z-table\n", argv[0]);
     fprintf(stderr, "   %s z-score x mean stddev\n", argv[0]);
     fprintf(stderr, "   %s z-cdf z-score [mean stddev] (defaults: 0 1)\n\n", argv[0]);
+    fprintf(stderr, "   %s t-score x-bar expected-mean stddev n\n", argv[0]);
     
     fprintf(stderr, "Tabular data:\n");
     fprintf(stderr, "   %s [--verbose] [--delim 'string'] \\\n"
@@ -125,6 +130,7 @@ void    usage(char *argv[])
     fprintf(stderr, "  sample-stddev\n");
     fprintf(stderr, "  sample-z-scores\n");
     fprintf(stderr, "  sample-stderr\n");
+    fprintf(stderr, "  t-score expected-mean\n");
     fprintf(stderr, "  mode\n");
     fprintf(stderr, "  range\n");
     fprintf(stderr, "  iq-range\n");
@@ -200,3 +206,38 @@ int     print_z_cdf(int argc, char *argv[])
 	usage(argv);
     return EX_OK;
 }
+
+
+int     print_t_table(void)
+
+{
+    fprintf(stderr, "Not yet iumplemented.\n");
+    return EX_OK;
+}
+
+
+int     print_t_score(int argc, char *argv[])
+
+{
+    double      x_bar, expected_mean, stddev, score;
+    unsigned    n;
+    char        *end;
+    
+    x_bar = strtod(argv[2], &end);
+    expected_mean = strtod(argv[3], &end);
+    stddev = strtod(argv[4], &end);
+    n = strtoul(argv[5], &end, 10);
+    score = t_score(x_bar, expected_mean, stddev, n);
+    printf("t-score = %f\n", score);
+    // printf("P(t < %f) = %f\n", score, t_cdf(score, 0.0, 1.0));
+    return EX_OK;
+}
+
+
+int     print_t_cdf(int argc, char *argv[])
+
+{
+    fprintf(stderr, "Not yet iumplemented.\n");
+    return EX_OK;
+}
+

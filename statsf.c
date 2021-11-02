@@ -32,6 +32,7 @@ void    statsf_process_val(statsf_t *function, double x)
 	case STATSF_POP_STDDEV:
 	case STATSF_SAMPLE_STDDEV:
 	case STATSF_SAMPLE_STDERR:
+	case STATSF_T_SCORE:
 	    function->sum_x += x;
 	    function->sum_x_2 += x * x;
 	    break;
@@ -113,7 +114,7 @@ double  statsf_sum_squares(statsf_t *function)
  *      -l
  *
  *  Description:
- *      z-score = (score - mean) / stddev
+ *      z-score = (x - mean) / stddev
  *  
  *  Arguments:
  *
@@ -145,7 +146,7 @@ double  z_score(double x, double mean, double stddev)
  *      -l
  *
  *  Description:
- *      z-score = (score - mean) / stddev
+ *      z-score = (x - mean) / stddev
  *      equivalent score = z-score * new_stddev + new_mean
  *  
  *  Arguments:
@@ -165,11 +166,11 @@ double  z_score(double x, double mean, double stddev)
  *  2021-10-27  Jason Bacon Begin
  ***************************************************************************/
 
-double  z_equivalent(double score, double mean, double stddev,
+double  z_equivalent(double x, double mean, double stddev,
 		     double new_mean, double new_stddev)
 
 {
-    return z_score(score, mean, stddev) * new_stddev + new_mean;
+    return z_score(x, mean, stddev) * new_stddev + new_mean;
 }
 
 
@@ -202,3 +203,37 @@ double  z_cdf(double x, double mean, double stddev)
 {
     return 0.5 * (1 + erf((x - mean) / (stddev * M_SQRT2)));
 }
+
+
+/***************************************************************************
+ *  Library:
+ *      #include <>
+ *      -l
+ *
+ *  Description:
+ *      t-score = (x-bar - mean) / (s / sqrt(n))
+ *  
+ *  Arguments:
+ *
+ *  Returns:
+ *
+ *  Examples:
+ *
+ *  Files:
+ *
+ *  Environment
+ *
+ *  See also:
+ *
+ *  History: 
+ *  Date        Name        Modification
+ *  2021-10-27  Jason Bacon Begin
+ ***************************************************************************/
+
+double  t_score(double x_bar, double expected_mean, double sample_stddev, unsigned n)
+
+{
+    //printf("%f %f %f %u\n", x_bar, expected_mean, sample_stddev, n);
+    return (x_bar - expected_mean) / (sample_stddev / sqrt((double)n));
+}
+

@@ -48,6 +48,15 @@ int     statsf_list_add_func(statsf_list_t *flist, statsf_code_t new_code,
 	    STATSF_SET_PARTITIONS(&flist->functions[count], 4);
 	    break;
 
+	case    STATSF_T_SCORE:
+	    STATSF_SET_EXPECTED_MEAN(&flist->functions[count], strtod(argv[++*c], &end));
+	    if ( *end != '\0' )
+	    {
+		fprintf(stderr, "Invalid expected mean: %s\n", argv[*c]);
+		exit(EX_USAGE);
+	    }
+	    break;
+	
 	default:
 	    break;
     }
@@ -91,6 +100,7 @@ int     statsf_list_process_stream(statsf_list_t *flist, FILE *stream,
     size_t      len,
 		c;
     double      x, ss, var, stddev, mean, se;
+    unsigned long   n;
     int         ch;
 
     for (c = 0; c < flist->count; ++c)
@@ -161,8 +171,9 @@ int     statsf_list_process_stream(statsf_list_t *flist, FILE *stream,
 	    row_col_name = "Col";
 	    row_col_value = STATSF_COL(&flist->functions[c]);
 	}
-	mean = STATSF_SUM(&flist->functions[c]) /
-		STATSF_NUM_COUNT(&flist->functions[c]);
+	n = STATSF_NUM_COUNT(&flist->functions[c]);
+	mean = STATSF_SUM(&flist->functions[c]) / n;
+		
 	switch(STATSF_CODE(&flist->functions[c]))
 	{
 	    case    STATSF_MEAN:
@@ -182,7 +193,7 @@ int     statsf_list_process_stream(statsf_list_t *flist, FILE *stream,
 	    case    STATSF_POP_STDDEV:
 	    case    STATSF_POP_Z_SCORES:
 		ss = statsf_sum_squares(&flist->functions[c]);
-		var = ss / STATSF_NUM_COUNT(&flist->functions[c]);
+		var = ss / n;
 		stddev = sqrt(var);
 		printf("%s %u sum-squares    %f\n", row_col_name,
 			row_col_value, ss);
@@ -210,26 +221,27 @@ int     statsf_list_process_stream(statsf_list_t *flist, FILE *stream,
 	    case    STATSF_SAMPLE_STDDEV:
 	    case    STATSF_SAMPLE_STDERR:
 	    case    STATSF_SAMPLE_Z_SCORES:
+	    case    STATSF_T_SCORE:
 		ss = statsf_sum_squares(&flist->functions[c]);
-		var = ss / (STATSF_NUM_COUNT(&flist->functions[c]) - 1);
+		var = ss / (n - 1);
 		stddev = sqrt(var);
-		se = sqrt(var) / sqrt(STATSF_NUM_COUNT(&flist->functions[c]));
-		printf("%s %u sum-squares    %f\n", row_col_name,
+		se = sqrt(var) / sqrt(n);
+		printf("%s %u sum-squares       %f\n", row_col_name,
 			row_col_value, ss);
-		printf("%s %u sample-var     %f\n", row_col_name,
+		printf("%s %u sample-var        %f\n", row_col_name,
 			row_col_value, var);
-		printf("%s %u sample-stddev  %f\n", row_col_name,
+		printf("%s %u sample-stddev     %f\n", row_col_name,
 			row_col_value, stddev);
-		printf("%s %u sample-stderr  %f\n", row_col_name,
+		printf("%s %u sample-stderr     %f\n", row_col_name,
 			row_col_value, se);
-		printf("%s %u sample-mean    %f\n", row_col_name,
+		printf("%s %u sample-mean       %f\n", row_col_name,
 			row_col_value, mean);
-		printf("%s %u 95%%-CI-2SE     %f->%f\n", row_col_name,
+		printf("%s %u mean 95%%-CI-2SE   %f -> %f\n", row_col_name,
 			row_col_value, mean - 2.0*se, mean + 2.0*se);
 
 		if ( STATSF_CODE(&flist->functions[c]) == STATSF_SAMPLE_Z_SCORES )
 		{
-		    if ( STATSF_NUM_COUNT(&flist->functions[c]) < 30 )
+		    if ( n < 30 )
 		    {
 			printf("Warning: Sample size is < 30.\n");
 			printf("You may want to use a t-distribution instad.\n");
@@ -242,6 +254,13 @@ int     statsf_list_process_stream(statsf_list_t *flist, FILE *stream,
 			printf("%16f %16f %16f\n", x,
 				z_score(x, mean, stddev),
 				z_cdf(x, mean, stddev));
+		}
+		else if ( STATSF_CODE(&flist->functions[c]) == STATSF_T_SCORE )
+		{
+		    
+		    printf("%s %u t-score           %f\n", row_col_name,
+			    row_col_value, t_score(mean,
+				STATSF_EXPECTED_MEAN(&flist->functions[c]), stddev, n));
 		}
 		break;
 	    

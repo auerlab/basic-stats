@@ -53,7 +53,7 @@
  *
  *  History: 
  *  Date        Name        Modification
- *  2021-10-27  gen-get-set Auto-generated from statsf.h
+ *  2021-11-02  gen-get-set Auto-generated from statsf.h
  ***************************************************************************/
 
 int     statsf_set_code(statsf_t *statsf_ptr, statsf_code_t new_code)
@@ -111,7 +111,7 @@ int     statsf_set_code(statsf_t *statsf_ptr, statsf_code_t new_code)
  *
  *  History: 
  *  Date        Name        Modification
- *  2021-10-27  gen-get-set Auto-generated from statsf.h
+ *  2021-11-02  gen-get-set Auto-generated from statsf.h
  ***************************************************************************/
 
 int     statsf_set_row(statsf_t *statsf_ptr, unsigned new_row)
@@ -169,7 +169,7 @@ int     statsf_set_row(statsf_t *statsf_ptr, unsigned new_row)
  *
  *  History: 
  *  Date        Name        Modification
- *  2021-10-27  gen-get-set Auto-generated from statsf.h
+ *  2021-11-02  gen-get-set Auto-generated from statsf.h
  ***************************************************************************/
 
 int     statsf_set_col(statsf_t *statsf_ptr, unsigned new_col)
@@ -227,7 +227,7 @@ int     statsf_set_col(statsf_t *statsf_ptr, unsigned new_col)
  *
  *  History: 
  *  Date        Name        Modification
- *  2021-10-27  gen-get-set Auto-generated from statsf.h
+ *  2021-11-02  gen-get-set Auto-generated from statsf.h
  ***************************************************************************/
 
 int     statsf_set_rows(statsf_t *statsf_ptr, unsigned * new_rows)
@@ -282,7 +282,7 @@ int     statsf_set_rows(statsf_t *statsf_ptr, unsigned * new_rows)
  *
  *  History: 
  *  Date        Name        Modification
- *  2021-10-27  gen-get-set Auto-generated from statsf.h
+ *  2021-11-02  gen-get-set Auto-generated from statsf.h
  ***************************************************************************/
 
 int     statsf_set_rows_ae(statsf_t *statsf_ptr, size_t c, unsigned  new_rows_element)
@@ -338,7 +338,7 @@ int     statsf_set_rows_ae(statsf_t *statsf_ptr, size_t c, unsigned  new_rows_el
  *
  *  History: 
  *  Date        Name        Modification
- *  2021-10-27  gen-get-set Auto-generated from statsf.h
+ *  2021-11-02  gen-get-set Auto-generated from statsf.h
  ***************************************************************************/
 
 int     statsf_set_rows_cpy(statsf_t *statsf_ptr, unsigned * new_rows, size_t array_size)
@@ -402,7 +402,7 @@ int     statsf_set_rows_cpy(statsf_t *statsf_ptr, unsigned * new_rows, size_t ar
  *
  *  History: 
  *  Date        Name        Modification
- *  2021-10-27  gen-get-set Auto-generated from statsf.h
+ *  2021-11-02  gen-get-set Auto-generated from statsf.h
  ***************************************************************************/
 
 int     statsf_set_cols(statsf_t *statsf_ptr, unsigned * new_cols)
@@ -457,7 +457,7 @@ int     statsf_set_cols(statsf_t *statsf_ptr, unsigned * new_cols)
  *
  *  History: 
  *  Date        Name        Modification
- *  2021-10-27  gen-get-set Auto-generated from statsf.h
+ *  2021-11-02  gen-get-set Auto-generated from statsf.h
  ***************************************************************************/
 
 int     statsf_set_cols_ae(statsf_t *statsf_ptr, size_t c, unsigned  new_cols_element)
@@ -513,7 +513,7 @@ int     statsf_set_cols_ae(statsf_t *statsf_ptr, size_t c, unsigned  new_cols_el
  *
  *  History: 
  *  Date        Name        Modification
- *  2021-10-27  gen-get-set Auto-generated from statsf.h
+ *  2021-11-02  gen-get-set Auto-generated from statsf.h
  ***************************************************************************/
 
 int     statsf_set_cols_cpy(statsf_t *statsf_ptr, unsigned * new_cols, size_t array_size)
@@ -577,7 +577,7 @@ int     statsf_set_cols_cpy(statsf_t *statsf_ptr, unsigned * new_cols, size_t ar
  *
  *  History: 
  *  Date        Name        Modification
- *  2021-10-27  gen-get-set Auto-generated from statsf.h
+ *  2021-11-02  gen-get-set Auto-generated from statsf.h
  ***************************************************************************/
 
 int     statsf_set_sum(statsf_t *statsf_ptr, double new_sum)
@@ -635,7 +635,7 @@ int     statsf_set_sum(statsf_t *statsf_ptr, double new_sum)
  *
  *  History: 
  *  Date        Name        Modification
- *  2021-10-27  gen-get-set Auto-generated from statsf.h
+ *  2021-11-02  gen-get-set Auto-generated from statsf.h
  ***************************************************************************/
 
 int     statsf_set_nums(statsf_t *statsf_ptr, double * new_nums)
@@ -690,7 +690,7 @@ int     statsf_set_nums(statsf_t *statsf_ptr, double * new_nums)
  *
  *  History: 
  *  Date        Name        Modification
- *  2021-10-27  gen-get-set Auto-generated from statsf.h
+ *  2021-11-02  gen-get-set Auto-generated from statsf.h
  ***************************************************************************/
 
 int     statsf_set_nums_ae(statsf_t *statsf_ptr, size_t c, double  new_nums_element)
@@ -746,7 +746,7 @@ int     statsf_set_nums_ae(statsf_t *statsf_ptr, size_t c, double  new_nums_elem
  *
  *  History: 
  *  Date        Name        Modification
- *  2021-10-27  gen-get-set Auto-generated from statsf.h
+ *  2021-11-02  gen-get-set Auto-generated from statsf.h
  ***************************************************************************/
 
 int     statsf_set_nums_cpy(statsf_t *statsf_ptr, double * new_nums, size_t array_size)
@@ -810,7 +810,7 @@ int     statsf_set_nums_cpy(statsf_t *statsf_ptr, double * new_nums, size_t arra
  *
  *  History: 
  *  Date        Name        Modification
- *  2021-10-27  gen-get-set Auto-generated from statsf.h
+ *  2021-11-02  gen-get-set Auto-generated from statsf.h
  ***************************************************************************/
 
 int     statsf_set_num_count(statsf_t *statsf_ptr, size_t new_num_count)
@@ -868,7 +868,7 @@ int     statsf_set_num_count(statsf_t *statsf_ptr, size_t new_num_count)
  *
  *  History: 
  *  Date        Name        Modification
- *  2021-10-27  gen-get-set Auto-generated from statsf.h
+ *  2021-11-02  gen-get-set Auto-generated from statsf.h
  ***************************************************************************/
 
 int     statsf_set_array_size(statsf_t *statsf_ptr, size_t new_array_size)
@@ -926,7 +926,7 @@ int     statsf_set_array_size(statsf_t *statsf_ptr, size_t new_array_size)
  *
  *  History: 
  *  Date        Name        Modification
- *  2021-10-27  gen-get-set Auto-generated from statsf.h
+ *  2021-11-02  gen-get-set Auto-generated from statsf.h
  ***************************************************************************/
 
 int     statsf_set_partitions(statsf_t *statsf_ptr, unsigned new_partitions)
@@ -984,7 +984,7 @@ int     statsf_set_partitions(statsf_t *statsf_ptr, unsigned new_partitions)
  *
  *  History: 
  *  Date        Name        Modification
- *  2021-10-27  gen-get-set Auto-generated from statsf.h
+ *  2021-11-02  gen-get-set Auto-generated from statsf.h
  ***************************************************************************/
 
 int     statsf_set_sum_x(statsf_t *statsf_ptr, double new_sum_x)
@@ -1042,7 +1042,7 @@ int     statsf_set_sum_x(statsf_t *statsf_ptr, double new_sum_x)
  *
  *  History: 
  *  Date        Name        Modification
- *  2021-10-27  gen-get-set Auto-generated from statsf.h
+ *  2021-11-02  gen-get-set Auto-generated from statsf.h
  ***************************************************************************/
 
 int     statsf_set_sum_x_2(statsf_t *statsf_ptr, double new_sum_x_2)
@@ -1100,7 +1100,7 @@ int     statsf_set_sum_x_2(statsf_t *statsf_ptr, double new_sum_x_2)
  *
  *  History: 
  *  Date        Name        Modification
- *  2021-10-27  gen-get-set Auto-generated from statsf.h
+ *  2021-11-02  gen-get-set Auto-generated from statsf.h
  ***************************************************************************/
 
 int     statsf_set_row_sums(statsf_t *statsf_ptr, double * new_row_sums)
@@ -1155,7 +1155,7 @@ int     statsf_set_row_sums(statsf_t *statsf_ptr, double * new_row_sums)
  *
  *  History: 
  *  Date        Name        Modification
- *  2021-10-27  gen-get-set Auto-generated from statsf.h
+ *  2021-11-02  gen-get-set Auto-generated from statsf.h
  ***************************************************************************/
 
 int     statsf_set_row_sums_ae(statsf_t *statsf_ptr, size_t c, double  new_row_sums_element)
@@ -1211,7 +1211,7 @@ int     statsf_set_row_sums_ae(statsf_t *statsf_ptr, size_t c, double  new_row_s
  *
  *  History: 
  *  Date        Name        Modification
- *  2021-10-27  gen-get-set Auto-generated from statsf.h
+ *  2021-11-02  gen-get-set Auto-generated from statsf.h
  ***************************************************************************/
 
 int     statsf_set_row_sums_cpy(statsf_t *statsf_ptr, double * new_row_sums, size_t array_size)
@@ -1275,7 +1275,7 @@ int     statsf_set_row_sums_cpy(statsf_t *statsf_ptr, double * new_row_sums, siz
  *
  *  History: 
  *  Date        Name        Modification
- *  2021-10-27  gen-get-set Auto-generated from statsf.h
+ *  2021-11-02  gen-get-set Auto-generated from statsf.h
  ***************************************************************************/
 
 int     statsf_set_col_sums(statsf_t *statsf_ptr, double * new_col_sums)
@@ -1330,7 +1330,7 @@ int     statsf_set_col_sums(statsf_t *statsf_ptr, double * new_col_sums)
  *
  *  History: 
  *  Date        Name        Modification
- *  2021-10-27  gen-get-set Auto-generated from statsf.h
+ *  2021-11-02  gen-get-set Auto-generated from statsf.h
  ***************************************************************************/
 
 int     statsf_set_col_sums_ae(statsf_t *statsf_ptr, size_t c, double  new_col_sums_element)
@@ -1386,7 +1386,7 @@ int     statsf_set_col_sums_ae(statsf_t *statsf_ptr, size_t c, double  new_col_s
  *
  *  History: 
  *  Date        Name        Modification
- *  2021-10-27  gen-get-set Auto-generated from statsf.h
+ *  2021-11-02  gen-get-set Auto-generated from statsf.h
  ***************************************************************************/
 
 int     statsf_set_col_sums_cpy(statsf_t *statsf_ptr, double * new_col_sums, size_t array_size)
@@ -1403,6 +1403,239 @@ int     statsf_set_col_sums_cpy(statsf_t *statsf_ptr, double * new_col_sums, siz
 	    // FIXME: Assuming all elements should be copied
 	    for (c = 0; c < array_size; ++c)
 		statsf_ptr->col_sums[c] = new_col_sums[c];
+	}
+	return STATSF_DATA_OK;
+    }
+}
+
+
+/***************************************************************************
+ *  Library:
+ *      #include <statsf.h>
+ *      -lbasic-stats
+ *
+ *  Description:
+ *      Mutator for expected_mean member in a statsf_t structure.
+ *      Use this function to set expected_mean in a statsf_t variable
+ *      from non-member functions.  This function performs a direct
+ *      assignment for scalar or pointer structure members.  If
+ *      expected_mean is a pointer, data previously pointed to should
+ *      generally be freed before calling this function to avoid memory
+ *      leaks.
+ *
+ *      Note that there is an equivalent macro (), which performs
+ *      this function with no data verification or function call overhead.
+ *      Use the macro version to maximize performance where the validity
+ *      of new_expected_mean is guaranteed by other means.
+ *      
+ *
+ *  Arguments:
+ *      statsf_ptr      Pointer to the structure to set
+ *      new_expected_mean The new value for expected_mean
+ *
+ *  Returns:
+ *      STATSF_DATA_OK if the new value is acceptable and assigned
+ *      STATSF_DATA_OUT_OF_RANGE otherwise
+ *
+ *  Examples:
+ *      statsf_t        statsf;
+ *      double          new_expected_mean;
+ *
+ *      if ( statsf_set_expected_mean(&statsf, new_expected_mean) == STATSF_DATA_OK )
+ *      {
+ *      }
+ *
+ *  See also:
+ *      (3)
+ *
+ *  History: 
+ *  Date        Name        Modification
+ *  2021-11-02  gen-get-set Auto-generated from statsf.h
+ ***************************************************************************/
+
+int     statsf_set_expected_mean(statsf_t *statsf_ptr, double new_expected_mean)
+
+{
+    /* FIXME: Replace this with a proper sanity check */
+    if ( 0 )
+	return STATSF_DATA_OUT_OF_RANGE;
+    else
+    {
+	statsf_ptr->expected_mean = new_expected_mean;
+	return STATSF_DATA_OK;
+    }
+}
+
+
+/***************************************************************************
+ *  Library:
+ *      #include <statsf.h>
+ *      -lbasic-stats
+ *
+ *  Description:
+ *      Mutator for tmp_file member in a statsf_t structure.
+ *      Use this function to set tmp_file in a statsf_t variable
+ *      from non-member functions.  This function performs a direct
+ *      assignment for scalar or pointer structure members.  If
+ *      tmp_file is a pointer, data previously pointed to should
+ *      generally be freed before calling this function to avoid memory
+ *      leaks.
+ *
+ *      Note that there is an equivalent macro (), which performs
+ *      this function with no data verification or function call overhead.
+ *      Use the macro version to maximize performance where the validity
+ *      of new_tmp_file is guaranteed by other means.
+ *      
+ *
+ *  Arguments:
+ *      statsf_ptr      Pointer to the structure to set
+ *      new_tmp_file    The new value for tmp_file
+ *
+ *  Returns:
+ *      STATSF_DATA_OK if the new value is acceptable and assigned
+ *      STATSF_DATA_OUT_OF_RANGE otherwise
+ *
+ *  Examples:
+ *      statsf_t        statsf;
+ *      FILE *          new_tmp_file;
+ *
+ *      if ( statsf_set_tmp_file(&statsf, new_tmp_file) == STATSF_DATA_OK )
+ *      {
+ *      }
+ *
+ *  See also:
+ *      (3)
+ *
+ *  History: 
+ *  Date        Name        Modification
+ *  2021-11-02  gen-get-set Auto-generated from statsf.h
+ ***************************************************************************/
+
+int     statsf_set_tmp_file(statsf_t *statsf_ptr, FILE * new_tmp_file)
+
+{
+    /* FIXME: Replace this with a proper sanity check */
+    if ( new_tmp_file == NULL )
+	return STATSF_DATA_OUT_OF_RANGE;
+    else
+    {
+	statsf_ptr->tmp_file = new_tmp_file;
+	return STATSF_DATA_OK;
+    }
+}
+
+
+/***************************************************************************
+ *  Library:
+ *      #include <statsf.h>
+ *      -lbasic-stats
+ *
+ *  Description:
+ *      Mutator for an array element of tmp_file member in a statsf_t
+ *      structure. Use this function to set an element of the array
+ *      tmp_file in a statsf_t variable from non-member functions.
+ *
+ *      Note that there is an equivalent macro STATSF_SET_TMP_FILE_AE(), which performs
+ *      this function with no data verification or function call overhead.
+ *      Use the macro version to maximize performance where the validity
+ *      of new_tmp_file_element is guaranteed by other means.
+ *
+ *  Arguments:
+ *      statsf_ptr      Pointer to the structure to set
+ *      c               Subscript to the tmp_file array
+ *      new_tmp_file_element The new value for tmp_file[c]
+ *
+ *  Returns:
+ *      STATSF_DATA_OK if the new value is acceptable and assigned
+ *      STATSF_DATA_OUT_OF_RANGE otherwise
+ *
+ *  Examples:
+ *      statsf_t        statsf;
+ *      size_t          c;
+ *      FILE *          new_tmp_file_element;
+ *
+ *      if ( statsf_set_tmp_file(&statsf, c, new_tmp_file_element) == STATSF_DATA_OK )
+ *      {
+ *      }
+ *
+ *  See also:
+ *      STATSF_SET_TMP_FILE_AE(3)
+ *
+ *  History: 
+ *  Date        Name        Modification
+ *  2021-11-02  gen-get-set Auto-generated from statsf.h
+ ***************************************************************************/
+
+int     statsf_set_tmp_file_ae(statsf_t *statsf_ptr, size_t c, FILE  new_tmp_file_element)
+
+{
+    /* FIXME: Replace this with a proper sanity check */
+    if ( 0 )
+	return STATSF_DATA_OUT_OF_RANGE;
+    else
+    {
+	statsf_ptr->tmp_file[c] = new_tmp_file_element;
+	return STATSF_DATA_OK;
+    }
+}
+
+
+/***************************************************************************
+ *  Library:
+ *      #include <statsf.h>
+ *      -lbasic-stats
+ *
+ *  Description:
+ *      Mutator for tmp_file member in a statsf_t structure.
+ *      Use this function to set tmp_file in a statsf_t variable
+ *      from non-member functions.  This function copies the array pointed to
+ *      by new_tmp_file to ->tmp_file.
+ *
+ *      Note that there is an equivalent macro STATSF_SET_TMP_FILE(), which performs
+ *      this function with no data verification or function call overhead.
+ *      Use the macro version to maximize performance where the validity
+ *      of new_tmp_file is guaranteed by other means.
+ *
+ *  Arguments:
+ *      statsf_ptr      Pointer to the structure to set
+ *      new_tmp_file    The new value for tmp_file
+ *      array_size      Size of the tmp_file array.
+ *
+ *  Returns:
+ *      STATSF_DATA_OK if the new value is acceptable and assigned
+ *      STATSF_DATA_OUT_OF_RANGE otherwise
+ *
+ *  Examples:
+ *      statsf_t        statsf;
+ *      FILE *          new_tmp_file;
+ *      size_t          array_size;
+ *
+ *      if ( statsf_set_tmp_file(&statsf, new_tmp_file, array_size) == STATSF_DATA_OK )
+ *      {
+ *      }
+ *
+ *  See also:
+ *      STATSF_SET_TMP_FILE(3)
+ *
+ *  History: 
+ *  Date        Name        Modification
+ *  2021-11-02  gen-get-set Auto-generated from statsf.h
+ ***************************************************************************/
+
+int     statsf_set_tmp_file_cpy(statsf_t *statsf_ptr, FILE * new_tmp_file, size_t array_size)
+
+{
+    /* FIXME: Replace this with a proper sanity check */
+    if ( new_tmp_file == NULL )
+	return STATSF_DATA_OUT_OF_RANGE;
+    else
+    {
+	{
+	    size_t  c;
+	    
+	    // FIXME: Assuming all elements should be copied
+	    for (c = 0; c < array_size; ++c)
+		statsf_ptr->tmp_file[c] = new_tmp_file[c];
 	}
 	return STATSF_DATA_OK;
     }
