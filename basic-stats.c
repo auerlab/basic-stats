@@ -112,6 +112,7 @@ void    usage(char *argv[])
     fprintf(stderr, "   %s z-score x mean stddev\n", argv[0]);
     fprintf(stderr, "   %s z-cdf z-score [mean stddev] (defaults: 0 1)\n\n", argv[0]);
     fprintf(stderr, "   %s t-score x-bar expected-mean stddev n\n", argv[0]);
+    fprintf(stderr, "   %s t-cdf x-bar expected-mean stddev n\n", argv[0]);
     
     fprintf(stderr, "Tabular data:\n");
     fprintf(stderr, "   %s [--verbose] [--delim 'string'] \\\n"
@@ -229,7 +230,7 @@ int     print_t_score(int argc, char *argv[])
     n = strtoul(argv[5], &end, 10);
     score = t_score(x_bar, expected_mean, stddev, n);
     printf("t-score = %f\n", score);
-    // printf("P(t < %f) = %f\n", score, t_cdf(score, 0.0, 1.0));
+    // printf("P(t < %f) = %f\n", score, t_cdf(score, 0.0, 1.0, n));
     return EX_OK;
 }
 
@@ -237,7 +238,7 @@ int     print_t_score(int argc, char *argv[])
 int     print_t_cdf(int argc, char *argv[])
 
 {
-    fprintf(stderr, "Not yet iumplemented.\n");
+    fprintf(stderr, "Not yet implemented.\n");
     return EX_OK;
 }
 

@@ -23,3 +23,7 @@ int statsf_set_row_sums_cpy(statsf_t *statsf_ptr, double *new_row_sums, size_t a
 int statsf_set_col_sums(statsf_t *statsf_ptr, double *new_col_sums);
 int statsf_set_col_sums_ae(statsf_t *statsf_ptr, size_t c, double new_col_sums_element);
 int statsf_set_col_sums_cpy(statsf_t *statsf_ptr, double *new_col_sums, size_t array_size);
+int statsf_set_expected_mean(statsf_t *statsf_ptr, double new_expected_mean);
+int statsf_set_tmp_file(statsf_t *statsf_ptr, FILE *new_tmp_file);
+int statsf_set_tmp_file_ae(statsf_t *statsf_ptr, size_t c, FILE new_tmp_file_element);
+int statsf_set_tmp_file_cpy(statsf_t *statsf_ptr, FILE *new_tmp_file, size_t array_size);

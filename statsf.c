@@ -237,3 +237,62 @@ double  t_score(double x_bar, double expected_mean, double sample_stddev, unsign
     return (x_bar - expected_mean) / (sample_stddev / sqrt((double)n));
 }
 
+
+/***************************************************************************
+ *  Use auto-c2man to generate a man page from this comment
+ *
+ *  Library:
+ *      #include <>
+ *      -l
+ *
+ *  Description:
+ *      Hypergeometric function
+ *      https://en.wikipedia.org/wiki/Hypergeometric_function
+ *      Code based on http://www.cplusplus.com/forum/general/255896/
+ *  
+ *  Arguments:
+ *
+ *  Returns:
+ *
+ *  Examples:
+ *
+ *  Files:
+ *
+ *  Environment
+ *
+ *  See also:
+ *
+ *  History: 
+ *  Date        Name        Modification
+ *  2021-11-02  Jason Bacon Begin
+ ***************************************************************************/
+
+double hypergeometric( double a, double b, double c, double x )
+{
+    const double TOLERANCE = 1.0e-10;
+    double term = a * b * x / c;
+    double value = 1.0 + term;
+    int n = 1;
+    
+    while ( fabs( term ) > TOLERANCE )
+    {
+	putchar('.');
+	a++, b++, c++, n++;
+	term *= a * b * x / c / n;
+	value += term;
+	printf("%f\n", value);
+    }
+    
+    return value;
+}
+
+
+double  t_cdf(double x_bar, double expected_mean, double sample_stddev, unsigned n)
+
+{
+    unsigned df = n - 1;
+    
+    return 0.5 * x_bar * gamma(n / 2.0) *
+	hypergeometric(0.5, n/2.0, 1.5, (x_bar * x_bar) / df) /
+	sqrt(M_PI * df) * gamma(df / 2.0);
+}

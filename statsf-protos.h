@@ -6,4 +6,6 @@ double statsf_sum_squares(statsf_t *function);
 double z_score(double x, double mean, double stddev);
 double z_equivalent(double x, double mean, double stddev, double new_mean, double new_stddev);
 double z_cdf(double x, double mean, double stddev);
-double t_score(double x, double mean, double sample_stddev, unsigned n);
+double t_score(double x_bar, double expected_mean, double sample_stddev, unsigned n);
+double hypergeometric(double a, double b, double c, double x);
+double t_cdf(double x_bar, double expected_mean, double sample_stddev, unsigned n);
