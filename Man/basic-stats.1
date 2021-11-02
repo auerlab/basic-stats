@@ -10,6 +10,10 @@ basic-stats - Command-line statistics made trivial
 .PP
 .nf 
 .na
+basic-stats z-score x mean stddev
+basic-stats z-cdf z-score [mean stddev] (defaults: 0 1)
+basic-stats t-score x-bar expected-mean stddev n
+
 basic-stats [--verbose] [--delim string] \\
 	    function1 [param1] --row|--col N \\
 	    [function2 ...]
@@ -45,6 +49,55 @@ Compute the low, high, and quantiles for row/column N
 \fBmedian\fI --row|--col N\fR
 Compute the low, high, and median for row/column N.  Identical to
 quantile 2 --row|--col N.
+
+.TP
+\fBquartile\fI --row|--col N\fR
+Identical to quantile 4 --row|--col N.
+
+.TP
+\fBpop-var\fI --row|--col N\fR
+Report population variance
+
+.TP
+\fBpop-stddev\fI --row|--col N\fR
+Report population standard deviation
+
+.TP
+\fBpop-z-scores\fI --row|--col N\fR
+Report population z-scores
+
+.TP
+\fBsample-var\fI --row|--col N\fR
+Report sample variance
+
+.TP
+\fBsample-stddev\fI --row|--col N\fR
+Report sample standard deviation
+
+.TP
+\fBsample-z-scores\fI --row|--col N\fR
+Report sample z-scores.  Should only be used for sample sizes of 30 or more.
+Otherwise, use sample-t-score.
+
+.TP
+\fBsample-stderr\fI --row|--col N\fR
+Report sample standard error (sigma-x-bar = stddev / sqrt(n))
+
+.TP
+\fBsample-t-score\fI --row|--col N\fR
+Report t-score for sample data.
+
+.TP
+\fBmode\fI --row|--col N\fR
+Report mode
+
+.TP
+\fBrange\fI --row|--col N\fR
+Report range
+
+.TP
+\fBiq-range\fI --row|--col N\fR
+Report interquartile range
 
 .SH "PURPOSE"
 
@@ -111,4 +164,4 @@ Please report bugs to the author and send patches in unified diff format.
 .SH AUTHOR
 .nf
 .na
-
+J. Bacon
