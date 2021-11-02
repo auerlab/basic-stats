@@ -130,7 +130,7 @@ void    usage(char *argv[])
     fprintf(stderr, "  sample-stddev\n");
     fprintf(stderr, "  sample-z-scores\n");
     fprintf(stderr, "  sample-stderr\n");
-    fprintf(stderr, "  t-score expected-mean\n");
+    fprintf(stderr, "  sample-t-score expected-mean\n");
     fprintf(stderr, "  mode\n");
     fprintf(stderr, "  range\n");
     fprintf(stderr, "  iq-range\n");
