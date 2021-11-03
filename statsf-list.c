@@ -236,7 +236,7 @@ int     statsf_list_process_stream(statsf_list_t *flist, FILE *stream,
 			row_col_value, se);
 		printf("%s %u sample-mean       %f\n", row_col_name,
 			row_col_value, mean);
-		printf("%s %u mean 95%%-CI-2SE   %f -> %f\n", row_col_name,
+		printf("%s %u mean 95%%-CI-2SE   (%f, %f)\n", row_col_name,
 			row_col_value, mean - 2.0*se, mean + 2.0*se);
 
 		if ( STATSF_CODE(&flist->functions[c]) == STATSF_SAMPLE_Z_SCORES )
