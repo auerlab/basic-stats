@@ -57,11 +57,11 @@ LIBOBJS = statsf-list.o statsf.o statsf-mutators.o statsf-list-mutators.o
 
 # Where to find local libraries and headers.  For MacPorts, override
 # with LOCALBASE=/opt/local.
-LOCALBASE   ?= ../local
+LOCALBASE   ?= /usr/local
 
 # Install in /usr/local, unless defined by the parent Makefile, the
 # environment, or a command line option such as PREFIX=/opt/local.
-PREFIX      ?= ${LOCALBASE}
+PREFIX      ?= ../local
 
 # Allow caller to override either MANPREFIX or MANDIR
 MANPREFIX   ?= ${PREFIX}
@@ -91,11 +91,11 @@ AR          ?= ar
 RANLIB      ?= ranlib
 STRIP       ?= strip
 
-INCLUDES    += -I${LOCALBASE}/include
+INCLUDES    += -I${PREFIX}/include -I${LOCALBASE}/include
 CFLAGS      += ${INCLUDES}
 CXXFLAGS    += ${INCLUDES}
 FFLAGS      += ${INCLUDES}
-LDFLAGS     += -L${LOCALBASE}/lib -lxtend -lm
+LDFLAGS     += -L${PREFIX}/lib -L${LOCALBASE}/lib -lxtend -lm
 
 ############################################################################
 # Assume first command in PATH.  Override with full pathnames if necessary.
