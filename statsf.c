@@ -246,7 +246,12 @@ double  t_score(double x, double expected_mean, double sample_stddev, unsigned n
  *      -l
  *
  *  Description:
- *      Need to find an appropriate hypergeometric function to make this work
+ *      https://en.wikipedia.org/wiki/Student%27s_t-distribution
+ *      CDF involves hypergeometric function, which is complicated and not
+ *      in standard libraries.
+ *      PDF is simpler and only requires gamma function.  Can be applied
+ *      with trapezoid rule for estimating integrals.  Not efficient, but
+ *      should suffice for now.
  *  
  *  Arguments:
  *
@@ -265,16 +270,38 @@ double  t_score(double x, double expected_mean, double sample_stddev, unsigned n
  *  2021-11-03  Jason Bacon Begin
  ***************************************************************************/
 
-#if 0
-double  t_cdf(double x, double expected_mean, double sample_stddev,
-	      unsigned n)
+double  t_pdf(double x, unsigned n)
 
 {
-    unsigned v = n - 1;    // Degrees of freedom
+    double  v = n - 1;
     
-    return 0.5 +
-	x * gamma(n / 2.0)
-	    * gsl_sf_hyperg_2F1(0.5, n/2.0, 1.5, (x * x) / v)
-		/ (sqrt(M_PI * v) * gamma(v / 2.0));
+    return (lgamma(n / 2.0) / (sqrt(v * M_PI) * lgamma(v / 2.0))) 
+	* pow(1.0 + x * x / v, -n / 2.0);
 }
-#endif
+
+
+double  t_cdf(double x, unsigned n)
+
+{
+    double  slice_width = 1.0 / 1024.0,
+	    c,
+	    area,
+	    tolerance = 1e-10,
+	    cdf = 0.0;
+    
+    /*
+     *  Estimate area of trapezoid as PDF height at center * slice_width.
+     *  Start 1/2 slice left of x and work backwards until slices have
+     *  inconsequential area.
+     */
+    
+    c = x - slice_width / 2.0;
+    while ( (area = t_pdf(c, n) * slice_width) > tolerance )
+    {
+	cdf += area;
+	c -= slice_width;
+	printf("%f %f\n", c, area);
+    }
+    return cdf;
+}
+

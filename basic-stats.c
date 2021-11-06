@@ -230,7 +230,6 @@ int     print_t_score(int argc, char *argv[])
     n = strtoul(argv[5], &end, 10);
     score = t_score(x_bar, expected_mean, stddev, n);
     printf("t-score = %f\n", score);
-    // printf("P(t < %f) = %f\n", score, t_cdf(score, 0.0, 1.0, n));
     return EX_OK;
 }
 
