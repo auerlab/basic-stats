@@ -33,15 +33,15 @@ int     main(int argc, char *argv[])
 
     if ( (argc == 2) && (strcmp(argv[1], "z-table") == 0) )
 	return print_z_table();
-    else if ( (argc > 1) && (strcmp(argv[1], "z-cdf") == 0) )
-	return print_z_cdf(argc, argv);
+    else if ( ((argc == 3) || (argc == 5)) && (strcmp(argv[1], "normal-cdf") == 0) )
+	return print_normal_cdf(argc, argv);
     else if ( (argc == 5) && (strcmp(argv[1], "z-score") == 0) )
 	return print_z_score(argc, argv);
     else if ( (argc == 5) && (strcmp(argv[1], "t-table") == 0) )
 	return print_t_table();
     else if ( (argc == 6) && (strcmp(argv[1], "t-score") == 0) )
 	return print_t_score(argc, argv);
-    else if ( (argc == 5) && (strcmp(argv[1], "t-cdf") == 0) )
+    else if ( (argc == 4) && (strcmp(argv[1], "t-cdf") == 0) )
 	return print_t_cdf(argc, argv);
     else if ( argc < 4 )
 	usage(argv);
@@ -110,9 +110,9 @@ void    usage(char *argv[])
     fprintf(stderr, "\nSimple functions:\n");
     fprintf(stderr, "   %s z-table\n", argv[0]);
     fprintf(stderr, "   %s z-score x mean stddev\n", argv[0]);
-    fprintf(stderr, "   %s z-cdf z-score [mean stddev] (defaults: 0 1)\n\n", argv[0]);
+    fprintf(stderr, "   %s normal-cdf x [mean stddev] (defaults: 0 1)\n\n", argv[0]);
     fprintf(stderr, "   %s t-score x-bar expected-mean stddev n\n", argv[0]);
-    fprintf(stderr, "   %s t-cdf x-bar expected-mean stddev n\n", argv[0]);
+    fprintf(stderr, "   %s t-cdf x-bar n\n", argv[0]);
     
     fprintf(stderr, "Tabular data:\n");
     fprintf(stderr, "   %s [--verbose] [--delim 'string'] \\\n"
@@ -157,7 +157,7 @@ int     print_z_table(void)
     {
 	printf("%4.1f  ", row);
 	for (col = 0.00; col < 0.099; col += 0.01)
-	    printf("%.4f ", z_cdf(row + (row < 0 ? -col : col), 0.0, 1.0));
+	    printf("%.4f ", normal_cdf(row + (row < 0 ? -col : col), 0.0, 1.0));
 	putchar('\n');
     }
     return EX_OK;
@@ -167,7 +167,7 @@ int     print_z_table(void)
 int     print_z_score(int argc, char *argv[])
 
 {
-    double  x, mean, stddev, score;
+    double  x, mean, stddev, score, cdf;
     char    *end;
     
     x = strtod(argv[2], &end);
@@ -175,33 +175,36 @@ int     print_z_score(int argc, char *argv[])
     stddev = strtod(argv[4], &end);
     score = z_score(x, mean, stddev);
     printf("z-score = %f\n", score);
-    printf("P(z < %f) = %f\n", score, z_cdf(score, 0.0, 1.0));
+    printf("P(x < %f) = %f\n", x, cdf = normal_cdf(x, mean, stddev));
+    printf("1 - P = %f\n", 1.0 - cdf);
     return EX_OK;
 }
 
 
-int     print_z_cdf(int argc, char *argv[])
+int     print_normal_cdf(int argc, char *argv[])
 
 {
-    double  z_score, mean, stddev;
+    double  x, mean, stddev, cdf;
     char    *end;
     
     if ( argc == 3 )
     {
-	z_score = strtod(argv[2], &end);
+	x = strtod(argv[2], &end);
 	if ( *end != '\0' )
 	{
 	    fprintf(stderr, "Invalid z-score: %s\n", argv[1]);
 	    usage(argv);
 	}
-	printf("P(z < %f) = %f\n", z_score, z_cdf(z_score, 0.0, 1.0));
+	printf("P(x < %f) = %f\n", x, cdf = normal_cdf(x, 0.0, 1.0));
+	printf("1 - P = %f\n", 1.0 - cdf);
     }
     else if ( argc == 5 )
     {
-	z_score = strtod(argv[2], &end);
+	x = strtod(argv[2], &end);
 	mean = strtod(argv[3], &end);
 	stddev = strtod(argv[4], &end);
-	printf("P(z < %f) = %f\n", z_score, z_cdf(z_score, mean, stddev));
+	printf("P(x < %f) = %f\n", x, cdf = normal_cdf(x, mean, stddev));
+	printf("1 - P = %f\n", 1.0 - cdf);
     }
     else
 	usage(argv);
@@ -229,7 +232,9 @@ int     print_t_score(int argc, char *argv[])
     stddev = strtod(argv[4], &end);
     n = strtoul(argv[5], &end, 10);
     score = t_score(x_bar, expected_mean, stddev, n);
-    printf("t-score = %f\n", score);
+    printf("t(%u) = %f\n", n - 1, score);
+    printf("P(t(%u) < %f) = %f\n", n - 1, score, t_cdf(score, n));
+    printf("1 - P = %f\n", 1.0 - t_cdf(score, n));
     return EX_OK;
 }
 
@@ -237,7 +242,15 @@ int     print_t_score(int argc, char *argv[])
 int     print_t_cdf(int argc, char *argv[])
 
 {
-    fprintf(stderr, "Not yet implemented.\n");
+    double      x_bar;
+    unsigned    n;
+    char        *end;
+    
+    x_bar = strtod(argv[2], &end);
+    n = strtoul(argv[3], &end, 10);
+    printf("P(x_bar < %f) = %f\n", x_bar, t_cdf(x_bar, n));
+    printf("1 - P = %f\n", 1.0 - t_cdf(x_bar, n));
+    
     return EX_OK;
 }
 

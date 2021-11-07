@@ -99,7 +99,7 @@ int     statsf_list_process_stream(statsf_list_t *flist, FILE *stream,
 		*row_col_name = "";
     size_t      len,
 		c;
-    double      x, ss, var, stddev, mean, se;
+    double      x, ss, var, stddev, mean, se, score;
     unsigned long   n;
     int         ch;
 
@@ -213,7 +213,7 @@ int     statsf_list_process_stream(statsf_list_t *flist, FILE *stream,
 		    while ( fscanf(flist->functions[c].tmp_file, "%lf", &x) == 1 )
 			printf("%16f %16f %16f\n", x,
 				z_score(x, mean, stddev),
-				z_cdf(x, mean, stddev));
+				normal_cdf(x, mean, stddev));
 		}
 		break;
 		
@@ -253,14 +253,15 @@ int     statsf_list_process_stream(statsf_list_t *flist, FILE *stream,
 		    while ( fscanf(flist->functions[c].tmp_file, "%lf", &x) == 1 )
 			printf("%16f %16f %16f\n", x,
 				z_score(x, mean, stddev),
-				z_cdf(x, mean, stddev));
+				normal_cdf(x, mean, stddev));
 		}
 		else if ( STATSF_CODE(&flist->functions[c]) == STATSF_T_SCORE )
 		{
-		    
+		    score = t_score(mean,
+				STATSF_EXPECTED_MEAN(&flist->functions[c]),
+				stddev, n);
 		    printf("%s %u t-score           %f\n", row_col_name,
-			    row_col_value, t_score(mean,
-				STATSF_EXPECTED_MEAN(&flist->functions[c]), stddev, n));
+			    row_col_value, score);
 		}
 		break;
 	    

@@ -198,7 +198,7 @@ double  z_equivalent(double x, double mean, double stddev,
  *  2021-10-27  Jason Bacon Begin
  ***************************************************************************/
 
-double  z_cdf(double x, double mean, double stddev)
+double  normal_cdf(double x, double mean, double stddev)
 
 {
     return 0.5 * (1 + erf((x - mean) / (stddev * M_SQRT2)));
@@ -233,7 +233,6 @@ double  z_cdf(double x, double mean, double stddev)
 double  t_score(double x, double expected_mean, double sample_stddev, unsigned n)
 
 {
-    //printf("%f %f %f %u\n", x, expected_mean, sample_stddev, n);
     return (x - expected_mean) / (sample_stddev / sqrt((double)n));
 }
 
@@ -250,8 +249,8 @@ double  t_score(double x, double expected_mean, double sample_stddev, unsigned n
  *      CDF involves hypergeometric function, which is complicated and not
  *      in standard libraries.
  *      PDF is simpler and only requires gamma function.  Can be applied
- *      with trapezoid rule for estimating integrals.  Not efficient, but
- *      should suffice for now.
+ *      with trapezoid rule for estimating integrals.  Probably not the
+ *      most efficient approach, but should suffice for now.
  *  
  *  Arguments:
  *
@@ -273,10 +272,13 @@ double  t_score(double x, double expected_mean, double sample_stddev, unsigned n
 double  t_pdf(double x, unsigned n)
 
 {
-    double  v = n - 1;
+    double  v = n - 1,
+	    pdf;
     
-    return (lgamma(n / 2.0) / (sqrt(v * M_PI) * lgamma(v / 2.0))) 
-	* pow(1.0 + x * x / v, -n / 2.0);
+    // n is unsigned, so don't try to negate it before dividing
+    pdf = (tgamma(n / 2.0) / (sqrt(v * M_PI) * tgamma(v / 2.0)))
+	* pow(1.0 + x * x / v, -(n / 2.0));
+    return pdf;
 }
 
 
@@ -300,8 +302,6 @@ double  t_cdf(double x, unsigned n)
     {
 	cdf += area;
 	c -= slice_width;
-	printf("%f %f\n", c, area);
     }
     return cdf;
 }
-
