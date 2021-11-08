@@ -223,7 +223,7 @@ int     print_t_table(void)
 int     print_t_score(int argc, char *argv[])
 
 {
-    double      x_bar, expected_mean, stddev, score;
+    double      x_bar, expected_mean, stddev, score, cdf;
     unsigned    n;
     char        *end;
     
@@ -233,8 +233,8 @@ int     print_t_score(int argc, char *argv[])
     n = strtoul(argv[5], &end, 10);
     score = t_score(x_bar, expected_mean, stddev, n);
     printf("t(%u) = %f\n", n - 1, score);
-    printf("P(t(%u) < %f) = %f\n", n - 1, score, t_cdf(score, n));
-    printf("1 - P = %f\n", 1.0 - t_cdf(score, n));
+    printf("P(t(%u) < %f) = %f\n", n - 1, score, cdf = t_cdf(score, n));
+    printf("1 - P = %f\n", 1.0 - cdf);
     return EX_OK;
 }
 
@@ -242,14 +242,14 @@ int     print_t_score(int argc, char *argv[])
 int     print_t_cdf(int argc, char *argv[])
 
 {
-    double      x_bar;
+    double      x_bar, cdf;
     unsigned    n;
     char        *end;
     
     x_bar = strtod(argv[2], &end);
     n = strtoul(argv[3], &end, 10);
-    printf("P(x_bar < %f) = %f\n", x_bar, t_cdf(x_bar, n));
-    printf("1 - P = %f\n", 1.0 - t_cdf(x_bar, n));
+    printf("P(x_bar < %f) = %f\n", x_bar, cdf = t_cdf(x_bar, n));
+    printf("1 - P = %f\n", 1.0 - cdf);
     
     return EX_OK;
 }

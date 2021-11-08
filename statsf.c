@@ -295,13 +295,23 @@ double  t_cdf(double x, unsigned n)
      *  Estimate area of trapezoid as PDF height at center * slice_width.
      *  Start 1/2 slice left of x and work backwards until slices have
      *  inconsequential area.
+     *
+     *  For positive X, compute area for -X and return 1-area, to save
+     *  time.
      */
     
-    c = x - slice_width / 2.0;
+    if ( x < 0 )
+	c = x - slice_width / 2.0;
+    else
+	c = -x - slice_width / 2.0;
+    
     while ( (area = t_pdf(c, n) * slice_width) > tolerance )
     {
 	cdf += area;
 	c -= slice_width;
     }
-    return cdf;
+    if ( x < 0 )
+	return cdf;
+    else
+	return 1.0 - cdf;
 }
