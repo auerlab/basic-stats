@@ -27,12 +27,19 @@ typedef enum
 typedef struct
 {
     statsf_code_t   code;       // MEAN, MEDIAN, etc.
-    unsigned        row;        // 1-based row in input
-    unsigned        col;        // 1-based col in input
-    unsigned        *rows;      // List of rows for multirow (e.g. chi-sq)
-    unsigned        *cols;      // List of cols for multicol (e.g. chi-sq)
+    union
+    {
+	unsigned        row;    // 1-based row in input
+	unsigned        *rows;  // List of rows for multirow (e.g. chi-sq)
+    };
+    union
+    {
+	unsigned        col;    // 1-based col in input
+	unsigned        *cols;  // List of cols for multicol (e.g. chi-sq)
+    };
     double          sum;        // Mean
     double          *nums;      // Array for sorting for quantiles
+				// FIXME: Use temp file and Unix sort instead
     size_t          num_count;
     size_t          array_size;
     unsigned        partitions; // Quantile partitions
@@ -44,6 +51,11 @@ typedef struct
     double          *col_sums;  // List of col sums for multirow (e.g. chi-sq)
     
     double          expected_mean;  // Parameter for t-scores
+
+    // Pearson's r
+    double          sum_y;
+    double          sum_y_2;
+    double          sum_x_y;
     
     FILE            *tmp_file;
 }   statsf_t;
