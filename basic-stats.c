@@ -35,7 +35,7 @@ int     main(int argc, char *argv[])
 	return print_z_table();
     else if ( ((argc == 3) || (argc == 5)) && (strcmp(argv[1], "normal-cdf") == 0) )
 	return print_normal_cdf(argc, argv);
-    else if ( ((argc == 5) || (argc == 6)) && (strcmp(argv[1], "z-score") == 0) )
+    else if ( (argc == 5) && (strcmp(argv[1], "z-score") == 0) )
 	return print_z_score(argc, argv);
     else if ( (argc == 5) && (strcmp(argv[1], "t-table") == 0) )
 	return print_t_table();
@@ -168,24 +168,12 @@ int     print_z_table(void)
 int     print_z_score(int argc, char *argv[])
 
 {
-    double  x, mean, stddev, score, cdf, ssd, n;
+    double  x, mean, stddev, score, cdf;
     char    *end;
     
     x = strtod(argv[2], &end);
     mean = strtod(argv[3], &end);
-    if ( argc == 5 )
-	stddev = strtod(argv[4], &end);
-    else if ( argc == 6 )
-    {
-	ssd = strtod(argv[4], &end);
-	n = strtod(argv[5], &end);
-	stddev = ssd / sqrt(n);
-    }
-    else
-    {
-	usage(argv);
-	exit(EX_USAGE); // Redundant, to silence false warning
-    }
+    stddev = strtod(argv[4], &end);
     score = z_score(x, mean, stddev);
     printf("z-score = %f\n", score);
     printf("P(x < %f) = %f\n", x, cdf = normal_cdf(x, mean, stddev));
