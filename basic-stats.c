@@ -35,7 +35,7 @@ int     main(int argc, char *argv[])
 	return print_z_table();
     else if ( ((argc == 3) || (argc == 5)) && (strcmp(argv[1], "normal-cdf") == 0) )
 	return print_normal_cdf(argc, argv);
-    else if ( (argc == 5) && (strcmp(argv[1], "z-score") == 0) )
+    else if ( ((argc == 5) || (argc == 6)) && (strcmp(argv[1], "z-score") == 0) )
 	return print_z_score(argc, argv);
     else if ( (argc == 5) && (strcmp(argv[1], "t-table") == 0) )
 	return print_t_table();
@@ -72,13 +72,13 @@ int     main(int argc, char *argv[])
 	    statsf_list_add_func(&flist, STATSF_POP_VAR, &c, argc, argv);
 	else if ( strcmp(argv[c],"sample-var") == 0 )
 	    statsf_list_add_func(&flist, STATSF_SAMPLE_VAR, &c, argc, argv);
-	else if ( strcmp(argv[c],"pop-stddev") == 0 )
+	else if ( strcmp(argv[c],"pop-SD") == 0 )
 	    statsf_list_add_func(&flist, STATSF_POP_STDDEV, &c, argc, argv);
 	else if ( strcmp(argv[c],"pop-z-scores") == 0 )
 	    statsf_list_add_func(&flist, STATSF_POP_Z_SCORES, &c, argc, argv);
-	else if ( strcmp(argv[c],"sample-stddev") == 0 )
+	else if ( strcmp(argv[c],"sample-SD") == 0 )
 	    statsf_list_add_func(&flist, STATSF_SAMPLE_STDDEV, &c, argc, argv);
-	else if ( strcmp(argv[c],"sample-stderr") == 0 )
+	else if ( strcmp(argv[c],"sample-SE") == 0 )
 	    statsf_list_add_func(&flist, STATSF_SAMPLE_STDERR, &c, argc, argv);
 	else if ( strcmp(argv[c],"sample-z-scores") == 0 )
 	    statsf_list_add_func(&flist, STATSF_SAMPLE_Z_SCORES, &c, argc, argv);
@@ -109,9 +109,10 @@ void    usage(char *argv[])
 {
     fprintf(stderr, "\nSimple functions:\n");
     fprintf(stderr, "   %s z-table\n", argv[0]);
-    fprintf(stderr, "   %s z-score x mean stddev\n", argv[0]);
-    fprintf(stderr, "   %s normal-cdf x [mean stddev] (defaults: 0 1)\n\n", argv[0]);
-    fprintf(stderr, "   %s t-score x-bar expected-mean stddev n\n", argv[0]);
+    fprintf(stderr, "   %s z-score x mean SD|SEM\n", argv[0]);
+    fprintf(stderr, "   %s z-score x mean SSD n\n", argv[0]);
+    fprintf(stderr, "   %s normal-cdf x [mean SD] (defaults: 0 1)\n\n", argv[0]);
+    fprintf(stderr, "   %s t-score x-bar expected-mean SD n\n", argv[0]);
     fprintf(stderr, "   %s t-cdf x-bar n\n", argv[0]);
     
     fprintf(stderr, "Tabular data:\n");
@@ -125,12 +126,12 @@ void    usage(char *argv[])
     fprintf(stderr, "  median (same as quantile 2)\n");
     fprintf(stderr, "  quartile (same as quantile 4)\n");
     fprintf(stderr, "  pop-var\n");
-    fprintf(stderr, "  pop-stddev\n");
+    fprintf(stderr, "  pop-SD\n");
     fprintf(stderr, "  pop-z-scores\n");
     fprintf(stderr, "  sample-var\n");
-    fprintf(stderr, "  sample-stddev\n");
+    fprintf(stderr, "  sample-SD\n");
     fprintf(stderr, "  sample-z-scores\n");
-    fprintf(stderr, "  sample-stderr\n");
+    fprintf(stderr, "  sample-SE\n");
     fprintf(stderr, "  sample-t-score expected-mean\n");
     fprintf(stderr, "  mode\n");
     fprintf(stderr, "  range\n");
@@ -138,7 +139,7 @@ void    usage(char *argv[])
     fprintf(stderr, "  box-plot\n");
     fprintf(stderr, "\nDefault delimiter is TAB.  The delimiter string may be multiple characters.\n");
     fprintf(stderr, "Multiple consecutive spaces are treated as a single delimiter.\n");
-    fprintf(stderr, "\nExample: basic-stats sample-stddev --col 9 pop-var --col 10 < sample.tsv\n");
+    fprintf(stderr, "\nExample: basic-stats sample-SD --col 9 pop-var --col 10 < sample.tsv\n");
     fprintf(stderr, "Example: echo '3 6 1 8 2' | basic-stats mean --row 1\n\n");
     exit(EX_USAGE);
 }
@@ -167,12 +168,24 @@ int     print_z_table(void)
 int     print_z_score(int argc, char *argv[])
 
 {
-    double  x, mean, stddev, score, cdf;
+    double  x, mean, stddev, score, cdf, ssd, n;
     char    *end;
     
     x = strtod(argv[2], &end);
     mean = strtod(argv[3], &end);
-    stddev = strtod(argv[4], &end);
+    if ( argc == 5 )
+	stddev = strtod(argv[4], &end);
+    else if ( argc == 6 )
+    {
+	ssd = strtod(argv[4], &end);
+	n = strtod(argv[5], &end);
+	stddev = ssd / sqrt(n);
+    }
+    else
+    {
+	usage(argv);
+	exit(EX_USAGE); // Redundant, to silence false warning
+    }
     score = z_score(x, mean, stddev);
     printf("z-score = %f\n", score);
     printf("P(x < %f) = %f\n", x, cdf = normal_cdf(x, mean, stddev));
