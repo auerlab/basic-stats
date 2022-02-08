@@ -91,7 +91,7 @@ AR          ?= ar
 RANLIB      ?= ranlib
 STRIP       ?= strip
 
-INCLUDES    += -I${PREFIX}/include -I${LOCALBASE}/include
+INCLUDES    += -isystem ${PREFIX}/include -isystem ${LOCALBASE}/include
 CFLAGS      += ${INCLUDES}
 CXXFLAGS    += ${INCLUDES}
 FFLAGS      += ${INCLUDES}
