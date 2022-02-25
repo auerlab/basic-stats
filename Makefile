@@ -55,13 +55,15 @@ LIBOBJS = statsf-list.o statsf.o statsf-mutators.o statsf-list-mutators.o
 ############################################################################
 # Compile, link, and install options
 
-# Where to find local libraries and headers.  For MacPorts, override
-# with LOCALBASE=/opt/local.
-LOCALBASE   ?= /usr/local
-
-# Install in /usr/local, unless defined by the parent Makefile, the
+# Install in ../local, unless defined by the parent Makefile, the
 # environment, or a command line option such as PREFIX=/opt/local.
+# FreeBSD ports sets this to /usr/local, MacPorts to /opt/local, etc.
 PREFIX      ?= ../local
+
+# Where to find local libraries and headers.  If you want to use libraries
+# from outside ${PREFIX} (not usually recommended), you can set this
+# independently.
+LOCALBASE   ?= ${PREFIX}
 
 # Allow caller to override either MANPREFIX or MANDIR
 MANPREFIX   ?= ${PREFIX}
