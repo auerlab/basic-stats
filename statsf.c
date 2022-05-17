@@ -201,7 +201,7 @@ double  z_equivalent(double x, double mean, double stddev,
 double  normal_cdf(double x, double mean, double stddev)
 
 {
-    return 0.5 * (1 + erf((x - mean) / (stddev * M_SQRT2)));
+    return 0.5 * (1.0 + erf((x - mean) / (stddev * M_SQRT2)));
 }
 
 
