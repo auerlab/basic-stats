@@ -8,6 +8,8 @@
 
 #include <string.h>
 #include <ctype.h>
+#include <stdbool.h>        // In case of bool
+#include <stdint.h>         // In case of int64_t, etc
 #include <xtend/string.h>   // strlcpy() on Linux
 #include "statsf.h"
 
@@ -15,22 +17,16 @@
 /***************************************************************************
  *  Library:
  *      #include <statsf.h>
- *      -lbasic-stats
+ *      -lbasic-stats -lxtend
  *
  *  Description:
  *      Mutator for code member in a statsf_t structure.
- *      Use this function to set code in a statsf_t variable
+ *      Use this function to set code in a statsf_t object
  *      from non-member functions.  This function performs a direct
  *      assignment for scalar or pointer structure members.  If
  *      code is a pointer, data previously pointed to should
- *      generally be freed before calling this function to avoid memory
+ *      be freed before calling this function to avoid memory
  *      leaks.
- *
- *      Note that there is an equivalent macro (), which performs
- *      this function with no data verification or function call overhead.
- *      Use the macro version to maximize performance where the validity
- *      of new_code is guaranteed by other means.
- *      
  *
  *  Arguments:
  *      statsf_ptr      Pointer to the structure to set
@@ -44,7 +40,8 @@
  *      statsf_t        statsf;
  *      statsf_code_t   new_code;
  *
- *      if ( statsf_set_code(&statsf, new_code) == STATSF_DATA_OK )
+ *      if ( statsf_set_code(&statsf, new_code)
+ *              == STATSF_DATA_OK )
  *      {
  *      }
  *
@@ -53,14 +50,13 @@
  *
  *  History: 
  *  Date        Name        Modification
- *  2021-11-02  gen-get-set Auto-generated from statsf.h
+ *  2022-06-11  gen-get-set Auto-generated from statsf.h
  ***************************************************************************/
 
 int     statsf_set_code(statsf_t *statsf_ptr, statsf_code_t new_code)
 
 {
-    /* FIXME: Replace this with a proper sanity check */
-    if ( 0 )
+    if ( false )
 	return STATSF_DATA_OUT_OF_RANGE;
     else
     {
@@ -73,22 +69,16 @@ int     statsf_set_code(statsf_t *statsf_ptr, statsf_code_t new_code)
 /***************************************************************************
  *  Library:
  *      #include <statsf.h>
- *      -lbasic-stats
+ *      -lbasic-stats -lxtend
  *
  *  Description:
  *      Mutator for row member in a statsf_t structure.
- *      Use this function to set row in a statsf_t variable
+ *      Use this function to set row in a statsf_t object
  *      from non-member functions.  This function performs a direct
  *      assignment for scalar or pointer structure members.  If
  *      row is a pointer, data previously pointed to should
- *      generally be freed before calling this function to avoid memory
+ *      be freed before calling this function to avoid memory
  *      leaks.
- *
- *      Note that there is an equivalent macro (), which performs
- *      this function with no data verification or function call overhead.
- *      Use the macro version to maximize performance where the validity
- *      of new_row is guaranteed by other means.
- *      
  *
  *  Arguments:
  *      statsf_ptr      Pointer to the structure to set
@@ -102,7 +92,8 @@ int     statsf_set_code(statsf_t *statsf_ptr, statsf_code_t new_code)
  *      statsf_t        statsf;
  *      unsigned        new_row;
  *
- *      if ( statsf_set_row(&statsf, new_row) == STATSF_DATA_OK )
+ *      if ( statsf_set_row(&statsf, new_row)
+ *              == STATSF_DATA_OK )
  *      {
  *      }
  *
@@ -111,14 +102,13 @@ int     statsf_set_code(statsf_t *statsf_ptr, statsf_code_t new_code)
  *
  *  History: 
  *  Date        Name        Modification
- *  2021-11-02  gen-get-set Auto-generated from statsf.h
+ *  2022-06-11  gen-get-set Auto-generated from statsf.h
  ***************************************************************************/
 
 int     statsf_set_row(statsf_t *statsf_ptr, unsigned new_row)
 
 {
-    /* FIXME: Replace this with a proper sanity check */
-    if ( 0 )
+    if ( false )
 	return STATSF_DATA_OUT_OF_RANGE;
     else
     {
@@ -131,80 +121,16 @@ int     statsf_set_row(statsf_t *statsf_ptr, unsigned new_row)
 /***************************************************************************
  *  Library:
  *      #include <statsf.h>
- *      -lbasic-stats
- *
- *  Description:
- *      Mutator for col member in a statsf_t structure.
- *      Use this function to set col in a statsf_t variable
- *      from non-member functions.  This function performs a direct
- *      assignment for scalar or pointer structure members.  If
- *      col is a pointer, data previously pointed to should
- *      generally be freed before calling this function to avoid memory
- *      leaks.
- *
- *      Note that there is an equivalent macro (), which performs
- *      this function with no data verification or function call overhead.
- *      Use the macro version to maximize performance where the validity
- *      of new_col is guaranteed by other means.
- *      
- *
- *  Arguments:
- *      statsf_ptr      Pointer to the structure to set
- *      new_col         The new value for col
- *
- *  Returns:
- *      STATSF_DATA_OK if the new value is acceptable and assigned
- *      STATSF_DATA_OUT_OF_RANGE otherwise
- *
- *  Examples:
- *      statsf_t        statsf;
- *      unsigned        new_col;
- *
- *      if ( statsf_set_col(&statsf, new_col) == STATSF_DATA_OK )
- *      {
- *      }
- *
- *  See also:
- *      (3)
- *
- *  History: 
- *  Date        Name        Modification
- *  2021-11-02  gen-get-set Auto-generated from statsf.h
- ***************************************************************************/
-
-int     statsf_set_col(statsf_t *statsf_ptr, unsigned new_col)
-
-{
-    /* FIXME: Replace this with a proper sanity check */
-    if ( 0 )
-	return STATSF_DATA_OUT_OF_RANGE;
-    else
-    {
-	statsf_ptr->col = new_col;
-	return STATSF_DATA_OK;
-    }
-}
-
-
-/***************************************************************************
- *  Library:
- *      #include <statsf.h>
- *      -lbasic-stats
+ *      -lbasic-stats -lxtend
  *
  *  Description:
  *      Mutator for rows member in a statsf_t structure.
- *      Use this function to set rows in a statsf_t variable
+ *      Use this function to set rows in a statsf_t object
  *      from non-member functions.  This function performs a direct
  *      assignment for scalar or pointer structure members.  If
  *      rows is a pointer, data previously pointed to should
- *      generally be freed before calling this function to avoid memory
+ *      be freed before calling this function to avoid memory
  *      leaks.
- *
- *      Note that there is an equivalent macro (), which performs
- *      this function with no data verification or function call overhead.
- *      Use the macro version to maximize performance where the validity
- *      of new_rows is guaranteed by other means.
- *      
  *
  *  Arguments:
  *      statsf_ptr      Pointer to the structure to set
@@ -218,7 +144,8 @@ int     statsf_set_col(statsf_t *statsf_ptr, unsigned new_col)
  *      statsf_t        statsf;
  *      unsigned *      new_rows;
  *
- *      if ( statsf_set_rows(&statsf, new_rows) == STATSF_DATA_OK )
+ *      if ( statsf_set_rows(&statsf, new_rows)
+ *              == STATSF_DATA_OK )
  *      {
  *      }
  *
@@ -227,13 +154,12 @@ int     statsf_set_col(statsf_t *statsf_ptr, unsigned new_col)
  *
  *  History: 
  *  Date        Name        Modification
- *  2021-11-02  gen-get-set Auto-generated from statsf.h
+ *  2022-06-11  gen-get-set Auto-generated from statsf.h
  ***************************************************************************/
 
 int     statsf_set_rows(statsf_t *statsf_ptr, unsigned * new_rows)
 
 {
-    /* FIXME: Replace this with a proper sanity check */
     if ( new_rows == NULL )
 	return STATSF_DATA_OUT_OF_RANGE;
     else
@@ -247,17 +173,12 @@ int     statsf_set_rows(statsf_t *statsf_ptr, unsigned * new_rows)
 /***************************************************************************
  *  Library:
  *      #include <statsf.h>
- *      -lbasic-stats
+ *      -lbasic-stats -lxtend
  *
  *  Description:
  *      Mutator for an array element of rows member in a statsf_t
- *      structure. Use this function to set an element of the array
- *      rows in a statsf_t variable from non-member functions.
- *
- *      Note that there is an equivalent macro STATSF_SET_ROWS_AE(), which performs
- *      this function with no data verification or function call overhead.
- *      Use the macro version to maximize performance where the validity
- *      of new_rows_element is guaranteed by other means.
+ *      structure. Use this function to set statsf_ptr->rows[c]
+ *      in a statsf_t object from non-member functions.
  *
  *  Arguments:
  *      statsf_ptr      Pointer to the structure to set
@@ -273,7 +194,8 @@ int     statsf_set_rows(statsf_t *statsf_ptr, unsigned * new_rows)
  *      size_t          c;
  *      unsigned *      new_rows_element;
  *
- *      if ( statsf_set_rows(&statsf, c, new_rows_element) == STATSF_DATA_OK )
+ *      if ( statsf_set_rows_ae(&statsf, c, new_rows_element)
+ *              == STATSF_DATA_OK )
  *      {
  *      }
  *
@@ -282,14 +204,13 @@ int     statsf_set_rows(statsf_t *statsf_ptr, unsigned * new_rows)
  *
  *  History: 
  *  Date        Name        Modification
- *  2021-11-02  gen-get-set Auto-generated from statsf.h
+ *  2022-06-11  gen-get-set Auto-generated from statsf.h
  ***************************************************************************/
 
 int     statsf_set_rows_ae(statsf_t *statsf_ptr, size_t c, unsigned  new_rows_element)
 
 {
-    /* FIXME: Replace this with a proper sanity check */
-    if ( 0 )
+    if ( false )
 	return STATSF_DATA_OUT_OF_RANGE;
     else
     {
@@ -302,18 +223,13 @@ int     statsf_set_rows_ae(statsf_t *statsf_ptr, size_t c, unsigned  new_rows_el
 /***************************************************************************
  *  Library:
  *      #include <statsf.h>
- *      -lbasic-stats
+ *      -lbasic-stats -lxtend
  *
  *  Description:
  *      Mutator for rows member in a statsf_t structure.
- *      Use this function to set rows in a statsf_t variable
+ *      Use this function to set rows in a statsf_t object
  *      from non-member functions.  This function copies the array pointed to
- *      by new_rows to ->rows.
- *
- *      Note that there is an equivalent macro STATSF_SET_ROWS(), which performs
- *      this function with no data verification or function call overhead.
- *      Use the macro version to maximize performance where the validity
- *      of new_rows is guaranteed by other means.
+ *      by new_rows to statsf_ptr->rows.
  *
  *  Arguments:
  *      statsf_ptr      Pointer to the structure to set
@@ -329,7 +245,8 @@ int     statsf_set_rows_ae(statsf_t *statsf_ptr, size_t c, unsigned  new_rows_el
  *      unsigned *      new_rows;
  *      size_t          array_size;
  *
- *      if ( statsf_set_rows(&statsf, new_rows, array_size) == STATSF_DATA_OK )
+ *      if ( statsf_set_rows_cpy(&statsf, new_rows, array_size)
+ *              == STATSF_DATA_OK )
  *      {
  *      }
  *
@@ -338,24 +255,21 @@ int     statsf_set_rows_ae(statsf_t *statsf_ptr, size_t c, unsigned  new_rows_el
  *
  *  History: 
  *  Date        Name        Modification
- *  2021-11-02  gen-get-set Auto-generated from statsf.h
+ *  2022-06-11  gen-get-set Auto-generated from statsf.h
  ***************************************************************************/
 
 int     statsf_set_rows_cpy(statsf_t *statsf_ptr, unsigned * new_rows, size_t array_size)
 
 {
-    /* FIXME: Replace this with a proper sanity check */
     if ( new_rows == NULL )
 	return STATSF_DATA_OUT_OF_RANGE;
     else
     {
-	{
-	    size_t  c;
-	    
-	    // FIXME: Assuming all elements should be copied
-	    for (c = 0; c < array_size; ++c)
-		statsf_ptr->rows[c] = new_rows[c];
-	}
+	size_t  c;
+	
+	// FIXME: Assuming all elements should be copied
+	for (c = 0; c < array_size; ++c)
+	    statsf_ptr->rows[c] = new_rows[c];
 	return STATSF_DATA_OK;
     }
 }
@@ -364,22 +278,68 @@ int     statsf_set_rows_cpy(statsf_t *statsf_ptr, unsigned * new_rows, size_t ar
 /***************************************************************************
  *  Library:
  *      #include <statsf.h>
- *      -lbasic-stats
+ *      -lbasic-stats -lxtend
+ *
+ *  Description:
+ *      Mutator for col member in a statsf_t structure.
+ *      Use this function to set col in a statsf_t object
+ *      from non-member functions.  This function performs a direct
+ *      assignment for scalar or pointer structure members.  If
+ *      col is a pointer, data previously pointed to should
+ *      be freed before calling this function to avoid memory
+ *      leaks.
+ *
+ *  Arguments:
+ *      statsf_ptr      Pointer to the structure to set
+ *      new_col         The new value for col
+ *
+ *  Returns:
+ *      STATSF_DATA_OK if the new value is acceptable and assigned
+ *      STATSF_DATA_OUT_OF_RANGE otherwise
+ *
+ *  Examples:
+ *      statsf_t        statsf;
+ *      unsigned        new_col;
+ *
+ *      if ( statsf_set_col(&statsf, new_col)
+ *              == STATSF_DATA_OK )
+ *      {
+ *      }
+ *
+ *  See also:
+ *      (3)
+ *
+ *  History: 
+ *  Date        Name        Modification
+ *  2022-06-11  gen-get-set Auto-generated from statsf.h
+ ***************************************************************************/
+
+int     statsf_set_col(statsf_t *statsf_ptr, unsigned new_col)
+
+{
+    if ( false )
+	return STATSF_DATA_OUT_OF_RANGE;
+    else
+    {
+	statsf_ptr->col = new_col;
+	return STATSF_DATA_OK;
+    }
+}
+
+
+/***************************************************************************
+ *  Library:
+ *      #include <statsf.h>
+ *      -lbasic-stats -lxtend
  *
  *  Description:
  *      Mutator for cols member in a statsf_t structure.
- *      Use this function to set cols in a statsf_t variable
+ *      Use this function to set cols in a statsf_t object
  *      from non-member functions.  This function performs a direct
  *      assignment for scalar or pointer structure members.  If
  *      cols is a pointer, data previously pointed to should
- *      generally be freed before calling this function to avoid memory
+ *      be freed before calling this function to avoid memory
  *      leaks.
- *
- *      Note that there is an equivalent macro (), which performs
- *      this function with no data verification or function call overhead.
- *      Use the macro version to maximize performance where the validity
- *      of new_cols is guaranteed by other means.
- *      
  *
  *  Arguments:
  *      statsf_ptr      Pointer to the structure to set
@@ -393,7 +353,8 @@ int     statsf_set_rows_cpy(statsf_t *statsf_ptr, unsigned * new_rows, size_t ar
  *      statsf_t        statsf;
  *      unsigned *      new_cols;
  *
- *      if ( statsf_set_cols(&statsf, new_cols) == STATSF_DATA_OK )
+ *      if ( statsf_set_cols(&statsf, new_cols)
+ *              == STATSF_DATA_OK )
  *      {
  *      }
  *
@@ -402,13 +363,12 @@ int     statsf_set_rows_cpy(statsf_t *statsf_ptr, unsigned * new_rows, size_t ar
  *
  *  History: 
  *  Date        Name        Modification
- *  2021-11-02  gen-get-set Auto-generated from statsf.h
+ *  2022-06-11  gen-get-set Auto-generated from statsf.h
  ***************************************************************************/
 
 int     statsf_set_cols(statsf_t *statsf_ptr, unsigned * new_cols)
 
 {
-    /* FIXME: Replace this with a proper sanity check */
     if ( new_cols == NULL )
 	return STATSF_DATA_OUT_OF_RANGE;
     else
@@ -422,17 +382,12 @@ int     statsf_set_cols(statsf_t *statsf_ptr, unsigned * new_cols)
 /***************************************************************************
  *  Library:
  *      #include <statsf.h>
- *      -lbasic-stats
+ *      -lbasic-stats -lxtend
  *
  *  Description:
  *      Mutator for an array element of cols member in a statsf_t
- *      structure. Use this function to set an element of the array
- *      cols in a statsf_t variable from non-member functions.
- *
- *      Note that there is an equivalent macro STATSF_SET_COLS_AE(), which performs
- *      this function with no data verification or function call overhead.
- *      Use the macro version to maximize performance where the validity
- *      of new_cols_element is guaranteed by other means.
+ *      structure. Use this function to set statsf_ptr->cols[c]
+ *      in a statsf_t object from non-member functions.
  *
  *  Arguments:
  *      statsf_ptr      Pointer to the structure to set
@@ -448,7 +403,8 @@ int     statsf_set_cols(statsf_t *statsf_ptr, unsigned * new_cols)
  *      size_t          c;
  *      unsigned *      new_cols_element;
  *
- *      if ( statsf_set_cols(&statsf, c, new_cols_element) == STATSF_DATA_OK )
+ *      if ( statsf_set_cols_ae(&statsf, c, new_cols_element)
+ *              == STATSF_DATA_OK )
  *      {
  *      }
  *
@@ -457,14 +413,13 @@ int     statsf_set_cols(statsf_t *statsf_ptr, unsigned * new_cols)
  *
  *  History: 
  *  Date        Name        Modification
- *  2021-11-02  gen-get-set Auto-generated from statsf.h
+ *  2022-06-11  gen-get-set Auto-generated from statsf.h
  ***************************************************************************/
 
 int     statsf_set_cols_ae(statsf_t *statsf_ptr, size_t c, unsigned  new_cols_element)
 
 {
-    /* FIXME: Replace this with a proper sanity check */
-    if ( 0 )
+    if ( false )
 	return STATSF_DATA_OUT_OF_RANGE;
     else
     {
@@ -477,18 +432,13 @@ int     statsf_set_cols_ae(statsf_t *statsf_ptr, size_t c, unsigned  new_cols_el
 /***************************************************************************
  *  Library:
  *      #include <statsf.h>
- *      -lbasic-stats
+ *      -lbasic-stats -lxtend
  *
  *  Description:
  *      Mutator for cols member in a statsf_t structure.
- *      Use this function to set cols in a statsf_t variable
+ *      Use this function to set cols in a statsf_t object
  *      from non-member functions.  This function copies the array pointed to
- *      by new_cols to ->cols.
- *
- *      Note that there is an equivalent macro STATSF_SET_COLS(), which performs
- *      this function with no data verification or function call overhead.
- *      Use the macro version to maximize performance where the validity
- *      of new_cols is guaranteed by other means.
+ *      by new_cols to statsf_ptr->cols.
  *
  *  Arguments:
  *      statsf_ptr      Pointer to the structure to set
@@ -504,7 +454,8 @@ int     statsf_set_cols_ae(statsf_t *statsf_ptr, size_t c, unsigned  new_cols_el
  *      unsigned *      new_cols;
  *      size_t          array_size;
  *
- *      if ( statsf_set_cols(&statsf, new_cols, array_size) == STATSF_DATA_OK )
+ *      if ( statsf_set_cols_cpy(&statsf, new_cols, array_size)
+ *              == STATSF_DATA_OK )
  *      {
  *      }
  *
@@ -513,24 +464,21 @@ int     statsf_set_cols_ae(statsf_t *statsf_ptr, size_t c, unsigned  new_cols_el
  *
  *  History: 
  *  Date        Name        Modification
- *  2021-11-02  gen-get-set Auto-generated from statsf.h
+ *  2022-06-11  gen-get-set Auto-generated from statsf.h
  ***************************************************************************/
 
 int     statsf_set_cols_cpy(statsf_t *statsf_ptr, unsigned * new_cols, size_t array_size)
 
 {
-    /* FIXME: Replace this with a proper sanity check */
     if ( new_cols == NULL )
 	return STATSF_DATA_OUT_OF_RANGE;
     else
     {
-	{
-	    size_t  c;
-	    
-	    // FIXME: Assuming all elements should be copied
-	    for (c = 0; c < array_size; ++c)
-		statsf_ptr->cols[c] = new_cols[c];
-	}
+	size_t  c;
+	
+	// FIXME: Assuming all elements should be copied
+	for (c = 0; c < array_size; ++c)
+	    statsf_ptr->cols[c] = new_cols[c];
 	return STATSF_DATA_OK;
     }
 }
@@ -539,22 +487,16 @@ int     statsf_set_cols_cpy(statsf_t *statsf_ptr, unsigned * new_cols, size_t ar
 /***************************************************************************
  *  Library:
  *      #include <statsf.h>
- *      -lbasic-stats
+ *      -lbasic-stats -lxtend
  *
  *  Description:
  *      Mutator for sum member in a statsf_t structure.
- *      Use this function to set sum in a statsf_t variable
+ *      Use this function to set sum in a statsf_t object
  *      from non-member functions.  This function performs a direct
  *      assignment for scalar or pointer structure members.  If
  *      sum is a pointer, data previously pointed to should
- *      generally be freed before calling this function to avoid memory
+ *      be freed before calling this function to avoid memory
  *      leaks.
- *
- *      Note that there is an equivalent macro (), which performs
- *      this function with no data verification or function call overhead.
- *      Use the macro version to maximize performance where the validity
- *      of new_sum is guaranteed by other means.
- *      
  *
  *  Arguments:
  *      statsf_ptr      Pointer to the structure to set
@@ -568,7 +510,8 @@ int     statsf_set_cols_cpy(statsf_t *statsf_ptr, unsigned * new_cols, size_t ar
  *      statsf_t        statsf;
  *      double          new_sum;
  *
- *      if ( statsf_set_sum(&statsf, new_sum) == STATSF_DATA_OK )
+ *      if ( statsf_set_sum(&statsf, new_sum)
+ *              == STATSF_DATA_OK )
  *      {
  *      }
  *
@@ -577,14 +520,13 @@ int     statsf_set_cols_cpy(statsf_t *statsf_ptr, unsigned * new_cols, size_t ar
  *
  *  History: 
  *  Date        Name        Modification
- *  2021-11-02  gen-get-set Auto-generated from statsf.h
+ *  2022-06-11  gen-get-set Auto-generated from statsf.h
  ***************************************************************************/
 
 int     statsf_set_sum(statsf_t *statsf_ptr, double new_sum)
 
 {
-    /* FIXME: Replace this with a proper sanity check */
-    if ( 0 )
+    if ( false )
 	return STATSF_DATA_OUT_OF_RANGE;
     else
     {
@@ -597,22 +539,16 @@ int     statsf_set_sum(statsf_t *statsf_ptr, double new_sum)
 /***************************************************************************
  *  Library:
  *      #include <statsf.h>
- *      -lbasic-stats
+ *      -lbasic-stats -lxtend
  *
  *  Description:
  *      Mutator for nums member in a statsf_t structure.
- *      Use this function to set nums in a statsf_t variable
+ *      Use this function to set nums in a statsf_t object
  *      from non-member functions.  This function performs a direct
  *      assignment for scalar or pointer structure members.  If
  *      nums is a pointer, data previously pointed to should
- *      generally be freed before calling this function to avoid memory
+ *      be freed before calling this function to avoid memory
  *      leaks.
- *
- *      Note that there is an equivalent macro (), which performs
- *      this function with no data verification or function call overhead.
- *      Use the macro version to maximize performance where the validity
- *      of new_nums is guaranteed by other means.
- *      
  *
  *  Arguments:
  *      statsf_ptr      Pointer to the structure to set
@@ -626,7 +562,8 @@ int     statsf_set_sum(statsf_t *statsf_ptr, double new_sum)
  *      statsf_t        statsf;
  *      double *        new_nums;
  *
- *      if ( statsf_set_nums(&statsf, new_nums) == STATSF_DATA_OK )
+ *      if ( statsf_set_nums(&statsf, new_nums)
+ *              == STATSF_DATA_OK )
  *      {
  *      }
  *
@@ -635,13 +572,12 @@ int     statsf_set_sum(statsf_t *statsf_ptr, double new_sum)
  *
  *  History: 
  *  Date        Name        Modification
- *  2021-11-02  gen-get-set Auto-generated from statsf.h
+ *  2022-06-11  gen-get-set Auto-generated from statsf.h
  ***************************************************************************/
 
 int     statsf_set_nums(statsf_t *statsf_ptr, double * new_nums)
 
 {
-    /* FIXME: Replace this with a proper sanity check */
     if ( new_nums == NULL )
 	return STATSF_DATA_OUT_OF_RANGE;
     else
@@ -655,17 +591,12 @@ int     statsf_set_nums(statsf_t *statsf_ptr, double * new_nums)
 /***************************************************************************
  *  Library:
  *      #include <statsf.h>
- *      -lbasic-stats
+ *      -lbasic-stats -lxtend
  *
  *  Description:
  *      Mutator for an array element of nums member in a statsf_t
- *      structure. Use this function to set an element of the array
- *      nums in a statsf_t variable from non-member functions.
- *
- *      Note that there is an equivalent macro STATSF_SET_NUMS_AE(), which performs
- *      this function with no data verification or function call overhead.
- *      Use the macro version to maximize performance where the validity
- *      of new_nums_element is guaranteed by other means.
+ *      structure. Use this function to set statsf_ptr->nums[c]
+ *      in a statsf_t object from non-member functions.
  *
  *  Arguments:
  *      statsf_ptr      Pointer to the structure to set
@@ -681,7 +612,8 @@ int     statsf_set_nums(statsf_t *statsf_ptr, double * new_nums)
  *      size_t          c;
  *      double *        new_nums_element;
  *
- *      if ( statsf_set_nums(&statsf, c, new_nums_element) == STATSF_DATA_OK )
+ *      if ( statsf_set_nums_ae(&statsf, c, new_nums_element)
+ *              == STATSF_DATA_OK )
  *      {
  *      }
  *
@@ -690,14 +622,13 @@ int     statsf_set_nums(statsf_t *statsf_ptr, double * new_nums)
  *
  *  History: 
  *  Date        Name        Modification
- *  2021-11-02  gen-get-set Auto-generated from statsf.h
+ *  2022-06-11  gen-get-set Auto-generated from statsf.h
  ***************************************************************************/
 
 int     statsf_set_nums_ae(statsf_t *statsf_ptr, size_t c, double  new_nums_element)
 
 {
-    /* FIXME: Replace this with a proper sanity check */
-    if ( 0 )
+    if ( false )
 	return STATSF_DATA_OUT_OF_RANGE;
     else
     {
@@ -710,18 +641,13 @@ int     statsf_set_nums_ae(statsf_t *statsf_ptr, size_t c, double  new_nums_elem
 /***************************************************************************
  *  Library:
  *      #include <statsf.h>
- *      -lbasic-stats
+ *      -lbasic-stats -lxtend
  *
  *  Description:
  *      Mutator for nums member in a statsf_t structure.
- *      Use this function to set nums in a statsf_t variable
+ *      Use this function to set nums in a statsf_t object
  *      from non-member functions.  This function copies the array pointed to
- *      by new_nums to ->nums.
- *
- *      Note that there is an equivalent macro STATSF_SET_NUMS(), which performs
- *      this function with no data verification or function call overhead.
- *      Use the macro version to maximize performance where the validity
- *      of new_nums is guaranteed by other means.
+ *      by new_nums to statsf_ptr->nums.
  *
  *  Arguments:
  *      statsf_ptr      Pointer to the structure to set
@@ -737,7 +663,8 @@ int     statsf_set_nums_ae(statsf_t *statsf_ptr, size_t c, double  new_nums_elem
  *      double *        new_nums;
  *      size_t          array_size;
  *
- *      if ( statsf_set_nums(&statsf, new_nums, array_size) == STATSF_DATA_OK )
+ *      if ( statsf_set_nums_cpy(&statsf, new_nums, array_size)
+ *              == STATSF_DATA_OK )
  *      {
  *      }
  *
@@ -746,24 +673,21 @@ int     statsf_set_nums_ae(statsf_t *statsf_ptr, size_t c, double  new_nums_elem
  *
  *  History: 
  *  Date        Name        Modification
- *  2021-11-02  gen-get-set Auto-generated from statsf.h
+ *  2022-06-11  gen-get-set Auto-generated from statsf.h
  ***************************************************************************/
 
 int     statsf_set_nums_cpy(statsf_t *statsf_ptr, double * new_nums, size_t array_size)
 
 {
-    /* FIXME: Replace this with a proper sanity check */
     if ( new_nums == NULL )
 	return STATSF_DATA_OUT_OF_RANGE;
     else
     {
-	{
-	    size_t  c;
-	    
-	    // FIXME: Assuming all elements should be copied
-	    for (c = 0; c < array_size; ++c)
-		statsf_ptr->nums[c] = new_nums[c];
-	}
+	size_t  c;
+	
+	// FIXME: Assuming all elements should be copied
+	for (c = 0; c < array_size; ++c)
+	    statsf_ptr->nums[c] = new_nums[c];
 	return STATSF_DATA_OK;
     }
 }
@@ -772,22 +696,16 @@ int     statsf_set_nums_cpy(statsf_t *statsf_ptr, double * new_nums, size_t arra
 /***************************************************************************
  *  Library:
  *      #include <statsf.h>
- *      -lbasic-stats
+ *      -lbasic-stats -lxtend
  *
  *  Description:
  *      Mutator for num_count member in a statsf_t structure.
- *      Use this function to set num_count in a statsf_t variable
+ *      Use this function to set num_count in a statsf_t object
  *      from non-member functions.  This function performs a direct
  *      assignment for scalar or pointer structure members.  If
  *      num_count is a pointer, data previously pointed to should
- *      generally be freed before calling this function to avoid memory
+ *      be freed before calling this function to avoid memory
  *      leaks.
- *
- *      Note that there is an equivalent macro (), which performs
- *      this function with no data verification or function call overhead.
- *      Use the macro version to maximize performance where the validity
- *      of new_num_count is guaranteed by other means.
- *      
  *
  *  Arguments:
  *      statsf_ptr      Pointer to the structure to set
@@ -801,7 +719,8 @@ int     statsf_set_nums_cpy(statsf_t *statsf_ptr, double * new_nums, size_t arra
  *      statsf_t        statsf;
  *      size_t          new_num_count;
  *
- *      if ( statsf_set_num_count(&statsf, new_num_count) == STATSF_DATA_OK )
+ *      if ( statsf_set_num_count(&statsf, new_num_count)
+ *              == STATSF_DATA_OK )
  *      {
  *      }
  *
@@ -810,14 +729,13 @@ int     statsf_set_nums_cpy(statsf_t *statsf_ptr, double * new_nums, size_t arra
  *
  *  History: 
  *  Date        Name        Modification
- *  2021-11-02  gen-get-set Auto-generated from statsf.h
+ *  2022-06-11  gen-get-set Auto-generated from statsf.h
  ***************************************************************************/
 
 int     statsf_set_num_count(statsf_t *statsf_ptr, size_t new_num_count)
 
 {
-    /* FIXME: Replace this with a proper sanity check */
-    if ( 0 )
+    if ( false )
 	return STATSF_DATA_OUT_OF_RANGE;
     else
     {
@@ -830,22 +748,16 @@ int     statsf_set_num_count(statsf_t *statsf_ptr, size_t new_num_count)
 /***************************************************************************
  *  Library:
  *      #include <statsf.h>
- *      -lbasic-stats
+ *      -lbasic-stats -lxtend
  *
  *  Description:
  *      Mutator for array_size member in a statsf_t structure.
- *      Use this function to set array_size in a statsf_t variable
+ *      Use this function to set array_size in a statsf_t object
  *      from non-member functions.  This function performs a direct
  *      assignment for scalar or pointer structure members.  If
  *      array_size is a pointer, data previously pointed to should
- *      generally be freed before calling this function to avoid memory
+ *      be freed before calling this function to avoid memory
  *      leaks.
- *
- *      Note that there is an equivalent macro (), which performs
- *      this function with no data verification or function call overhead.
- *      Use the macro version to maximize performance where the validity
- *      of new_array_size is guaranteed by other means.
- *      
  *
  *  Arguments:
  *      statsf_ptr      Pointer to the structure to set
@@ -859,7 +771,8 @@ int     statsf_set_num_count(statsf_t *statsf_ptr, size_t new_num_count)
  *      statsf_t        statsf;
  *      size_t          new_array_size;
  *
- *      if ( statsf_set_array_size(&statsf, new_array_size) == STATSF_DATA_OK )
+ *      if ( statsf_set_array_size(&statsf, new_array_size)
+ *              == STATSF_DATA_OK )
  *      {
  *      }
  *
@@ -868,14 +781,13 @@ int     statsf_set_num_count(statsf_t *statsf_ptr, size_t new_num_count)
  *
  *  History: 
  *  Date        Name        Modification
- *  2021-11-02  gen-get-set Auto-generated from statsf.h
+ *  2022-06-11  gen-get-set Auto-generated from statsf.h
  ***************************************************************************/
 
 int     statsf_set_array_size(statsf_t *statsf_ptr, size_t new_array_size)
 
 {
-    /* FIXME: Replace this with a proper sanity check */
-    if ( 0 )
+    if ( false )
 	return STATSF_DATA_OUT_OF_RANGE;
     else
     {
@@ -888,22 +800,16 @@ int     statsf_set_array_size(statsf_t *statsf_ptr, size_t new_array_size)
 /***************************************************************************
  *  Library:
  *      #include <statsf.h>
- *      -lbasic-stats
+ *      -lbasic-stats -lxtend
  *
  *  Description:
  *      Mutator for partitions member in a statsf_t structure.
- *      Use this function to set partitions in a statsf_t variable
+ *      Use this function to set partitions in a statsf_t object
  *      from non-member functions.  This function performs a direct
  *      assignment for scalar or pointer structure members.  If
  *      partitions is a pointer, data previously pointed to should
- *      generally be freed before calling this function to avoid memory
+ *      be freed before calling this function to avoid memory
  *      leaks.
- *
- *      Note that there is an equivalent macro (), which performs
- *      this function with no data verification or function call overhead.
- *      Use the macro version to maximize performance where the validity
- *      of new_partitions is guaranteed by other means.
- *      
  *
  *  Arguments:
  *      statsf_ptr      Pointer to the structure to set
@@ -917,7 +823,8 @@ int     statsf_set_array_size(statsf_t *statsf_ptr, size_t new_array_size)
  *      statsf_t        statsf;
  *      unsigned        new_partitions;
  *
- *      if ( statsf_set_partitions(&statsf, new_partitions) == STATSF_DATA_OK )
+ *      if ( statsf_set_partitions(&statsf, new_partitions)
+ *              == STATSF_DATA_OK )
  *      {
  *      }
  *
@@ -926,14 +833,13 @@ int     statsf_set_array_size(statsf_t *statsf_ptr, size_t new_array_size)
  *
  *  History: 
  *  Date        Name        Modification
- *  2021-11-02  gen-get-set Auto-generated from statsf.h
+ *  2022-06-11  gen-get-set Auto-generated from statsf.h
  ***************************************************************************/
 
 int     statsf_set_partitions(statsf_t *statsf_ptr, unsigned new_partitions)
 
 {
-    /* FIXME: Replace this with a proper sanity check */
-    if ( 0 )
+    if ( false )
 	return STATSF_DATA_OUT_OF_RANGE;
     else
     {
@@ -946,22 +852,16 @@ int     statsf_set_partitions(statsf_t *statsf_ptr, unsigned new_partitions)
 /***************************************************************************
  *  Library:
  *      #include <statsf.h>
- *      -lbasic-stats
+ *      -lbasic-stats -lxtend
  *
  *  Description:
  *      Mutator for sum_x member in a statsf_t structure.
- *      Use this function to set sum_x in a statsf_t variable
+ *      Use this function to set sum_x in a statsf_t object
  *      from non-member functions.  This function performs a direct
  *      assignment for scalar or pointer structure members.  If
  *      sum_x is a pointer, data previously pointed to should
- *      generally be freed before calling this function to avoid memory
+ *      be freed before calling this function to avoid memory
  *      leaks.
- *
- *      Note that there is an equivalent macro (), which performs
- *      this function with no data verification or function call overhead.
- *      Use the macro version to maximize performance where the validity
- *      of new_sum_x is guaranteed by other means.
- *      
  *
  *  Arguments:
  *      statsf_ptr      Pointer to the structure to set
@@ -975,7 +875,8 @@ int     statsf_set_partitions(statsf_t *statsf_ptr, unsigned new_partitions)
  *      statsf_t        statsf;
  *      double          new_sum_x;
  *
- *      if ( statsf_set_sum_x(&statsf, new_sum_x) == STATSF_DATA_OK )
+ *      if ( statsf_set_sum_x(&statsf, new_sum_x)
+ *              == STATSF_DATA_OK )
  *      {
  *      }
  *
@@ -984,14 +885,13 @@ int     statsf_set_partitions(statsf_t *statsf_ptr, unsigned new_partitions)
  *
  *  History: 
  *  Date        Name        Modification
- *  2021-11-02  gen-get-set Auto-generated from statsf.h
+ *  2022-06-11  gen-get-set Auto-generated from statsf.h
  ***************************************************************************/
 
 int     statsf_set_sum_x(statsf_t *statsf_ptr, double new_sum_x)
 
 {
-    /* FIXME: Replace this with a proper sanity check */
-    if ( 0 )
+    if ( false )
 	return STATSF_DATA_OUT_OF_RANGE;
     else
     {
@@ -1004,22 +904,16 @@ int     statsf_set_sum_x(statsf_t *statsf_ptr, double new_sum_x)
 /***************************************************************************
  *  Library:
  *      #include <statsf.h>
- *      -lbasic-stats
+ *      -lbasic-stats -lxtend
  *
  *  Description:
  *      Mutator for sum_x_2 member in a statsf_t structure.
- *      Use this function to set sum_x_2 in a statsf_t variable
+ *      Use this function to set sum_x_2 in a statsf_t object
  *      from non-member functions.  This function performs a direct
  *      assignment for scalar or pointer structure members.  If
  *      sum_x_2 is a pointer, data previously pointed to should
- *      generally be freed before calling this function to avoid memory
+ *      be freed before calling this function to avoid memory
  *      leaks.
- *
- *      Note that there is an equivalent macro (), which performs
- *      this function with no data verification or function call overhead.
- *      Use the macro version to maximize performance where the validity
- *      of new_sum_x_2 is guaranteed by other means.
- *      
  *
  *  Arguments:
  *      statsf_ptr      Pointer to the structure to set
@@ -1033,7 +927,8 @@ int     statsf_set_sum_x(statsf_t *statsf_ptr, double new_sum_x)
  *      statsf_t        statsf;
  *      double          new_sum_x_2;
  *
- *      if ( statsf_set_sum_x_2(&statsf, new_sum_x_2) == STATSF_DATA_OK )
+ *      if ( statsf_set_sum_x_2(&statsf, new_sum_x_2)
+ *              == STATSF_DATA_OK )
  *      {
  *      }
  *
@@ -1042,14 +937,13 @@ int     statsf_set_sum_x(statsf_t *statsf_ptr, double new_sum_x)
  *
  *  History: 
  *  Date        Name        Modification
- *  2021-11-02  gen-get-set Auto-generated from statsf.h
+ *  2022-06-11  gen-get-set Auto-generated from statsf.h
  ***************************************************************************/
 
 int     statsf_set_sum_x_2(statsf_t *statsf_ptr, double new_sum_x_2)
 
 {
-    /* FIXME: Replace this with a proper sanity check */
-    if ( 0 )
+    if ( false )
 	return STATSF_DATA_OUT_OF_RANGE;
     else
     {
@@ -1062,22 +956,16 @@ int     statsf_set_sum_x_2(statsf_t *statsf_ptr, double new_sum_x_2)
 /***************************************************************************
  *  Library:
  *      #include <statsf.h>
- *      -lbasic-stats
+ *      -lbasic-stats -lxtend
  *
  *  Description:
  *      Mutator for row_sums member in a statsf_t structure.
- *      Use this function to set row_sums in a statsf_t variable
+ *      Use this function to set row_sums in a statsf_t object
  *      from non-member functions.  This function performs a direct
  *      assignment for scalar or pointer structure members.  If
  *      row_sums is a pointer, data previously pointed to should
- *      generally be freed before calling this function to avoid memory
+ *      be freed before calling this function to avoid memory
  *      leaks.
- *
- *      Note that there is an equivalent macro (), which performs
- *      this function with no data verification or function call overhead.
- *      Use the macro version to maximize performance where the validity
- *      of new_row_sums is guaranteed by other means.
- *      
  *
  *  Arguments:
  *      statsf_ptr      Pointer to the structure to set
@@ -1091,7 +979,8 @@ int     statsf_set_sum_x_2(statsf_t *statsf_ptr, double new_sum_x_2)
  *      statsf_t        statsf;
  *      double *        new_row_sums;
  *
- *      if ( statsf_set_row_sums(&statsf, new_row_sums) == STATSF_DATA_OK )
+ *      if ( statsf_set_row_sums(&statsf, new_row_sums)
+ *              == STATSF_DATA_OK )
  *      {
  *      }
  *
@@ -1100,13 +989,12 @@ int     statsf_set_sum_x_2(statsf_t *statsf_ptr, double new_sum_x_2)
  *
  *  History: 
  *  Date        Name        Modification
- *  2021-11-02  gen-get-set Auto-generated from statsf.h
+ *  2022-06-11  gen-get-set Auto-generated from statsf.h
  ***************************************************************************/
 
 int     statsf_set_row_sums(statsf_t *statsf_ptr, double * new_row_sums)
 
 {
-    /* FIXME: Replace this with a proper sanity check */
     if ( new_row_sums == NULL )
 	return STATSF_DATA_OUT_OF_RANGE;
     else
@@ -1120,17 +1008,12 @@ int     statsf_set_row_sums(statsf_t *statsf_ptr, double * new_row_sums)
 /***************************************************************************
  *  Library:
  *      #include <statsf.h>
- *      -lbasic-stats
+ *      -lbasic-stats -lxtend
  *
  *  Description:
  *      Mutator for an array element of row_sums member in a statsf_t
- *      structure. Use this function to set an element of the array
- *      row_sums in a statsf_t variable from non-member functions.
- *
- *      Note that there is an equivalent macro STATSF_SET_ROW_SUMS_AE(), which performs
- *      this function with no data verification or function call overhead.
- *      Use the macro version to maximize performance where the validity
- *      of new_row_sums_element is guaranteed by other means.
+ *      structure. Use this function to set statsf_ptr->row_sums[c]
+ *      in a statsf_t object from non-member functions.
  *
  *  Arguments:
  *      statsf_ptr      Pointer to the structure to set
@@ -1146,7 +1029,8 @@ int     statsf_set_row_sums(statsf_t *statsf_ptr, double * new_row_sums)
  *      size_t          c;
  *      double *        new_row_sums_element;
  *
- *      if ( statsf_set_row_sums(&statsf, c, new_row_sums_element) == STATSF_DATA_OK )
+ *      if ( statsf_set_row_sums_ae(&statsf, c, new_row_sums_element)
+ *              == STATSF_DATA_OK )
  *      {
  *      }
  *
@@ -1155,14 +1039,13 @@ int     statsf_set_row_sums(statsf_t *statsf_ptr, double * new_row_sums)
  *
  *  History: 
  *  Date        Name        Modification
- *  2021-11-02  gen-get-set Auto-generated from statsf.h
+ *  2022-06-11  gen-get-set Auto-generated from statsf.h
  ***************************************************************************/
 
 int     statsf_set_row_sums_ae(statsf_t *statsf_ptr, size_t c, double  new_row_sums_element)
 
 {
-    /* FIXME: Replace this with a proper sanity check */
-    if ( 0 )
+    if ( false )
 	return STATSF_DATA_OUT_OF_RANGE;
     else
     {
@@ -1175,18 +1058,13 @@ int     statsf_set_row_sums_ae(statsf_t *statsf_ptr, size_t c, double  new_row_s
 /***************************************************************************
  *  Library:
  *      #include <statsf.h>
- *      -lbasic-stats
+ *      -lbasic-stats -lxtend
  *
  *  Description:
  *      Mutator for row_sums member in a statsf_t structure.
- *      Use this function to set row_sums in a statsf_t variable
+ *      Use this function to set row_sums in a statsf_t object
  *      from non-member functions.  This function copies the array pointed to
- *      by new_row_sums to ->row_sums.
- *
- *      Note that there is an equivalent macro STATSF_SET_ROW_SUMS(), which performs
- *      this function with no data verification or function call overhead.
- *      Use the macro version to maximize performance where the validity
- *      of new_row_sums is guaranteed by other means.
+ *      by new_row_sums to statsf_ptr->row_sums.
  *
  *  Arguments:
  *      statsf_ptr      Pointer to the structure to set
@@ -1202,7 +1080,8 @@ int     statsf_set_row_sums_ae(statsf_t *statsf_ptr, size_t c, double  new_row_s
  *      double *        new_row_sums;
  *      size_t          array_size;
  *
- *      if ( statsf_set_row_sums(&statsf, new_row_sums, array_size) == STATSF_DATA_OK )
+ *      if ( statsf_set_row_sums_cpy(&statsf, new_row_sums, array_size)
+ *              == STATSF_DATA_OK )
  *      {
  *      }
  *
@@ -1211,24 +1090,21 @@ int     statsf_set_row_sums_ae(statsf_t *statsf_ptr, size_t c, double  new_row_s
  *
  *  History: 
  *  Date        Name        Modification
- *  2021-11-02  gen-get-set Auto-generated from statsf.h
+ *  2022-06-11  gen-get-set Auto-generated from statsf.h
  ***************************************************************************/
 
 int     statsf_set_row_sums_cpy(statsf_t *statsf_ptr, double * new_row_sums, size_t array_size)
 
 {
-    /* FIXME: Replace this with a proper sanity check */
     if ( new_row_sums == NULL )
 	return STATSF_DATA_OUT_OF_RANGE;
     else
     {
-	{
-	    size_t  c;
-	    
-	    // FIXME: Assuming all elements should be copied
-	    for (c = 0; c < array_size; ++c)
-		statsf_ptr->row_sums[c] = new_row_sums[c];
-	}
+	size_t  c;
+	
+	// FIXME: Assuming all elements should be copied
+	for (c = 0; c < array_size; ++c)
+	    statsf_ptr->row_sums[c] = new_row_sums[c];
 	return STATSF_DATA_OK;
     }
 }
@@ -1237,22 +1113,16 @@ int     statsf_set_row_sums_cpy(statsf_t *statsf_ptr, double * new_row_sums, siz
 /***************************************************************************
  *  Library:
  *      #include <statsf.h>
- *      -lbasic-stats
+ *      -lbasic-stats -lxtend
  *
  *  Description:
  *      Mutator for col_sums member in a statsf_t structure.
- *      Use this function to set col_sums in a statsf_t variable
+ *      Use this function to set col_sums in a statsf_t object
  *      from non-member functions.  This function performs a direct
  *      assignment for scalar or pointer structure members.  If
  *      col_sums is a pointer, data previously pointed to should
- *      generally be freed before calling this function to avoid memory
+ *      be freed before calling this function to avoid memory
  *      leaks.
- *
- *      Note that there is an equivalent macro (), which performs
- *      this function with no data verification or function call overhead.
- *      Use the macro version to maximize performance where the validity
- *      of new_col_sums is guaranteed by other means.
- *      
  *
  *  Arguments:
  *      statsf_ptr      Pointer to the structure to set
@@ -1266,7 +1136,8 @@ int     statsf_set_row_sums_cpy(statsf_t *statsf_ptr, double * new_row_sums, siz
  *      statsf_t        statsf;
  *      double *        new_col_sums;
  *
- *      if ( statsf_set_col_sums(&statsf, new_col_sums) == STATSF_DATA_OK )
+ *      if ( statsf_set_col_sums(&statsf, new_col_sums)
+ *              == STATSF_DATA_OK )
  *      {
  *      }
  *
@@ -1275,13 +1146,12 @@ int     statsf_set_row_sums_cpy(statsf_t *statsf_ptr, double * new_row_sums, siz
  *
  *  History: 
  *  Date        Name        Modification
- *  2021-11-02  gen-get-set Auto-generated from statsf.h
+ *  2022-06-11  gen-get-set Auto-generated from statsf.h
  ***************************************************************************/
 
 int     statsf_set_col_sums(statsf_t *statsf_ptr, double * new_col_sums)
 
 {
-    /* FIXME: Replace this with a proper sanity check */
     if ( new_col_sums == NULL )
 	return STATSF_DATA_OUT_OF_RANGE;
     else
@@ -1295,17 +1165,12 @@ int     statsf_set_col_sums(statsf_t *statsf_ptr, double * new_col_sums)
 /***************************************************************************
  *  Library:
  *      #include <statsf.h>
- *      -lbasic-stats
+ *      -lbasic-stats -lxtend
  *
  *  Description:
  *      Mutator for an array element of col_sums member in a statsf_t
- *      structure. Use this function to set an element of the array
- *      col_sums in a statsf_t variable from non-member functions.
- *
- *      Note that there is an equivalent macro STATSF_SET_COL_SUMS_AE(), which performs
- *      this function with no data verification or function call overhead.
- *      Use the macro version to maximize performance where the validity
- *      of new_col_sums_element is guaranteed by other means.
+ *      structure. Use this function to set statsf_ptr->col_sums[c]
+ *      in a statsf_t object from non-member functions.
  *
  *  Arguments:
  *      statsf_ptr      Pointer to the structure to set
@@ -1321,7 +1186,8 @@ int     statsf_set_col_sums(statsf_t *statsf_ptr, double * new_col_sums)
  *      size_t          c;
  *      double *        new_col_sums_element;
  *
- *      if ( statsf_set_col_sums(&statsf, c, new_col_sums_element) == STATSF_DATA_OK )
+ *      if ( statsf_set_col_sums_ae(&statsf, c, new_col_sums_element)
+ *              == STATSF_DATA_OK )
  *      {
  *      }
  *
@@ -1330,14 +1196,13 @@ int     statsf_set_col_sums(statsf_t *statsf_ptr, double * new_col_sums)
  *
  *  History: 
  *  Date        Name        Modification
- *  2021-11-02  gen-get-set Auto-generated from statsf.h
+ *  2022-06-11  gen-get-set Auto-generated from statsf.h
  ***************************************************************************/
 
 int     statsf_set_col_sums_ae(statsf_t *statsf_ptr, size_t c, double  new_col_sums_element)
 
 {
-    /* FIXME: Replace this with a proper sanity check */
-    if ( 0 )
+    if ( false )
 	return STATSF_DATA_OUT_OF_RANGE;
     else
     {
@@ -1350,18 +1215,13 @@ int     statsf_set_col_sums_ae(statsf_t *statsf_ptr, size_t c, double  new_col_s
 /***************************************************************************
  *  Library:
  *      #include <statsf.h>
- *      -lbasic-stats
+ *      -lbasic-stats -lxtend
  *
  *  Description:
  *      Mutator for col_sums member in a statsf_t structure.
- *      Use this function to set col_sums in a statsf_t variable
+ *      Use this function to set col_sums in a statsf_t object
  *      from non-member functions.  This function copies the array pointed to
- *      by new_col_sums to ->col_sums.
- *
- *      Note that there is an equivalent macro STATSF_SET_COL_SUMS(), which performs
- *      this function with no data verification or function call overhead.
- *      Use the macro version to maximize performance where the validity
- *      of new_col_sums is guaranteed by other means.
+ *      by new_col_sums to statsf_ptr->col_sums.
  *
  *  Arguments:
  *      statsf_ptr      Pointer to the structure to set
@@ -1377,7 +1237,8 @@ int     statsf_set_col_sums_ae(statsf_t *statsf_ptr, size_t c, double  new_col_s
  *      double *        new_col_sums;
  *      size_t          array_size;
  *
- *      if ( statsf_set_col_sums(&statsf, new_col_sums, array_size) == STATSF_DATA_OK )
+ *      if ( statsf_set_col_sums_cpy(&statsf, new_col_sums, array_size)
+ *              == STATSF_DATA_OK )
  *      {
  *      }
  *
@@ -1386,24 +1247,21 @@ int     statsf_set_col_sums_ae(statsf_t *statsf_ptr, size_t c, double  new_col_s
  *
  *  History: 
  *  Date        Name        Modification
- *  2021-11-02  gen-get-set Auto-generated from statsf.h
+ *  2022-06-11  gen-get-set Auto-generated from statsf.h
  ***************************************************************************/
 
 int     statsf_set_col_sums_cpy(statsf_t *statsf_ptr, double * new_col_sums, size_t array_size)
 
 {
-    /* FIXME: Replace this with a proper sanity check */
     if ( new_col_sums == NULL )
 	return STATSF_DATA_OUT_OF_RANGE;
     else
     {
-	{
-	    size_t  c;
-	    
-	    // FIXME: Assuming all elements should be copied
-	    for (c = 0; c < array_size; ++c)
-		statsf_ptr->col_sums[c] = new_col_sums[c];
-	}
+	size_t  c;
+	
+	// FIXME: Assuming all elements should be copied
+	for (c = 0; c < array_size; ++c)
+	    statsf_ptr->col_sums[c] = new_col_sums[c];
 	return STATSF_DATA_OK;
     }
 }
@@ -1412,22 +1270,16 @@ int     statsf_set_col_sums_cpy(statsf_t *statsf_ptr, double * new_col_sums, siz
 /***************************************************************************
  *  Library:
  *      #include <statsf.h>
- *      -lbasic-stats
+ *      -lbasic-stats -lxtend
  *
  *  Description:
  *      Mutator for expected_mean member in a statsf_t structure.
- *      Use this function to set expected_mean in a statsf_t variable
+ *      Use this function to set expected_mean in a statsf_t object
  *      from non-member functions.  This function performs a direct
  *      assignment for scalar or pointer structure members.  If
  *      expected_mean is a pointer, data previously pointed to should
- *      generally be freed before calling this function to avoid memory
+ *      be freed before calling this function to avoid memory
  *      leaks.
- *
- *      Note that there is an equivalent macro (), which performs
- *      this function with no data verification or function call overhead.
- *      Use the macro version to maximize performance where the validity
- *      of new_expected_mean is guaranteed by other means.
- *      
  *
  *  Arguments:
  *      statsf_ptr      Pointer to the structure to set
@@ -1441,7 +1293,8 @@ int     statsf_set_col_sums_cpy(statsf_t *statsf_ptr, double * new_col_sums, siz
  *      statsf_t        statsf;
  *      double          new_expected_mean;
  *
- *      if ( statsf_set_expected_mean(&statsf, new_expected_mean) == STATSF_DATA_OK )
+ *      if ( statsf_set_expected_mean(&statsf, new_expected_mean)
+ *              == STATSF_DATA_OK )
  *      {
  *      }
  *
@@ -1450,14 +1303,13 @@ int     statsf_set_col_sums_cpy(statsf_t *statsf_ptr, double * new_col_sums, siz
  *
  *  History: 
  *  Date        Name        Modification
- *  2021-11-02  gen-get-set Auto-generated from statsf.h
+ *  2022-06-11  gen-get-set Auto-generated from statsf.h
  ***************************************************************************/
 
 int     statsf_set_expected_mean(statsf_t *statsf_ptr, double new_expected_mean)
 
 {
-    /* FIXME: Replace this with a proper sanity check */
-    if ( 0 )
+    if ( false )
 	return STATSF_DATA_OUT_OF_RANGE;
     else
     {
@@ -1470,22 +1322,172 @@ int     statsf_set_expected_mean(statsf_t *statsf_ptr, double new_expected_mean)
 /***************************************************************************
  *  Library:
  *      #include <statsf.h>
- *      -lbasic-stats
+ *      -lbasic-stats -lxtend
+ *
+ *  Description:
+ *      Mutator for sum_y member in a statsf_t structure.
+ *      Use this function to set sum_y in a statsf_t object
+ *      from non-member functions.  This function performs a direct
+ *      assignment for scalar or pointer structure members.  If
+ *      sum_y is a pointer, data previously pointed to should
+ *      be freed before calling this function to avoid memory
+ *      leaks.
+ *
+ *  Arguments:
+ *      statsf_ptr      Pointer to the structure to set
+ *      new_sum_y       The new value for sum_y
+ *
+ *  Returns:
+ *      STATSF_DATA_OK if the new value is acceptable and assigned
+ *      STATSF_DATA_OUT_OF_RANGE otherwise
+ *
+ *  Examples:
+ *      statsf_t        statsf;
+ *      double          new_sum_y;
+ *
+ *      if ( statsf_set_sum_y(&statsf, new_sum_y)
+ *              == STATSF_DATA_OK )
+ *      {
+ *      }
+ *
+ *  See also:
+ *      (3)
+ *
+ *  History: 
+ *  Date        Name        Modification
+ *  2022-06-11  gen-get-set Auto-generated from statsf.h
+ ***************************************************************************/
+
+int     statsf_set_sum_y(statsf_t *statsf_ptr, double new_sum_y)
+
+{
+    if ( false )
+	return STATSF_DATA_OUT_OF_RANGE;
+    else
+    {
+	statsf_ptr->sum_y = new_sum_y;
+	return STATSF_DATA_OK;
+    }
+}
+
+
+/***************************************************************************
+ *  Library:
+ *      #include <statsf.h>
+ *      -lbasic-stats -lxtend
+ *
+ *  Description:
+ *      Mutator for sum_y_2 member in a statsf_t structure.
+ *      Use this function to set sum_y_2 in a statsf_t object
+ *      from non-member functions.  This function performs a direct
+ *      assignment for scalar or pointer structure members.  If
+ *      sum_y_2 is a pointer, data previously pointed to should
+ *      be freed before calling this function to avoid memory
+ *      leaks.
+ *
+ *  Arguments:
+ *      statsf_ptr      Pointer to the structure to set
+ *      new_sum_y_2     The new value for sum_y_2
+ *
+ *  Returns:
+ *      STATSF_DATA_OK if the new value is acceptable and assigned
+ *      STATSF_DATA_OUT_OF_RANGE otherwise
+ *
+ *  Examples:
+ *      statsf_t        statsf;
+ *      double          new_sum_y_2;
+ *
+ *      if ( statsf_set_sum_y_2(&statsf, new_sum_y_2)
+ *              == STATSF_DATA_OK )
+ *      {
+ *      }
+ *
+ *  See also:
+ *      (3)
+ *
+ *  History: 
+ *  Date        Name        Modification
+ *  2022-06-11  gen-get-set Auto-generated from statsf.h
+ ***************************************************************************/
+
+int     statsf_set_sum_y_2(statsf_t *statsf_ptr, double new_sum_y_2)
+
+{
+    if ( false )
+	return STATSF_DATA_OUT_OF_RANGE;
+    else
+    {
+	statsf_ptr->sum_y_2 = new_sum_y_2;
+	return STATSF_DATA_OK;
+    }
+}
+
+
+/***************************************************************************
+ *  Library:
+ *      #include <statsf.h>
+ *      -lbasic-stats -lxtend
+ *
+ *  Description:
+ *      Mutator for sum_x_y member in a statsf_t structure.
+ *      Use this function to set sum_x_y in a statsf_t object
+ *      from non-member functions.  This function performs a direct
+ *      assignment for scalar or pointer structure members.  If
+ *      sum_x_y is a pointer, data previously pointed to should
+ *      be freed before calling this function to avoid memory
+ *      leaks.
+ *
+ *  Arguments:
+ *      statsf_ptr      Pointer to the structure to set
+ *      new_sum_x_y     The new value for sum_x_y
+ *
+ *  Returns:
+ *      STATSF_DATA_OK if the new value is acceptable and assigned
+ *      STATSF_DATA_OUT_OF_RANGE otherwise
+ *
+ *  Examples:
+ *      statsf_t        statsf;
+ *      double          new_sum_x_y;
+ *
+ *      if ( statsf_set_sum_x_y(&statsf, new_sum_x_y)
+ *              == STATSF_DATA_OK )
+ *      {
+ *      }
+ *
+ *  See also:
+ *      (3)
+ *
+ *  History: 
+ *  Date        Name        Modification
+ *  2022-06-11  gen-get-set Auto-generated from statsf.h
+ ***************************************************************************/
+
+int     statsf_set_sum_x_y(statsf_t *statsf_ptr, double new_sum_x_y)
+
+{
+    if ( false )
+	return STATSF_DATA_OUT_OF_RANGE;
+    else
+    {
+	statsf_ptr->sum_x_y = new_sum_x_y;
+	return STATSF_DATA_OK;
+    }
+}
+
+
+/***************************************************************************
+ *  Library:
+ *      #include <statsf.h>
+ *      -lbasic-stats -lxtend
  *
  *  Description:
  *      Mutator for tmp_file member in a statsf_t structure.
- *      Use this function to set tmp_file in a statsf_t variable
+ *      Use this function to set tmp_file in a statsf_t object
  *      from non-member functions.  This function performs a direct
  *      assignment for scalar or pointer structure members.  If
  *      tmp_file is a pointer, data previously pointed to should
- *      generally be freed before calling this function to avoid memory
+ *      be freed before calling this function to avoid memory
  *      leaks.
- *
- *      Note that there is an equivalent macro (), which performs
- *      this function with no data verification or function call overhead.
- *      Use the macro version to maximize performance where the validity
- *      of new_tmp_file is guaranteed by other means.
- *      
  *
  *  Arguments:
  *      statsf_ptr      Pointer to the structure to set
@@ -1499,7 +1501,8 @@ int     statsf_set_expected_mean(statsf_t *statsf_ptr, double new_expected_mean)
  *      statsf_t        statsf;
  *      FILE *          new_tmp_file;
  *
- *      if ( statsf_set_tmp_file(&statsf, new_tmp_file) == STATSF_DATA_OK )
+ *      if ( statsf_set_tmp_file(&statsf, new_tmp_file)
+ *              == STATSF_DATA_OK )
  *      {
  *      }
  *
@@ -1508,13 +1511,12 @@ int     statsf_set_expected_mean(statsf_t *statsf_ptr, double new_expected_mean)
  *
  *  History: 
  *  Date        Name        Modification
- *  2021-11-02  gen-get-set Auto-generated from statsf.h
+ *  2022-06-11  gen-get-set Auto-generated from statsf.h
  ***************************************************************************/
 
 int     statsf_set_tmp_file(statsf_t *statsf_ptr, FILE * new_tmp_file)
 
 {
-    /* FIXME: Replace this with a proper sanity check */
     if ( new_tmp_file == NULL )
 	return STATSF_DATA_OUT_OF_RANGE;
     else
@@ -1528,17 +1530,12 @@ int     statsf_set_tmp_file(statsf_t *statsf_ptr, FILE * new_tmp_file)
 /***************************************************************************
  *  Library:
  *      #include <statsf.h>
- *      -lbasic-stats
+ *      -lbasic-stats -lxtend
  *
  *  Description:
  *      Mutator for an array element of tmp_file member in a statsf_t
- *      structure. Use this function to set an element of the array
- *      tmp_file in a statsf_t variable from non-member functions.
- *
- *      Note that there is an equivalent macro STATSF_SET_TMP_FILE_AE(), which performs
- *      this function with no data verification or function call overhead.
- *      Use the macro version to maximize performance where the validity
- *      of new_tmp_file_element is guaranteed by other means.
+ *      structure. Use this function to set statsf_ptr->tmp_file[c]
+ *      in a statsf_t object from non-member functions.
  *
  *  Arguments:
  *      statsf_ptr      Pointer to the structure to set
@@ -1554,7 +1551,8 @@ int     statsf_set_tmp_file(statsf_t *statsf_ptr, FILE * new_tmp_file)
  *      size_t          c;
  *      FILE *          new_tmp_file_element;
  *
- *      if ( statsf_set_tmp_file(&statsf, c, new_tmp_file_element) == STATSF_DATA_OK )
+ *      if ( statsf_set_tmp_file_ae(&statsf, c, new_tmp_file_element)
+ *              == STATSF_DATA_OK )
  *      {
  *      }
  *
@@ -1563,14 +1561,13 @@ int     statsf_set_tmp_file(statsf_t *statsf_ptr, FILE * new_tmp_file)
  *
  *  History: 
  *  Date        Name        Modification
- *  2021-11-02  gen-get-set Auto-generated from statsf.h
+ *  2022-06-11  gen-get-set Auto-generated from statsf.h
  ***************************************************************************/
 
 int     statsf_set_tmp_file_ae(statsf_t *statsf_ptr, size_t c, FILE  new_tmp_file_element)
 
 {
-    /* FIXME: Replace this with a proper sanity check */
-    if ( 0 )
+    if ( false )
 	return STATSF_DATA_OUT_OF_RANGE;
     else
     {
@@ -1583,18 +1580,13 @@ int     statsf_set_tmp_file_ae(statsf_t *statsf_ptr, size_t c, FILE  new_tmp_fil
 /***************************************************************************
  *  Library:
  *      #include <statsf.h>
- *      -lbasic-stats
+ *      -lbasic-stats -lxtend
  *
  *  Description:
  *      Mutator for tmp_file member in a statsf_t structure.
- *      Use this function to set tmp_file in a statsf_t variable
+ *      Use this function to set tmp_file in a statsf_t object
  *      from non-member functions.  This function copies the array pointed to
- *      by new_tmp_file to ->tmp_file.
- *
- *      Note that there is an equivalent macro STATSF_SET_TMP_FILE(), which performs
- *      this function with no data verification or function call overhead.
- *      Use the macro version to maximize performance where the validity
- *      of new_tmp_file is guaranteed by other means.
+ *      by new_tmp_file to statsf_ptr->tmp_file.
  *
  *  Arguments:
  *      statsf_ptr      Pointer to the structure to set
@@ -1610,7 +1602,8 @@ int     statsf_set_tmp_file_ae(statsf_t *statsf_ptr, size_t c, FILE  new_tmp_fil
  *      FILE *          new_tmp_file;
  *      size_t          array_size;
  *
- *      if ( statsf_set_tmp_file(&statsf, new_tmp_file, array_size) == STATSF_DATA_OK )
+ *      if ( statsf_set_tmp_file_cpy(&statsf, new_tmp_file, array_size)
+ *              == STATSF_DATA_OK )
  *      {
  *      }
  *
@@ -1619,24 +1612,21 @@ int     statsf_set_tmp_file_ae(statsf_t *statsf_ptr, size_t c, FILE  new_tmp_fil
  *
  *  History: 
  *  Date        Name        Modification
- *  2021-11-02  gen-get-set Auto-generated from statsf.h
+ *  2022-06-11  gen-get-set Auto-generated from statsf.h
  ***************************************************************************/
 
 int     statsf_set_tmp_file_cpy(statsf_t *statsf_ptr, FILE * new_tmp_file, size_t array_size)
 
 {
-    /* FIXME: Replace this with a proper sanity check */
     if ( new_tmp_file == NULL )
 	return STATSF_DATA_OUT_OF_RANGE;
     else
     {
-	{
-	    size_t  c;
-	    
-	    // FIXME: Assuming all elements should be copied
-	    for (c = 0; c < array_size; ++c)
-		statsf_ptr->tmp_file[c] = new_tmp_file[c];
-	}
+	size_t  c;
+	
+	// FIXME: Assuming all elements should be copied
+	for (c = 0; c < array_size; ++c)
+	    statsf_ptr->tmp_file[c] = new_tmp_file[c];
 	return STATSF_DATA_OK;
     }
 }

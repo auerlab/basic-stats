@@ -24,11 +24,11 @@ int     statsf_list_add_func(statsf_list_t *flist, statsf_code_t new_code,
 	exit(EX_USAGE);
     }
     
-    STATSF_SET_CODE(&flist->functions[count], new_code);
+    statsf_set_code(&flist->functions[count], new_code);
     switch (new_code)
     {
 	case    STATSF_QUANTILE:
-	    STATSF_SET_PARTITIONS(&flist->functions[count], strtoul(argv[++*c], &end, 10));
+	    statsf_set_partitions(&flist->functions[count], strtoul(argv[++*c], &end, 10));
 	    if ( *end != '\0' )
 	    {
 		fprintf(stderr, "Invalid quantile partition count: %s\n", argv[*c]);
@@ -38,18 +38,18 @@ int     statsf_list_add_func(statsf_list_t *flist, statsf_code_t new_code,
 	
 	case    STATSF_MEDIAN:
 	    // Overwrite median code since it's a special case of quantile
-	    STATSF_SET_CODE(&flist->functions[count], STATSF_QUANTILE);
-	    STATSF_SET_PARTITIONS(&flist->functions[count], 2);
+	    statsf_set_code(&flist->functions[count], STATSF_QUANTILE);
+	    statsf_set_partitions(&flist->functions[count], 2);
 	    break;
 	
 	case    STATSF_QUARTILE:
 	    // Overwrite quartile code since it's a special case of quantile
-	    STATSF_SET_CODE(&flist->functions[count], STATSF_QUANTILE);
-	    STATSF_SET_PARTITIONS(&flist->functions[count], 4);
+	    statsf_set_code(&flist->functions[count], STATSF_QUANTILE);
+	    statsf_set_partitions(&flist->functions[count], 4);
 	    break;
 
 	case    STATSF_T_SCORE:
-	    STATSF_SET_EXPECTED_MEAN(&flist->functions[count], strtod(argv[++*c], &end));
+	    statsf_set_expected_mean(&flist->functions[count], strtod(argv[++*c], &end));
 	    if ( *end != '\0' )
 	    {
 		fprintf(stderr, "Invalid expected mean: %s\n", argv[*c]);
@@ -71,13 +71,13 @@ int     statsf_list_add_func(statsf_list_t *flist, statsf_code_t new_code,
     }
     if ( strcmp(argv[*c + 1], "--row") == 0 )
     {
-	STATSF_SET_ROW(&flist->functions[count], row_col);
-	STATSF_SET_COL(&flist->functions[count], 0);
+	statsf_set_row(&flist->functions[count], row_col);
+	statsf_set_col(&flist->functions[count], 0);
     }
     else if ( strcmp(argv[*c + 1], "--col") == 0 )
     {
-	STATSF_SET_ROW(&flist->functions[count], 0);
-	STATSF_SET_COL(&flist->functions[count], row_col);
+	statsf_set_row(&flist->functions[count], 0);
+	statsf_set_col(&flist->functions[count], row_col);
     }
     else
 	usage(argv);
@@ -108,10 +108,10 @@ int     statsf_list_process_stream(statsf_list_t *flist, FILE *stream,
 	if ( STATSF_CODE(&flist->functions[c]) == STATSF_QUANTILE )
 	{
 	    // FIXME: Check malloc
-	    STATSF_SET_NUMS(&flist->functions[c],
+	    statsf_set_nums(&flist->functions[c],
 		    xt_malloc(SFL_INITIAL_LIST_SIZE,
 			      sizeof(*STATSF_NUMS(&flist->functions[c]))));
-	    STATSF_SET_ARRAY_SIZE(&flist->functions[c], SFL_INITIAL_LIST_SIZE);
+	    statsf_set_array_size(&flist->functions[c], SFL_INITIAL_LIST_SIZE);
 	}
     }
     
@@ -199,7 +199,7 @@ int     statsf_list_process_stream(statsf_list_t *flist, FILE *stream,
 			row_col_value, ss);
 		printf("%s %u pop-var        %f\n", row_col_name,
 			row_col_value, var);
-		printf("%s %u pop-stddev     %f\n", row_col_name,
+		printf("%s %u pop-SD         %f\n", row_col_name,
 			row_col_value, stddev);
 		printf("%s %u pop-mean       %f\n", row_col_name,
 			row_col_value, mean);
@@ -230,9 +230,9 @@ int     statsf_list_process_stream(statsf_list_t *flist, FILE *stream,
 			row_col_value, ss);
 		printf("%s %u sample-var        %f\n", row_col_name,
 			row_col_value, var);
-		printf("%s %u sample-stddev     %f\n", row_col_name,
+		printf("%s %u sample-SD         %f\n", row_col_name,
 			row_col_value, stddev);
-		printf("%s %u sample-stderr     %f\n", row_col_name,
+		printf("%s %u sample-SE         %f\n", row_col_name,
 			row_col_value, se);
 		printf("%s %u sample-mean       %f\n", row_col_name,
 			row_col_value, mean);

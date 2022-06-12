@@ -165,7 +165,7 @@ realclean: clean
 ############################################################################
 # Install all target files (binaries, libraries, docs, etc.)
 
-common-install: all
+install: all
 	${MKDIR} -p ${DESTDIR}${PREFIX}/bin \
 		    ${DESTDIR}${PREFIX}/include \
 		    ${DESTDIR}${PREFIX}/lib \
@@ -176,12 +176,6 @@ common-install: all
 	${INSTALL} *.a ${DESTDIR}${PREFIX}/lib
 	${INSTALL} -m 0444 Man/*.1 ${DESTDIR}${MANDIR}/man1
 	${INSTALL} -m 0444 Man/*.3 ${DESTDIR}${MANDIR}/man3
-
-install: common-install
-	${INSTALL} -m 0444 Man/Macros/*.3 ${DESTDIR}${MANDIR}/man3
-
-# No Macros/*.3, which conflict with functions on case-insensitive FSs
-apple-install: common-install
 
 install-strip: install
 	${STRIP} ${DESTDIR}${PREFIX}/bin/basic-stats

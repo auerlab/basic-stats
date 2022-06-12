@@ -6,7 +6,7 @@
 .nf
 .na
 #include <statsf.h>
--lbasic-stats
+-lbasic-stats -lxtend
 .ad
 .fi
 
@@ -14,7 +14,11 @@
 \" Underline anything that is typed verbatim - commands, etc.
 .SH SYNOPSIS
 .PP
+.nf
+.na
 int     statsf_set_tmp_file_cpy(statsf_t *statsf_ptr, FILE * new_tmp_file, size_t array_size)
+.ad
+.fi
 
 .SH ARGUMENTS
 .nf
@@ -28,14 +32,9 @@ array_size      Size of the tmp_file array.
 .SH DESCRIPTION
 
 Mutator for tmp_file member in a statsf_t structure.
-Use this function to set tmp_file in a statsf_t variable
+Use this function to set tmp_file in a statsf_t object
 from non-member functions.  This function copies the array pointed to
-by new_tmp_file to ->tmp_file.
-
-Note that there is an equivalent macro STATSF_SET_TMP_FILE(), which performs
-this function with no data verification or function call overhead.
-Use the macro version to maximize performance where the validity
-of new_tmp_file is guaranteed by other means.
+by new_tmp_file to statsf_ptr->tmp_file.
 
 .SH RETURN VALUES
 
@@ -50,7 +49,8 @@ statsf_t        statsf;
 FILE *          new_tmp_file;
 size_t          array_size;
 
-if ( statsf_set_tmp_file(&statsf, new_tmp_file, array_size) == STATSF_DATA_OK )
+if ( statsf_set_tmp_file_cpy(&statsf, new_tmp_file, array_size)
+        == STATSF_DATA_OK )
 {
 }
 .ad

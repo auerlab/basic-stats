@@ -6,7 +6,7 @@
 .nf
 .na
 #include <statsf.h>
--lbasic-stats
+-lbasic-stats -lxtend
 .ad
 .fi
 
@@ -14,7 +14,11 @@
 \" Underline anything that is typed verbatim - commands, etc.
 .SH SYNOPSIS
 .PP
+.nf
+.na
 int     statsf_set_rows_ae(statsf_t *statsf_ptr, size_t c, unsigned  new_rows_element)
+.ad
+.fi
 
 .SH ARGUMENTS
 .nf
@@ -28,13 +32,8 @@ new_rows_element The new value for rows[c]
 .SH DESCRIPTION
 
 Mutator for an array element of rows member in a statsf_t
-structure. Use this function to set an element of the array
-rows in a statsf_t variable from non-member functions.
-
-Note that there is an equivalent macro STATSF_SET_ROWS_AE(), which performs
-this function with no data verification or function call overhead.
-Use the macro version to maximize performance where the validity
-of new_rows_element is guaranteed by other means.
+structure. Use this function to set statsf_ptr->rows[c]
+in a statsf_t object from non-member functions.
 
 .SH RETURN VALUES
 
@@ -49,7 +48,8 @@ statsf_t        statsf;
 size_t          c;
 unsigned *      new_rows_element;
 
-if ( statsf_set_rows(&statsf, c, new_rows_element) == STATSF_DATA_OK )
+if ( statsf_set_rows_ae(&statsf, c, new_rows_element)
+        == STATSF_DATA_OK )
 {
 }
 .ad

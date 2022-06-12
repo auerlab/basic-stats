@@ -3,14 +3,22 @@
 
 .SH LIBRARY
 \" Indicate #includes, library name, -L and -l flags
-#include <basic-stats/statsf-list.h>
--lxtend
+.nf
+.na
+#include <statsf-list.h>
+-lbasic-stats -lxtend
+.ad
+.fi
 
 \" Convention:
 \" Underline anything that is typed verbatim - commands, etc.
 .SH SYNOPSIS
 .PP
+.nf
+.na
 int     statsf_list_set_functions_ae(statsf_list_t *statsf_list_ptr, size_t c, statsf_t new_functions_element)
+.ad
+.fi
 
 .SH ARGUMENTS
 .nf
@@ -24,18 +32,13 @@ new_functions_element The new value for functions[c]
 .SH DESCRIPTION
 
 Mutator for an array element of functions member in a statsf_list_t
-structure. Use this function to set an element of the array
-functions in a statsf_list_t variable from non-member functions.
-
-Note that there is an equivalent macro STATSF_LIST_SET_FUNCTIONS_AE(), which performs
-this function with no data verification or function call overhead.
-Use the macro version to maximize performance where the validity
-of new_functions_element is guaranteed by other means.
+structure. Use this function to set statsf_list_ptr->functions[c]
+in a statsf_list_t object from non-member functions.
 
 .SH RETURN VALUES
 
-SFL_DATA_OK if the new value is acceptable and assigned
-SFL_DATA_OUT_OF_RANGE otherwise
+STATSF_LIST_DATA_OK if the new value is acceptable and assigned
+STATSF_LIST_DATA_OUT_OF_RANGE otherwise
 
 .SH EXAMPLES
 .nf
@@ -45,7 +48,8 @@ statsf_list_t   statsf_list;
 size_t          c;
 statsf_t        new_functions_element;
 
-if ( statsf_list_set_functions(&statsf_list, c, new_functions_element) == SFL_DATA_OK )
+if ( statsf_list_set_functions_ae(&statsf_list, c, new_functions_element)
+        == STATSF_LIST_DATA_OK )
 {
 }
 .ad

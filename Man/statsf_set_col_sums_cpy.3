@@ -6,7 +6,7 @@
 .nf
 .na
 #include <statsf.h>
--lbasic-stats
+-lbasic-stats -lxtend
 .ad
 .fi
 
@@ -14,7 +14,11 @@
 \" Underline anything that is typed verbatim - commands, etc.
 .SH SYNOPSIS
 .PP
+.nf
+.na
 int     statsf_set_col_sums_cpy(statsf_t *statsf_ptr, double * new_col_sums, size_t array_size)
+.ad
+.fi
 
 .SH ARGUMENTS
 .nf
@@ -28,14 +32,9 @@ array_size      Size of the col_sums array.
 .SH DESCRIPTION
 
 Mutator for col_sums member in a statsf_t structure.
-Use this function to set col_sums in a statsf_t variable
+Use this function to set col_sums in a statsf_t object
 from non-member functions.  This function copies the array pointed to
-by new_col_sums to ->col_sums.
-
-Note that there is an equivalent macro STATSF_SET_COL_SUMS(), which performs
-this function with no data verification or function call overhead.
-Use the macro version to maximize performance where the validity
-of new_col_sums is guaranteed by other means.
+by new_col_sums to statsf_ptr->col_sums.
 
 .SH RETURN VALUES
 
@@ -50,7 +49,8 @@ statsf_t        statsf;
 double *        new_col_sums;
 size_t          array_size;
 
-if ( statsf_set_col_sums(&statsf, new_col_sums, array_size) == STATSF_DATA_OK )
+if ( statsf_set_col_sums_cpy(&statsf, new_col_sums, array_size)
+        == STATSF_DATA_OK )
 {
 }
 .ad

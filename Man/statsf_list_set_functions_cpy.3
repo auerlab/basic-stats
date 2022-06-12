@@ -3,14 +3,22 @@
 
 .SH LIBRARY
 \" Indicate #includes, library name, -L and -l flags
-#include <basic-stats/statsf-list.h>
--lxtend
+.nf
+.na
+#include <statsf-list.h>
+-lbasic-stats -lxtend
+.ad
+.fi
 
 \" Convention:
 \" Underline anything that is typed verbatim - commands, etc.
 .SH SYNOPSIS
 .PP
+.nf
+.na
 int     statsf_list_set_functions_cpy(statsf_list_t *statsf_list_ptr, statsf_t new_functions[], size_t array_size)
+.ad
+.fi
 
 .SH ARGUMENTS
 .nf
@@ -24,19 +32,14 @@ array_size      Size of the functions array.
 .SH DESCRIPTION
 
 Mutator for functions member in a statsf_list_t structure.
-Use this function to set functions in a statsf_list_t variable
+Use this function to set functions in a statsf_list_t object
 from non-member functions.  This function copies the array pointed to
-by new_functions to ->functions.
-
-Note that there is an equivalent macro STATSF_LIST_SET_FUNCTIONS(), which performs
-this function with no data verification or function call overhead.
-Use the macro version to maximize performance where the validity
-of new_functions is guaranteed by other means.
+by new_functions to statsf_list_ptr->functions.
 
 .SH RETURN VALUES
 
-SFL_DATA_OK if the new value is acceptable and assigned
-SFL_DATA_OUT_OF_RANGE otherwise
+STATSF_LIST_DATA_OK if the new value is acceptable and assigned
+STATSF_LIST_DATA_OUT_OF_RANGE otherwise
 
 .SH EXAMPLES
 .nf
@@ -46,7 +49,8 @@ statsf_list_t   statsf_list;
 statsf_t        new_functions;
 size_t          array_size;
 
-if ( statsf_list_set_functions(&statsf_list, new_functions, array_size) == SFL_DATA_OK )
+if ( statsf_list_set_functions_cpy(&statsf_list, new_functions, array_size)
+        == STATSF_LIST_DATA_OK )
 {
 }
 .ad

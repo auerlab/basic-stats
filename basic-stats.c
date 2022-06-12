@@ -107,6 +107,7 @@ int     main(int argc, char *argv[])
 void    usage(char *argv[])
 
 {
+    fprintf(stderr, "\nUsage: basic-stats function arguments [...]\n");
     fprintf(stderr, "\nSimple functions:\n");
     fprintf(stderr, "   %s z-table\n", argv[0]);
     fprintf(stderr, "   %s z-score x mean SD|SEM\n", argv[0]);
@@ -115,7 +116,7 @@ void    usage(char *argv[])
     fprintf(stderr, "   %s t-score x-bar expected-mean SD n\n", argv[0]);
     fprintf(stderr, "   %s t-cdf x-bar n\n", argv[0]);
     
-    fprintf(stderr, "Tabular data:\n");
+    fprintf(stderr, "\nTabular data:\n");
     fprintf(stderr, "   %s [--verbose] [--delim 'string'] \\\n"
 		    "       function1 [param1] --row|--col N1 \\\n"
 		    "       [function2 [param2] --row|--col N2 ...] \\\n"

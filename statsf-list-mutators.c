@@ -8,43 +8,40 @@
 
 #include <string.h>
 #include <ctype.h>
+#include <stdbool.h>        // In case of bool
+#include <stdint.h>         // In case of int64_t, etc
 #include <xtend/string.h>   // strlcpy() on Linux
 #include "statsf-list.h"
 
 
 /***************************************************************************
  *  Library:
- *      #include <basic-stats/statsf-list.h>
- *      -lxtend
+ *      #include <statsf-list.h>
+ *      -lbasic-stats -lxtend
  *
  *  Description:
  *      Mutator for count member in a statsf_list_t structure.
- *      Use this function to set count in a statsf_list_t variable
+ *      Use this function to set count in a statsf_list_t object
  *      from non-member functions.  This function performs a direct
  *      assignment for scalar or pointer structure members.  If
  *      count is a pointer, data previously pointed to should
- *      generally be freed before calling this function to avoid memory
+ *      be freed before calling this function to avoid memory
  *      leaks.
- *
- *      Note that there is an equivalent macro (), which performs
- *      this function with no data verification or function call overhead.
- *      Use the macro version to maximize performance where the validity
- *      of new_count is guaranteed by other means.
- *      
  *
  *  Arguments:
  *      statsf_list_ptr Pointer to the structure to set
  *      new_count       The new value for count
  *
  *  Returns:
- *      SFL_DATA_OK if the new value is acceptable and assigned
- *      SFL_DATA_OUT_OF_RANGE otherwise
+ *      STATSF_LIST_DATA_OK if the new value is acceptable and assigned
+ *      STATSF_LIST_DATA_OUT_OF_RANGE otherwise
  *
  *  Examples:
  *      statsf_list_t   statsf_list;
  *      unsigned        new_count;
  *
- *      if ( statsf_list_set_count(&statsf_list, new_count) == SFL_DATA_OK )
+ *      if ( statsf_list_set_count(&statsf_list, new_count)
+ *              == STATSF_LIST_DATA_OK )
  *      {
  *      }
  *
@@ -53,37 +50,31 @@
  *
  *  History: 
  *  Date        Name        Modification
- *  2021-09-18  gen-get-set Auto-generated from statsf-list.h
+ *  2022-06-11  gen-get-set Auto-generated from statsf-list.h
  ***************************************************************************/
 
 int     statsf_list_set_count(statsf_list_t *statsf_list_ptr, unsigned new_count)
 
 {
-    /* FIXME: Replace this with a proper sanity check */
-    if ( 0 )
-	return SFL_DATA_OUT_OF_RANGE;
+    if ( false )
+	return STATSF_LIST_DATA_OUT_OF_RANGE;
     else
     {
 	statsf_list_ptr->count = new_count;
-	return SFL_DATA_OK;
+	return STATSF_LIST_DATA_OK;
     }
 }
 
 
 /***************************************************************************
  *  Library:
- *      #include <basic-stats/statsf-list.h>
- *      -lxtend
+ *      #include <statsf-list.h>
+ *      -lbasic-stats -lxtend
  *
  *  Description:
  *      Mutator for an array element of functions member in a statsf_list_t
- *      structure. Use this function to set an element of the array
- *      functions in a statsf_list_t variable from non-member functions.
- *
- *      Note that there is an equivalent macro STATSF_LIST_SET_FUNCTIONS_AE(), which performs
- *      this function with no data verification or function call overhead.
- *      Use the macro version to maximize performance where the validity
- *      of new_functions_element is guaranteed by other means.
+ *      structure. Use this function to set statsf_list_ptr->functions[c]
+ *      in a statsf_list_t object from non-member functions.
  *
  *  Arguments:
  *      statsf_list_ptr Pointer to the structure to set
@@ -91,15 +82,16 @@ int     statsf_list_set_count(statsf_list_t *statsf_list_ptr, unsigned new_count
  *      new_functions_element The new value for functions[c]
  *
  *  Returns:
- *      SFL_DATA_OK if the new value is acceptable and assigned
- *      SFL_DATA_OUT_OF_RANGE otherwise
+ *      STATSF_LIST_DATA_OK if the new value is acceptable and assigned
+ *      STATSF_LIST_DATA_OUT_OF_RANGE otherwise
  *
  *  Examples:
  *      statsf_list_t   statsf_list;
  *      size_t          c;
  *      statsf_t        new_functions_element;
  *
- *      if ( statsf_list_set_functions(&statsf_list, c, new_functions_element) == SFL_DATA_OK )
+ *      if ( statsf_list_set_functions_ae(&statsf_list, c, new_functions_element)
+ *              == STATSF_LIST_DATA_OK )
  *      {
  *      }
  *
@@ -108,38 +100,32 @@ int     statsf_list_set_count(statsf_list_t *statsf_list_ptr, unsigned new_count
  *
  *  History: 
  *  Date        Name        Modification
- *  2021-09-18  gen-get-set Auto-generated from statsf-list.h
+ *  2022-06-11  gen-get-set Auto-generated from statsf-list.h
  ***************************************************************************/
 
 int     statsf_list_set_functions_ae(statsf_list_t *statsf_list_ptr, size_t c, statsf_t new_functions_element)
 
 {
-    /* FIXME: Replace this with a proper sanity check */
-    if ( 0 )
-	return SFL_DATA_OUT_OF_RANGE;
+    if ( false )
+	return STATSF_LIST_DATA_OUT_OF_RANGE;
     else
     {
 	statsf_list_ptr->functions[c] = new_functions_element;
-	return SFL_DATA_OK;
+	return STATSF_LIST_DATA_OK;
     }
 }
 
 
 /***************************************************************************
  *  Library:
- *      #include <basic-stats/statsf-list.h>
- *      -lxtend
+ *      #include <statsf-list.h>
+ *      -lbasic-stats -lxtend
  *
  *  Description:
  *      Mutator for functions member in a statsf_list_t structure.
- *      Use this function to set functions in a statsf_list_t variable
+ *      Use this function to set functions in a statsf_list_t object
  *      from non-member functions.  This function copies the array pointed to
- *      by new_functions to ->functions.
- *
- *      Note that there is an equivalent macro STATSF_LIST_SET_FUNCTIONS(), which performs
- *      this function with no data verification or function call overhead.
- *      Use the macro version to maximize performance where the validity
- *      of new_functions is guaranteed by other means.
+ *      by new_functions to statsf_list_ptr->functions.
  *
  *  Arguments:
  *      statsf_list_ptr Pointer to the structure to set
@@ -147,15 +133,16 @@ int     statsf_list_set_functions_ae(statsf_list_t *statsf_list_ptr, size_t c, s
  *      array_size      Size of the functions array.
  *
  *  Returns:
- *      SFL_DATA_OK if the new value is acceptable and assigned
- *      SFL_DATA_OUT_OF_RANGE otherwise
+ *      STATSF_LIST_DATA_OK if the new value is acceptable and assigned
+ *      STATSF_LIST_DATA_OUT_OF_RANGE otherwise
  *
  *  Examples:
  *      statsf_list_t   statsf_list;
  *      statsf_t        new_functions;
  *      size_t          array_size;
  *
- *      if ( statsf_list_set_functions(&statsf_list, new_functions, array_size) == SFL_DATA_OK )
+ *      if ( statsf_list_set_functions_cpy(&statsf_list, new_functions, array_size)
+ *              == STATSF_LIST_DATA_OK )
  *      {
  *      }
  *
@@ -164,24 +151,21 @@ int     statsf_list_set_functions_ae(statsf_list_t *statsf_list_ptr, size_t c, s
  *
  *  History: 
  *  Date        Name        Modification
- *  2021-09-18  gen-get-set Auto-generated from statsf-list.h
+ *  2022-06-11  gen-get-set Auto-generated from statsf-list.h
  ***************************************************************************/
 
 int     statsf_list_set_functions_cpy(statsf_list_t *statsf_list_ptr, statsf_t new_functions[], size_t array_size)
 
 {
-    /* FIXME: Replace this with a proper sanity check */
     if ( new_functions == NULL )
-	return SFL_DATA_OUT_OF_RANGE;
+	return STATSF_LIST_DATA_OUT_OF_RANGE;
     else
     {
-	{
-	    size_t  c;
-	    
-	    // FIXME: Assuming all elements should be copied
-	    for (c = 0; c < array_size; ++c)
-		statsf_list_ptr->functions[c] = new_functions[c];
-	}
-	return SFL_DATA_OK;
+	size_t  c;
+	
+	// FIXME: Assuming all elements should be copied
+	for (c = 0; c < array_size; ++c)
+	    statsf_list_ptr->functions[c] = new_functions[c];
+	return STATSF_LIST_DATA_OK;
     }
 }

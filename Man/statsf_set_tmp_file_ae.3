@@ -6,7 +6,7 @@
 .nf
 .na
 #include <statsf.h>
--lbasic-stats
+-lbasic-stats -lxtend
 .ad
 .fi
 
@@ -14,7 +14,11 @@
 \" Underline anything that is typed verbatim - commands, etc.
 .SH SYNOPSIS
 .PP
+.nf
+.na
 int     statsf_set_tmp_file_ae(statsf_t *statsf_ptr, size_t c, FILE  new_tmp_file_element)
+.ad
+.fi
 
 .SH ARGUMENTS
 .nf
@@ -28,13 +32,8 @@ new_tmp_file_element The new value for tmp_file[c]
 .SH DESCRIPTION
 
 Mutator for an array element of tmp_file member in a statsf_t
-structure. Use this function to set an element of the array
-tmp_file in a statsf_t variable from non-member functions.
-
-Note that there is an equivalent macro STATSF_SET_TMP_FILE_AE(), which performs
-this function with no data verification or function call overhead.
-Use the macro version to maximize performance where the validity
-of new_tmp_file_element is guaranteed by other means.
+structure. Use this function to set statsf_ptr->tmp_file[c]
+in a statsf_t object from non-member functions.
 
 .SH RETURN VALUES
 
@@ -49,7 +48,8 @@ statsf_t        statsf;
 size_t          c;
 FILE *          new_tmp_file_element;
 
-if ( statsf_set_tmp_file(&statsf, c, new_tmp_file_element) == STATSF_DATA_OK )
+if ( statsf_set_tmp_file_ae(&statsf, c, new_tmp_file_element)
+        == STATSF_DATA_OK )
 {
 }
 .ad

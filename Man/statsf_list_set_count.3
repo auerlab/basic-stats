@@ -3,14 +3,22 @@
 
 .SH LIBRARY
 \" Indicate #includes, library name, -L and -l flags
-#include <basic-stats/statsf-list.h>
--lxtend
+.nf
+.na
+#include <statsf-list.h>
+-lbasic-stats -lxtend
+.ad
+.fi
 
 \" Convention:
 \" Underline anything that is typed verbatim - commands, etc.
 .SH SYNOPSIS
 .PP
+.nf
+.na
 int     statsf_list_set_count(statsf_list_t *statsf_list_ptr, unsigned new_count)
+.ad
+.fi
 
 .SH ARGUMENTS
 .nf
@@ -23,22 +31,17 @@ new_count       The new value for count
 .SH DESCRIPTION
 
 Mutator for count member in a statsf_list_t structure.
-Use this function to set count in a statsf_list_t variable
+Use this function to set count in a statsf_list_t object
 from non-member functions.  This function performs a direct
 assignment for scalar or pointer structure members.  If
 count is a pointer, data previously pointed to should
-generally be freed before calling this function to avoid memory
+be freed before calling this function to avoid memory
 leaks.
-
-Note that there is an equivalent macro (), which performs
-this function with no data verification or function call overhead.
-Use the macro version to maximize performance where the validity
-of new_count is guaranteed by other means.
 
 .SH RETURN VALUES
 
-SFL_DATA_OK if the new value is acceptable and assigned
-SFL_DATA_OUT_OF_RANGE otherwise
+STATSF_LIST_DATA_OK if the new value is acceptable and assigned
+STATSF_LIST_DATA_OUT_OF_RANGE otherwise
 
 .SH EXAMPLES
 .nf
@@ -47,7 +50,8 @@ SFL_DATA_OUT_OF_RANGE otherwise
 statsf_list_t   statsf_list;
 unsigned        new_count;
 
-if ( statsf_list_set_count(&statsf_list, new_count) == SFL_DATA_OK )
+if ( statsf_list_set_count(&statsf_list, new_count)
+        == STATSF_LIST_DATA_OK )
 {
 }
 .ad

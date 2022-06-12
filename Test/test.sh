@@ -12,7 +12,7 @@ set -x
     median --row 1 \
     mean --col 3 \
     median --col 2 \
-    sample-stddev --col 1 \
-    sample-stddev --col 3 \
-    pop-stddev --col 3 \
+    sample-SD --col 1 \
+    sample-SD --col 3 \
+    pop-SD --col 3 \
     < sample.txt

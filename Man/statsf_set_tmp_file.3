@@ -6,7 +6,7 @@
 .nf
 .na
 #include <statsf.h>
--lbasic-stats
+-lbasic-stats -lxtend
 .ad
 .fi
 
@@ -14,7 +14,11 @@
 \" Underline anything that is typed verbatim - commands, etc.
 .SH SYNOPSIS
 .PP
+.nf
+.na
 int     statsf_set_tmp_file(statsf_t *statsf_ptr, FILE * new_tmp_file)
+.ad
+.fi
 
 .SH ARGUMENTS
 .nf
@@ -27,17 +31,12 @@ new_tmp_file    The new value for tmp_file
 .SH DESCRIPTION
 
 Mutator for tmp_file member in a statsf_t structure.
-Use this function to set tmp_file in a statsf_t variable
+Use this function to set tmp_file in a statsf_t object
 from non-member functions.  This function performs a direct
 assignment for scalar or pointer structure members.  If
 tmp_file is a pointer, data previously pointed to should
-generally be freed before calling this function to avoid memory
+be freed before calling this function to avoid memory
 leaks.
-
-Note that there is an equivalent macro (), which performs
-this function with no data verification or function call overhead.
-Use the macro version to maximize performance where the validity
-of new_tmp_file is guaranteed by other means.
 
 .SH RETURN VALUES
 
@@ -51,7 +50,8 @@ STATSF_DATA_OUT_OF_RANGE otherwise
 statsf_t        statsf;
 FILE *          new_tmp_file;
 
-if ( statsf_set_tmp_file(&statsf, new_tmp_file) == STATSF_DATA_OK )
+if ( statsf_set_tmp_file(&statsf, new_tmp_file)
+        == STATSF_DATA_OK )
 {
 }
 .ad
