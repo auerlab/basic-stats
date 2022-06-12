@@ -2,7 +2,11 @@
 
 cd ..
 ./cave-man-install.sh
-ldd basic-stats
+if [ $(uname) = Darwin ]; then
+    otool -L basic-stats
+else
+    ldd basic-stats
+fi
 cd Test
 set -x
 ../basic-stats \
