@@ -155,7 +155,7 @@ Community support for pkgsrc is available through the
 
 ### Building basic-stats locally
 
-Below are cave man install instructions for development purposes, not
+Below are caveman install instructions for development purposes, not
 recommended for regular use.
 
 basic-stats depends on [libxtend](https://github.com/outpaddling/libxtend).
