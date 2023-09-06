@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <xtend/mem.h>
-#include <xtend/math.h> // double_cmp()
+#include <xtend/math.h> // xt_double_cmp()
 #include "statsf.h"
 
 void    statsf_process_val(statsf_t *function, double x)
@@ -78,7 +78,7 @@ void    statsf_quantiles(statsf_t *function,
 	    c;
     
     qsort(list, list_size, sizeof(double),
-	  (int (*)(const void *, const void *))double_cmp);
+	  (int (*)(const void *, const void *))xt_double_cmp);
     
     printf("%s %u low            %f\n", row_col_name, row_col_value, list[0]);
     for (c = 1; c < partitions; ++c)

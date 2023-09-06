@@ -116,7 +116,7 @@ int     statsf_list_process_stream(statsf_list_t *flist, FILE *stream,
     }
     
     row = 1, col = 1;
-    while ( (ch = dsv_read_field(stream, buff, SFL_MAX_FIELD_LEN, delims,
+    while ( (ch = xt_dsv_read_field(stream, buff, SFL_MAX_FIELD_LEN, delims,
 		    &len)) != EOF )
     {
 	if ( flags & SFL_FLAG_VERBOSE )
