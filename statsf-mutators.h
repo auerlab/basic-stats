@@ -43,5 +43,4 @@ int statsf_set_sum_y(statsf_t *statsf_ptr, double new_sum_y);
 int statsf_set_sum_y_2(statsf_t *statsf_ptr, double new_sum_y_2);
 int statsf_set_sum_x_y(statsf_t *statsf_ptr, double new_sum_x_y);
 int statsf_set_tmp_file(statsf_t *statsf_ptr, FILE *new_tmp_file);
-int statsf_set_tmp_file_ae(statsf_t *statsf_ptr, size_t c, FILE new_tmp_file_element);
-int statsf_set_tmp_file_cpy(statsf_t *statsf_ptr, FILE *new_tmp_file, size_t array_size);
+

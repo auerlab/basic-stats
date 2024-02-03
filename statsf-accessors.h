@@ -33,4 +33,3 @@
 #define STATSF_SUM_Y_2(ptr)             ((ptr)->sum_y_2)
 #define STATSF_SUM_X_Y(ptr)             ((ptr)->sum_x_y)
 #define STATSF_TMP_FILE(ptr)            ((ptr)->tmp_file)
-#define STATSF_TMP_FILE_AE(ptr,c)       ((ptr)->tmp_file[c])
