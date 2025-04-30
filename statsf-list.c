@@ -105,6 +105,9 @@ int     statsf_list_process_stream(statsf_list_t *flist, FILE *stream,
 
     for (c = 0; c < flist->count; ++c)
     {
+	// FIXME: Don't inhale values to an array.  Write a sorted temp
+	// file and extract the quantile from there.  Slower, but
+	// not memory-limited.
 	if ( STATSF_CODE(&flist->functions[c]) == STATSF_QUANTILE )
 	{
 	    // FIXME: Check malloc
